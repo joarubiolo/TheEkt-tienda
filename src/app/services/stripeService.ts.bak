@@ -1,0 +1,128 @@
+import { loadStripe } from '@stripe/stripe-js';
+
+// Inicializar Stripe con la clave pública
+const stripePublicKey = (import.meta as any).env?.VITE_STRIPE_PUBLIC_KEY || '';
+const stripePromise = loadStripe(stripePublicKey);
+
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  size: string;
+  color: string;
+  image: string;
+}
+
+export interface CheckoutData {
+  items: CartItem[];
+  shippingCost: number;
+  discount: number;
+  couponCode?: string;
+  shippingMethod: string;
+  customerEmail?: string;
+}
+
+// Función para verificar si Stripe está configurado
+export function isStripeConfigured(): boolean {
+  return !!stripePublicKey;
+}
+
+// Función para crear una sesión de checkout usando Stripe Checkout
+// NOTA: Para producción real, esto debe hacerse desde el backend
+// Esta es una implementación frontend-only que usa redirect manual
+export async function createCheckoutSession(checkoutData: CheckoutData): Promise<{ sessionId: string; url: string } | null> {
+  try {
+    const stripe = await stripePromise;
+    
+    if (!stripe) {
+      console.error('Stripe no está configurado');
+      return null;
+    }
+
+    const siteUrl = (import.meta as any).env?.VITE_SITE_URL || window.location.origin;
+    
+    // Como no hay backend, construimos el line_items para enviar a un endpoint
+    // En producción, esto debería ir a tu backend
+    const lineItems = checkoutData.items.map(item => ({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: item.name,
+          description: `Talla: ${item.size} | Color: ${item.color}`,
+          images: [item.image],
+        },
+        unit_amount: Math.round(item.price * 100),
+      },
+      quantity: item.quantity,
+    }));
+
+    // Agregar envío si aplica
+    if (checkoutData.shippingCost > 0) {
+      lineItems.push({
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Envío',
+            description: checkoutData.shippingMethod === 'express' 
+              ? 'Envío Express (2-3 días)' 
+              : 'Envío Estándar (5-7 días)',
+            images: [],
+          },
+          unit_amount: Math.round(checkoutData.shippingCost * 100),
+        },
+        quantity: 1,
+      });
+    }
+
+    // Para frontend-only sin backend, simulamos el checkout
+    // En producción real, deberías crear un endpoint backend
+    console.log('Checkout Data:', {
+      line_items: lineItems,
+      success_url: `${siteUrl}/success`,
+      cancel_url: `${siteUrl}/cancel`,
+      customer_email: checkoutData.customerEmail,
+    });
+
+    // Retornamos null para indicar que se debe usar el flujo alternativo
+    return null;
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    return null;
+  }
+}
+
+// Función alternativa: Crear un Payment Link de Stripe
+// Los Payment Links se crean en el dashboard de Stripe y se usan aquí
+export function getStripePaymentLink(checkoutData: CheckoutData): string {
+  // Lee el Payment Link base desde variables de entorno
+  const basePaymentLink = (import.meta as any).env?.VITE_STRIPE_PAYMENT_LINK || '';
+  
+  if (!basePaymentLink) {
+    return '';
+  }
+
+  // Calcular el total
+  const subtotal = checkoutData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const total = subtotal + checkoutData.shippingCost - checkoutData.discount;
+  
+  // Stripe Payment Links pueden aceptar parámetros de consulta
+  // para prellenar campos o agregar metadata
+  const params = new URLSearchParams({
+    'prefilled_email': checkoutData.customerEmail || '',
+    'client_reference_id': `order_${Date.now()}`,
+  });
+
+  return `${basePaymentLink}?${params.toString()}`;
+}
+
+// Función para simular el proceso de checkout (para desarrollo/demo)
+export async function simulateCheckout(checkoutData: CheckoutData): Promise<boolean> {
+  return new Promise((resolve) => {
+    // Simular un delay de procesamiento
+    setTimeout(() => {
+      console.log('Checkout simulado:', checkoutData);
+      resolve(true);
+    }, 1500);
+  });
+}

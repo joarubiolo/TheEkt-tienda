@@ -3,15 +3,15 @@ import { Product } from "../types/product";
 export const products: Product[] = [
   {
     id: 1,
-    name: "Camiseta Básica Blanca",
-    description: "Camiseta básica de algodón 100% en color blanco. Perfecta para el día a día.",
-    price: 29.99,
+    name: "Stone Kids - Remera Sta Monica",
+    description: "Remera cuello redondo tipo pupera.",
+    price: 19500.00,
     image: "https://images.unsplash.com/photo-1618677603544-51162346e165?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwd2hpdGUlMjB0c2hpcnR8ZW58MXx8fHwxNzcxMjQ2MTI2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
     category: "Casual",
-    gender: "Unisex",
+    gender: "Mujer",
     type: "Camiseta",
     sizes: ["XS", "S", "M", "L", "XL"],
-    colors: ["Blanco", "Negro", "Gris"],
+    colors: ["Beige"],
     inStock: true,
   },
   {

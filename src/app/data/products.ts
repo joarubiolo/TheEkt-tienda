@@ -6,7 +6,7 @@ export const products: Product[] = [
     name: "Stone Kids - Remera Sta Monica",
     description: "Remera cuello redondo tipo pupera.",
     price: 19500.00,
-    image: "https://images.unsplash.com/photo-1618677603544-51162346e165?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwd2hpdGUlMjB0c2hpcnR8ZW58MXx8fHwxNzcxMjQ2MTI2fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    image: "https://i.postimg.cc/25xMh7rX/D_NQ_NP_2X_695467_MLA101110920480_122025_F.jpg",
     category: "Casual",
     gender: "Mujer",
     type: "Camiseta",

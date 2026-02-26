@@ -21,8 +21,8 @@ export function Header() {
     <header className="bg-white border-b border-gray-200">
       <div className="px-8 py-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <img src="https://i.postimg.cc/gkBqnMQq/Whats_App_Image_2026_02_25_at_8_31_38_PM.jpg" alt="TheEkt" className="w-12 h-12 object-contain" />
-          <h1 className="text-3xl text-gray-900">TheEkt</h1>
+          <img src="https://i.postimg.cc/g21SF6jq/Icon.jpg" alt="TheEkt" className="w-12 h-12 object-contain" />
+          <img src="https://i.postimg.cc/L5ffPnRV/Title_subtitle.jpg" alt="TheEkt" className="h-8 object-contain" />
         </Link>
 
         <div className="flex items-center gap-3">

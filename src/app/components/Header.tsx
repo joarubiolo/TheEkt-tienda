@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
-import { ShoppingBag, ShoppingCart, MessageCircle, LogIn } from "lucide-react";
+import { ShoppingCart, MessageCircle, LogIn } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/button";
@@ -21,8 +21,8 @@ export function Header() {
     <header className="bg-white border-b border-gray-200">
       <div className="px-8 py-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <ShoppingBag className="w-8 h-8 text-gray-900" />
-          <h1 className="text-3xl text-gray-900">Tienda de Ropa</h1>
+          <img src="https://i.postimg.cc/gkBqnMQq/Whats_App_Image_2026_02_25_at_8_31_38_PM.jpg" alt="TheEkt" className="w-12 h-12 object-contain" />
+          <h1 className="text-3xl text-gray-900">TheEkt</h1>
         </Link>
 
         <div className="flex items-center gap-3">

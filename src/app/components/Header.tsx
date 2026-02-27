@@ -21,7 +21,7 @@ export function Header() {
     <header 
       className="bg-white border-b border-gray-200"
       style={{
-        backgroundImage: `url('https://i.postimg.cc/yYhhHY6X/banner-simple.jpg')`,
+        backgroundImage: `url('https://i.postimg.cc/BQrptWTb/banner-simple.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

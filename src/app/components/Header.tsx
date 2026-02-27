@@ -19,10 +19,12 @@ export function Header() {
 
   return (
     <header className="bg-white border-b border-gray-200">
-      <div className="px-8 py-4 flex items-center justify-between">
+      <div className="px-4 py-4 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity ml-2">
+          <img src="https://i.postimg.cc/7Yn9tWrD/Icon_transp.png" alt="TheEkt" className="h-16 md:h-20 lg:h-24 w-auto object-contain" />
+        </Link>
         <div className="flex items-center justify-center flex-1">
-          <Link to="/" className="flex items-center gap-6 hover:opacity-80 transition-opacity" style={{ marginLeft: '10px' }}>
-            <img src="https://i.postimg.cc/7Yn9tWrD/Icon_transp.png" alt="TheEkt" className="h-16 md:h-20 lg:h-24 w-auto object-contain" />
+          <Link to="/" className="hover:opacity-80 transition-opacity">
             <img src="https://i.postimg.cc/GhxKg5nw/title_transp.png" alt="TheEkt" className="h-12 md:h-16 lg:h-20 w-auto object-contain" />
           </Link>
         </div>

@@ -19,9 +19,9 @@ export function Header() {
 
   return (
     <header className="bg-white border-b border-gray-200">
-      <div className="px-8 py-6 flex items-center justify-between">
+      <div className="px-8 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <img src="https://i.postimg.cc/QMsRdPsB/banner.jpg" alt="TheEkt" className="h-12 object-contain" />
+          <img src="https://i.postimg.cc/QMsRdPsB/banner.jpg" alt="TheEkt" className="h-16 md:h-20 lg:h-24 w-auto object-contain" />
         </Link>
 
         <div className="flex items-center gap-3">

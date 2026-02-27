@@ -18,12 +18,28 @@ export function Header() {
   const isContactPage = location.pathname === "/contact";
 
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="relative">
-        <Link to="/" className="block hover:opacity-95 transition-opacity">
-          <img src="https://i.postimg.cc/yYhhHY6X/banner-simple.jpg" alt="TheEkt" className="w-full h-auto object-contain" style={{ maxHeight: '120px' }} />
-        </Link>
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
+    <header 
+      className="bg-white border-b border-gray-200"
+      style={{
+        backgroundImage: `url('https://i.postimg.cc/yYhhHY6X/banner-simple.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '120px'
+      }}
+    >
+      <div className="px-4 py-4 flex items-center justify-between h-full">
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity ml-2">
+            <img src="https://i.postimg.cc/7Yn9tWrD/Icon_transp.png" alt="TheEkt" className="h-16 md:h-20 lg:h-24 w-auto object-contain" />
+          </Link>
+          <Link to="/" className="hover:opacity-80 transition-opacity">
+            <img src="https://i.postimg.cc/GhxKg5nw/title_transp.png" alt="TheEkt" className="h-12 md:h-16 lg:h-20 w-auto object-contain" />
+          </Link>
+          <img src="https://i.postimg.cc/BZBWdJ06/Sin-titulo-(1).png" alt="" className="h-16 md:h-20 lg:h-24 w-auto object-contain ml-[10px]" />
+        </div>
+
+        <div className="flex items-center gap-3">
           {!isContactPage && (
             <Link to="/contact">
               <Button variant="outline">

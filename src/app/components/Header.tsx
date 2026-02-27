@@ -18,17 +18,13 @@ export function Header() {
   const isContactPage = location.pathname === "/contact";
 
   return (
-    <header 
-      className="bg-white border-b border-gray-200"
-      style={{
-        backgroundImage: `url('https://i.postimg.cc/BQrptWTb/banner-simple.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        minHeight: '120px'
-      }}
-    >
-      <div className="px-4 py-4 flex items-center justify-between h-full">
+    <header className="bg-white border-b border-gray-200 relative">
+      <img 
+        src="https://i.postimg.cc/BQrptWTb/banner-simple.jpg" 
+        alt="" 
+        className="absolute inset-0 w-full h-full object-cover -scale-x-100"
+      />
+      <div className="relative px-4 py-4 flex items-center justify-between" style={{ minHeight: '120px' }}>
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity ml-2">
             <img src="https://i.postimg.cc/7Yn9tWrD/Icon_transp.png" alt="TheEkt" className="h-16 md:h-20 lg:h-24 w-auto object-contain" />

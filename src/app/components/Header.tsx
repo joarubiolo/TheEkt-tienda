@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import { ShoppingCart, MessageCircle, LogIn } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -11,34 +11,51 @@ export function Header() {
   const { getTotalItems } = useCart();
   const { user, loading } = useAuth();
   const location = useLocation();
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   
   const totalItems = getTotalItems();
   const isCartPage = location.pathname === "/cart";
   const isContactPage = location.pathname === "/contact";
 
-  return (
-    <header className="bg-white border-b border-gray-200 relative">
-      <img 
-        src="https://i.postimg.cc/BQrptWTb/banner-simple.jpg" 
-        alt="" 
-        className="absolute inset-0 w-full h-full object-cover -scale-x-100"
-      />
-      <div className="relative px-4 py-4 flex items-center justify-between" style={{ minHeight: '120px' }}>
-        <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity ml-2">
-            <img src="https://i.postimg.cc/7Yn9tWrD/Icon_transp.png" alt="TheEkt" className="h-16 md:h-20 lg:h-24 w-auto object-contain" />
-          </Link>
-          <Link to="/" className="hover:opacity-80 transition-opacity">
-            <img src="https://i.postimg.cc/GhxKg5nw/title_transp.png" alt="TheEkt" className="h-12 md:h-16 lg:h-20 w-auto object-contain" />
-          </Link>
-          <img src="https://i.postimg.cc/BZBWdJ06/Sin-titulo-(1).png" alt="" className="h-16 md:h-20 lg:h-24 w-auto object-contain ml-[10px]" />
-        </div>
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 150) {
+        setScrollProgress(0);
+      } else if (scrollY > 50) {
+        setScrollProgress(1 - (scrollY - 50) / 100);
+      } else {
+        setScrollProgress(1);
+      }
+    };
 
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div 
+      className="relative sticky top-0 z-40 transition-all duration-300"
+      style={{ 
+        height: scrollProgress > 0 ? `${120 + scrollProgress * 180}px` : '0px',
+        opacity: scrollProgress,
+        overflow: 'hidden'
+      }}
+    >
+      <img 
+        src="https://i.postimg.cc/rmyGrMZW/stone_local.jpg" 
+        alt="Stone Store" 
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      
+      <div className="absolute inset-0 bg-black/30" />
+      
+      <div className="relative h-full flex items-center justify-end px-8">
         <div className="flex items-center gap-3">
           {!isContactPage && (
             <Link to="/contact">
-              <Button variant="outline">
+              <Button variant="outline" className="bg-white/90 hover:bg-white">
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Contáctanos
               </Button>
@@ -47,7 +64,7 @@ export function Header() {
           
           {!isCartPage && (
             <Link to="/cart">
-              <Button variant="outline" className="relative">
+              <Button variant="outline" className="bg-white/90 hover:bg-white relative">
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Carrito
                 {totalItems > 0 && (
@@ -60,7 +77,7 @@ export function Header() {
           )}
 
           {loading ? (
-            <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+            <div className="w-10 h-10 rounded-full bg-white/90 animate-pulse" />
           ) : user ? (
             <UserMenu />
           ) : (
@@ -68,7 +85,7 @@ export function Header() {
               open={authModalOpen} 
               onOpenChange={setAuthModalOpen}
               trigger={
-                <Button variant="outline">
+                <Button variant="outline" className="bg-white/90 hover:bg-white">
                   <LogIn className="w-5 h-5 mr-2" />
                   Iniciar sesión
                 </Button>
@@ -77,6 +94,6 @@ export function Header() {
           )}
         </div>
       </div>
-    </header>
+    </div>
   );
 }

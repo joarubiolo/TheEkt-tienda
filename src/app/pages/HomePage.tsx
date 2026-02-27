@@ -71,7 +71,7 @@ export function HomePage() {
           <img 
             src="https://i.postimg.cc/nzVKDpSv/stone_kids.png" 
             alt="Niños" 
-            className="w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-96 md:h-[500px] object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
             <span className="text-white text-2xl md:text-3xl font-bold">NIÑOS</span>
@@ -85,7 +85,7 @@ export function HomePage() {
           <img 
             src="https://i.postimg.cc/tTRdxpvZ/stone_adultos.jpg" 
             alt="Adultos" 
-            className="w-full h-48 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-96 md:h-[500px] object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
             <span className="text-white text-2xl md:text-3xl font-bold">ADULTOS</span>

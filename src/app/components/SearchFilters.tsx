@@ -1,6 +1,5 @@
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Checkbox } from "./ui/checkbox";
 import { Search } from "lucide-react";
 
@@ -9,8 +8,8 @@ interface SearchFiltersProps {
   onSearchChange: (value: string) => void;
   selectedCategory: string;
   onCategoryChange: (value: string) => void;
-  selectedGender: string;
-  onGenderChange: (value: string) => void;
+  selectedGenders: string[];
+  onGenderChange: (genders: string[]) => void;
   selectedTypes: string[];
   onTypeToggle: (type: string) => void;
 }
@@ -20,14 +19,22 @@ export function SearchFilters({
   onSearchChange,
   selectedCategory,
   onCategoryChange,
-  selectedGender,
+  selectedGenders,
   onGenderChange,
   selectedTypes,
   onTypeToggle,
 }: SearchFiltersProps) {
   const categories = ["Todas", "Casual", "Formal", "Deportivo"];
-  const genders = ["Todos", "Hombre", "Mujer", "Unisex"];
+  const genders = ["Hombre", "Mujer", "Niño", "Niña"];
   const types = ["Camiseta", "Pantalón", "Sudadera", "Vestido", "Camisa", "Chaqueta", "Calzado", "Blusa"];
+
+  const handleGenderToggle = (gender: string) => {
+    if (selectedGenders.includes(gender)) {
+      onGenderChange(selectedGenders.filter(g => g !== gender));
+    } else {
+      onGenderChange([...selectedGenders, gender]);
+    }
+  };
 
   return (
     <div className="w-64 shrink-0 border-r border-gray-200 p-6 space-y-8">
@@ -49,10 +56,14 @@ export function SearchFilters({
       {/* Categoría */}
       <div className="space-y-3">
         <Label className="text-sm text-gray-700">Categoría</Label>
-        <RadioGroup value={selectedCategory} onValueChange={onCategoryChange}>
+        <div className="space-y-2">
           {categories.map((category) => (
             <div key={category} className="flex items-center space-x-2">
-              <RadioGroupItem value={category} id={`category-${category}`} />
+              <Checkbox
+                id={`category-${category}`}
+                checked={selectedCategory === category}
+                onCheckedChange={() => onCategoryChange(category)}
+              />
               <Label
                 htmlFor={`category-${category}`}
                 className="text-sm text-gray-600 cursor-pointer"
@@ -61,16 +72,20 @@ export function SearchFilters({
               </Label>
             </div>
           ))}
-        </RadioGroup>
+        </div>
       </div>
 
       {/* Género */}
       <div className="space-y-3">
         <Label className="text-sm text-gray-700">Género</Label>
-        <RadioGroup value={selectedGender} onValueChange={onGenderChange}>
+        <div className="space-y-2">
           {genders.map((gender) => (
             <div key={gender} className="flex items-center space-x-2">
-              <RadioGroupItem value={gender} id={`gender-${gender}`} />
+              <Checkbox
+                id={`gender-${gender}`}
+                checked={selectedGenders.includes(gender)}
+                onCheckedChange={() => handleGenderToggle(gender)}
+              />
               <Label
                 htmlFor={`gender-${gender}`}
                 className="text-sm text-gray-600 cursor-pointer"
@@ -79,7 +94,7 @@ export function SearchFilters({
               </Label>
             </div>
           ))}
-        </RadioGroup>
+        </div>
       </div>
 
       {/* Tipo de Ropa */}

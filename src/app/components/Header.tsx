@@ -27,6 +27,7 @@ export function Header() {
           <Link to="/" className="hover:opacity-80 transition-opacity">
             <img src="https://i.postimg.cc/GhxKg5nw/title_transp.png" alt="TheEkt" className="h-12 md:h-16 lg:h-20 w-auto object-contain" />
           </Link>
+          <img src="https://i.postimg.cc/BZBWdJ06/Sin-titulo-(1).png" alt="" className="h-16 md:h-20 lg:h-24 w-auto object-contain ml-[10px]" />
         </div>
 
         <div className="flex items-center gap-3">

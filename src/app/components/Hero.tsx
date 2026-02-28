@@ -21,7 +21,7 @@ export function Hero() {
     <section 
       className="hero image-as-background relative h-[700px] flex items-center"
       style={{
-        backgroundImage: `url('https://i.postimg.cc/T3C124HH/tienda.png')`,
+        backgroundImage: `url('https://i.postimg.cc/yNRs9Jpn/tienda-portada.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -40,7 +40,7 @@ export function Hero() {
         />
       </div>
       
-      <div className="absolute top-1/2 -translate-y-1/2 right-8 flex flex-col gap-3">
+      <div className="absolute top-8 right-8 flex flex-row gap-3">
         {!isContactPage && (
           <Link to="/contact">
             <Button variant="outline" className="bg-white/90 hover:bg-white animate-fadeInLeft delay-600">
@@ -78,6 +78,12 @@ export function Hero() {
                 Iniciar sesión
               </Button>
             }
+          />
+        )}
+      </div>
+    </section>
+  );
+}
           />
         )}
       </div>

@@ -36,7 +36,7 @@ export function Hero() {
         <img 
           src="https://i.postimg.cc/GhxKg5nw/title_transp.png" 
           alt="TheEkt" 
-          className="h-16 md:h-24 w-auto object-contain mb-8 animate-fadeInLeft delay-400"
+          className="h-16 md:h-24 w-auto object-contain animate-fadeInLeft delay-400"
         />
       </div>
       
@@ -78,12 +78,6 @@ export function Hero() {
                 Iniciar sesión
               </Button>
             }
-          />
-        )}
-      </div>
-    </section>
-  );
-}
           />
         )}
       </div>

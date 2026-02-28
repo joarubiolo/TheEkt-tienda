@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import { useLocation, Link } from "react-router";
+import { useLocation } from "react-router";
 import { SearchFilters } from "../components/SearchFilters";
 import { ProductGrid } from "../components/ProductGrid";
 import { products } from "../data/products";
@@ -62,37 +62,6 @@ export function HomePage() {
 
   return (
     <div>
-      {/* Secciones Niños y Adultos */}
-      <div className="grid grid-cols-2 gap-4 p-4">
-        <Link 
-          to="/ninos" 
-          className="relative group cursor-pointer block overflow-hidden rounded-lg"
-        >
-          <img 
-            src="https://i.postimg.cc/nzVKDpSv/stone_kids.png" 
-            alt="Niños" 
-            className="w-full h-96 md:h-[500px] object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-            <span className="text-white text-2xl md:text-3xl font-bold">NIÑOS</span>
-          </div>
-        </Link>
-        
-        <Link 
-          to="/adultos" 
-          className="relative group cursor-pointer block overflow-hidden rounded-lg"
-        >
-          <img 
-            src="https://i.postimg.cc/tTRdxpvZ/stone_adultos.jpg" 
-            alt="Adultos" 
-            className="w-full h-96 md:h-[500px] object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-            <span className="text-white text-2xl md:text-3xl font-bold">ADULTOS</span>
-          </div>
-        </Link>
-      </div>
-
       {/* Filtros y Productos */}
       <div className="flex" ref={productsRef}>
         <SearchFilters

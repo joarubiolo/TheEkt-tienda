@@ -19,10 +19,10 @@ export function Hero() {
 
   return (
     <section 
-      className="hero image-as-background relative h-[700px] flex items-center"
+      className="hero image-as-background relative h-[467px] flex items-center"
       style={{
         backgroundImage: `url('https://i.postimg.cc/yNRs9Jpn/tienda-portada.jpg')`,
-        backgroundSize: 'cover',
+        backgroundSize: '100% auto',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }}

@@ -4,37 +4,58 @@ import { Button } from "./ui/button";
 import { ShoppingCart, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
-import { useNavigate } from "react-router";
 import { WishlistButton } from "./WishlistButton";
 
 interface ProductCardProps {
   product: Product;
+  onOpenModal: (product: Product) => void;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, onOpenModal }: ProductCardProps) {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const { addItem } = useCart();
-  const navigate = useNavigate();
 
-  const handlePurchase = () => {
+  const handlePurchase = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!selectedSize || !selectedColor) {
       toast.error("Por favor selecciona talla y color");
       return;
     }
     addItem(product, selectedSize, selectedColor);
     toast.success(`${product.name} agregado al carrito`);
-    // Resetear selecciones
     setSelectedSize("");
     setSelectedColor("");
   };
 
-  const handleConsultProduct = () => {
-    navigate(`/contact?product=${encodeURIComponent(product.name)}`);
+  const handleConsultProduct = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.location.href = `/contact?product=${encodeURIComponent(product.name)}`;
+  };
+
+  const handleSizeClick = (e: React.MouseEvent, size: string) => {
+    e.stopPropagation();
+    if (product.inStock) {
+      setSelectedSize(size);
+    }
+  };
+
+  const handleColorClick = (e: React.MouseEvent, color: string) => {
+    e.stopPropagation();
+    if (product.inStock) {
+      setSelectedColor(color);
+    }
+  };
+
+  const handleCardClick = () => {
+    onOpenModal(product);
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full">
+    <div 
+      className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full cursor-pointer"
+      onClick={handleCardClick}
+    >
       {/* Imagen */}
       <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
         <img
@@ -59,18 +80,17 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Nombre y Precio */}
         <div>
           <h3 className="text-lg text-gray-900">{product.name}</h3>
-          <p className="text-sm text-gray-500 mt-1">{product.description}</p>
-          <p className="text-xl text-gray-900 mt-2">${product.price}</p>
+          <p className="text-xl text-gray-900 mt-2">${product.price.toLocaleString('es-AR')}</p>
         </div>
 
         {/* Talles */}
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
           <label className="text-xs text-gray-600 block mb-2">Talla</label>
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((size) => (
               <button
                 key={size}
-                onClick={() => product.inStock && setSelectedSize(size)}
+                onClick={(e) => handleSizeClick(e, size)}
                 disabled={!product.inStock}
                 className={`px-3 py-1.5 text-xs border rounded transition-colors ${
                   !product.inStock
@@ -87,13 +107,13 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Colores */}
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
           <label className="text-xs text-gray-600 block mb-2">Color</label>
           <div className="flex flex-wrap gap-2">
             {product.colors.map((color) => (
               <button
                 key={color}
-                onClick={() => product.inStock && setSelectedColor(color)}
+                onClick={(e) => handleColorClick(e, color)}
                 disabled={!product.inStock}
                 className={`px-3 py-1.5 text-xs border rounded transition-colors ${
                   !product.inStock
@@ -110,7 +130,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Botón Comprar o Consultar */}
-        <div className="mt-auto pt-3">
+        <div className="mt-auto pt-3" onClick={(e) => e.stopPropagation()}>
           {product.inStock ? (
             <Button
               onClick={handlePurchase}

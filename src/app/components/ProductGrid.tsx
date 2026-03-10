@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Product } from "../types/product";
 import { ProductCard } from "./ProductCard";
+import { ProductModal } from "./ProductModal";
 
 interface ProductGridProps {
   products: Product[];
 }
 
 export function ProductGrid({ products }: ProductGridProps) {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
   if (products.length === 0) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -15,10 +19,22 @@ export function ProductGrid({ products }: ProductGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {products.map((product) => (
+          <ProductCard 
+            key={product.id} 
+            product={product} 
+            onOpenModal={setSelectedProduct}
+          />
+        ))}
+      </div>
+
+      <ProductModal
+        product={selectedProduct as Product}
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
+    </>
   );
 }

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Product } from "../types/product";
 import { Button } from "./ui/button";
@@ -7,7 +8,7 @@ import { useCart } from "../context/CartContext";
 import { WishlistButton } from "./WishlistButton";
 
 interface ProductModalProps {
-  product: Product;
+  product: Product | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -18,9 +19,15 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { addItem } = useCart();
 
-  const images = product.images && product.images.length > 0 
-    ? product.images 
-    : [product.image];
+  // 🔒 Evita errores si el producto es null o el modal está cerrado
+  if (!isOpen || !product) return null;
+
+  const images =
+    product.images && product.images.length > 0
+      ? product.images
+      : product.image
+      ? [product.image]
+      : [];
 
   useEffect(() => {
     if (isOpen) {
@@ -38,8 +45,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     setSelectedColor("");
     setCurrentImageIndex(0);
   }, [product]);
-
-  if (!isOpen) return null;
 
   const handlePurchase = () => {
     if (!selectedSize || !selectedColor) {
@@ -61,10 +66,12 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   };
 
   const nextImage = () => {
+    if (images.length === 0) return;
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
   const prevImage = () => {
+    if (images.length === 0) return;
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
@@ -74,7 +81,9 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-4 h-4 ${star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+            className={`w-4 h-4 ${
+              star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+            }`}
           />
         ))}
       </div>
@@ -86,11 +95,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
       onClick={handleOverlayClick}
     >
-      <div 
+      <div
         className="bg-white rounded-lg w-[60%] max-h-[90vh] overflow-hidden flex flex-col relative"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Botón X */}
+        {/* Botón cerrar */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 bg-white/80 rounded-full p-1 hover:bg-gray-100 transition-colors"
@@ -102,13 +111,15 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
           {/* Galería de imágenes */}
           <div className="w-full md:w-1/2 bg-gray-100 relative">
             <div className="aspect-[3/4] relative overflow-hidden">
-              <img
-                src={images[currentImageIndex]}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-              
-              {/* Navegación del carrusel */}
+              {images.length > 0 && (
+                <img
+                  src={images[currentImageIndex]}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
+
+              {/* Navegación carrusel */}
               {images.length > 1 && (
                 <>
                   <button
@@ -117,14 +128,14 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                   >
                     <ChevronLeft className="w-5 h-5 text-gray-700" />
                   </button>
+
                   <button
                     onClick={nextImage}
                     className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white transition-colors"
                   >
                     <ChevronRight className="w-5 h-5 text-gray-700" />
                   </button>
-                  
-                  {/* Dots indicator */}
+
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                     {images.map((_, index) => (
                       <button
@@ -141,21 +152,28 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
             </div>
           </div>
 
-          {/* Información del producto */}
+          {/* Información producto */}
           <div className="w-full md:w-1/2 p-6 overflow-y-auto max-h-[90vh]">
             <div className="space-y-4">
               {/* Título y precio */}
               <div>
                 <div className="flex justify-between items-start">
-                  <h2 className="text-2xl font-semibold text-gray-900">{product.name}</h2>
+                  <h2 className="text-2xl font-semibold text-gray-900">
+                    {product.name}
+                  </h2>
                   <WishlistButton productId={product.id} />
                 </div>
-                <p className="text-2xl font-bold text-gray-900 mt-2">${product.price.toLocaleString('es-AR')}</p>
+
+                <p className="text-2xl font-bold text-gray-900 mt-2">
+                  ${product.price.toLocaleString("es-AR")}
+                </p>
               </div>
 
               {/* Descripción */}
               <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-1">Descripción</h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-1">
+                  Descripción
+                </h3>
                 <p className="text-sm text-gray-600">{product.description}</p>
               </div>
 
@@ -205,7 +223,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 </div>
               </div>
 
-              {/* Botón Comprar */}
+              {/* Botón compra */}
               <div className="pt-2">
                 {product.inStock ? (
                   <Button
@@ -229,21 +247,30 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
               {/* Opiniones */}
               <div className="border-t pt-4 mt-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Opiniones</h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-3">
+                  Opiniones
+                </h3>
+
                 {product.reviews && product.reviews.length > 0 ? (
                   <div className="space-y-3">
                     {product.reviews.map((review, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm font-medium text-gray-800">{review.user}</span>
+                          <span className="text-sm font-medium text-gray-800">
+                            {review.user}
+                          </span>
                           {renderStars(review.rating)}
                         </div>
-                        <p className="text-sm text-gray-600">{review.comment}</p>
+                        <p className="text-sm text-gray-600">
+                          {review.comment}
+                        </p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-400 italic">Aún no hay valoraciones</p>
+                  <p className="text-sm text-gray-400 italic">
+                    Aún no hay valoraciones
+                  </p>
                 )}
               </div>
             </div>

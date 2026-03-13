@@ -39,7 +39,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     setCurrentImageIndex(0);
   }, [product]);
 
-  if (!product || !isOpen) return null;
+  if (!isOpen) return null;
 
   const handlePurchase = () => {
     if (!selectedSize || !selectedColor) {

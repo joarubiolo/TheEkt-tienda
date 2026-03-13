@@ -30,11 +30,13 @@ export function ProductGrid({ products }: ProductGridProps) {
         ))}
       </div>
 
-      <ProductModal
-        product={selectedProduct as Product}
-        isOpen={!!selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-      />
+      {selectedProduct && (
+        <ProductModal
+          product={selectedProduct}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </>
   );
 }

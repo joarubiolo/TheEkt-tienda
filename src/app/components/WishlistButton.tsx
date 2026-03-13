@@ -43,7 +43,7 @@ export function WishlistButton({ productId, className }: WishlistButtonProps) {
       variant="ghost"
       size="icon"
       className={cn(
-        "absolute top-2 right-2 z-10 bg-white/80 hover:bg-white rounded-full shadow-sm transition-all",
+        "bg-white/80 hover:bg-white rounded-full shadow-sm transition-all",
         inWishlist && "text-red-500 hover:text-red-600",
         className
       )}

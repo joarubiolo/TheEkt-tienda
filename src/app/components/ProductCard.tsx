@@ -57,11 +57,11 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
       onClick={handleCardClick}
     >
       {/* Imagen */}
-      <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative">
+      <div className="aspect-[3/4] overflow-hidden bg-white relative flex items-center justify-center">
         <img
           src={product.image}
           alt={product.name}
-          className={`w-full h-full object-cover hover:scale-105 transition-transform duration-300 ${
+          className={`max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 ${
             !product.inStock ? "opacity-40" : ""
           }`}
         />

@@ -99,27 +99,29 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
         className="bg-white rounded-lg w-[60%] max-h-[90vh] overflow-hidden flex flex-col relative"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Botón cerrar */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 bg-white/80 rounded-full p-1 hover:bg-gray-100 transition-colors"
-        >
-          <X className="w-6 h-6 text-gray-700" />
-        </button>
+        {/* Botones X y Corazón */}
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+          <WishlistButton productId={product.id} className="static bg-white/80 hover:bg-white" />
+          <button
+            onClick={onClose}
+            className="bg-white/80 hover:bg-gray-100 rounded-full p-1 transition-colors"
+          >
+            <X className="w-6 h-6 text-gray-700" />
+          </button>
+        </div>
 
         <div className="flex flex-col md:flex-row overflow-hidden">
           {/* Galería de imágenes */}
-          <div className="w-full md:w-1/2 bg-gray-100 relative">
-            <div className="aspect-[3/4] relative overflow-hidden">
-              {images.length > 0 && (
-                <img
-                  src={images[currentImageIndex]}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              )}
-
-              {/* Navegación carrusel */}
+          <div className="w-full md:w-1/2 bg-white relative flex items-center justify-center">
+            <div className="aspect-[3/4] relative overflow-hidden flex items-center justify-center bg-white">
+              <img
+                src={images[currentImageIndex]}
+                alt={product.name}
+                className="max-w-full max-h-full object-contain"
+              />
+              
+              {/* Navegación del carrusel */}
+              {images.length > 1 && (
               {images.length > 1 && (
                 <>
                   <button
@@ -157,16 +159,8 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
             <div className="space-y-4">
               {/* Título y precio */}
               <div>
-                <div className="flex justify-between items-start">
-                  <h2 className="text-2xl font-semibold text-gray-900">
-                    {product.name}
-                  </h2>
-                  <WishlistButton productId={product.id} />
-                </div>
-
-                <p className="text-2xl font-bold text-gray-900 mt-2">
-                  ${product.price.toLocaleString("es-AR")}
-                </p>
+                <h2 className="text-2xl font-semibold text-gray-900">{product.name}</h2>
+                <p className="text-2xl font-bold text-gray-900 mt-2">${product.price.toLocaleString('es-AR')}</p>
               </div>
 
               {/* Descripción */}

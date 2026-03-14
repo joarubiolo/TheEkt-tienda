@@ -57,7 +57,7 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
       onClick={handleCardClick}
     >
       {/* Imagen */}
-      <div className="aspect-[3/4] overflow-hidden bg-white relative flex items-center justify-center">
+      <div className="aspect-[3/4] overflow-hidden bg-gray-100 relative flex items-center justify-center">
         <img
           src={product.image}
           alt={product.name}

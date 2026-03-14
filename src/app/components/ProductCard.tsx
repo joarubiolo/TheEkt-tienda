@@ -5,7 +5,6 @@ import { ShoppingCart, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
 import { WishlistButton } from "./WishlistButton";
-import { useImageBorderColor } from "../hooks/useImageBorderColor";
 
 interface ProductCardProps {
   product: Product;
@@ -16,7 +15,6 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const { addItem } = useCart();
-  const borderColor = useImageBorderColor(product.image);
 
   const handlePurchase = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -59,7 +57,7 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
       onClick={handleCardClick}
     >
       {/* Imagen */}
-      <div className="aspect-[3/4] overflow-hidden relative flex items-center justify-center" style={{ backgroundColor: borderColor }}>
+      <div className="aspect-[3/4] overflow-hidden bg-gray-500 relative flex items-center justify-center">
         <img
           src={product.image}
           alt={product.name}

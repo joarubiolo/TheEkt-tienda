@@ -122,7 +122,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
               
               {/* Navegación del carrusel */}
               {images.length > 1 && (
-              {images.length > 1 && (
                 <>
                   <button
                     onClick={prevImage}

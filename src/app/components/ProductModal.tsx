@@ -112,8 +112,8 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
         <div className="flex flex-col md:flex-row overflow-hidden">
           {/* Galería de imágenes */}
-          <div className="w-full md:w-1/2 bg-gray-100 relative flex items-center justify-center">
-            <div className="aspect-[3/4] relative overflow-hidden flex items-center justify-center bg-gray-100">
+          <div className="w-full md:w-1/2 bg-gray-500 relative flex items-center justify-center">
+            <div className="aspect-[3/4] relative overflow-hidden flex items-center justify-center bg-gray-500">
               <img
                 src={images[currentImageIndex]}
                 alt={product.name}

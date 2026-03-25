@@ -26,7 +26,7 @@ export function SearchFilters({
 }: SearchFiltersProps) {
   const categories = ["Todas", "Casual", "Formal", "Deportivo"];
   const genders = ["Hombre", "Mujer", "Niño", "Niña"];
-  const types = ["Camiseta", "Pantalón", "Sudadera", "Vestido", "Camisa", "Chaqueta", "Calzado", "Blusa"];
+  const types = ["Camiseta", "Pantalón", "Conjunto", "Remera", "Abrigo", "Mallas", "Remeras", "Campera", "Zapatillas"];
 
   const handleGenderToggle = (gender: string) => {
     if (selectedGenders.includes(gender)) {

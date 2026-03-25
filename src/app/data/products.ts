@@ -43,9 +43,11 @@ export const products: Product[] = [
     name: "Jean Fly Back",
     description: "Jean elastizado",
     price: 68400.00,
-    image: "https://i.postimg.cc/ZKX3R3Lq/Niña_modela_ropa_(9).jpg",
+    image: "https://i.postimg.cc/Nj3XCzcJ/Niña_modela_ropa_(9).jpg",
     images: [
-      "https://i.postimg.cc/ZKX3R3Lq/Niña_modela_ropa_(9).jpg"
+      "https://i.postimg.cc/Nj3XCzcJ/Niña_modela_ropa_(9).jpg",
+      "https://i.postimg.cc/bYT4gnP4/Jean_fly_back.png",
+      "https://i.postimg.cc/8kHx4vG0/Jean_fly_back_dorso.png"
     ],
     category: "Casual",
     gender: "Niño",
@@ -59,9 +61,11 @@ export const products: Product[] = [
     name: "Jean Total Blue",
     description: "Jean elastizado en color azul.",
     price: 67800.00,
-    image: "https://i.postimg.cc/Wbxr3r73/Niña_modela_ropa_(8).jpg",
+    image: "https://i.postimg.cc/x1wmp426/Niña_modela_ropa_(8).jpg",
     images: [
-      "https://i.postimg.cc/Wbxr3r73/Niña_modela_ropa_(8).jpg"
+      "https://i.postimg.cc/x1wmp426/Niña_modela_ropa_(8).jpg",
+      "https://i.postimg.cc/Pf40yDHV/Jean_total_blue.png",
+      "https://i.postimg.cc/SN3kqSMP/Jean_total_blue_dorso.png"
     ],
     category: "Casual",
     gender: "Niño",
@@ -78,9 +82,11 @@ export const products: Product[] = [
     name: "Jean Wide Leg Chill",
     description: "Jean de piernas anchas color claro.",
     price: 65400.00,
-    image: "https://i.postimg.cc/dtgd1d93/Niña_modela_ropa_(7).jpg",
+    image: "https://i.postimg.cc/HkqMvhg3/Niña_modela_ropa_(7).jpg",
     images: [
-      "https://i.postimg.cc/dtgd1d93/Niña_modela_ropa_(7).jpg"
+      "https://i.postimg.cc/HkqMvhg3/Niña_modela_ropa_(7).jpg",
+      "https://i.postimg.cc/9FrCvRrS/Jean_wide_leg_chill.png",
+      "https://i.postimg.cc/XqD3r3DP/Jean_wide_leg_chill_dorso.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -94,9 +100,10 @@ export const products: Product[] = [
     name: "Mono Minnie Mouse",
     description: "Mono de algodón con bolsillos, cintura elástica y tiras ajustables.",
     price: 22800.00,
-    image: "https://i.postimg.cc/DzTXQTDC/Niña_modelando_ropa.jpg",
+    image: "https://i.postimg.cc/Y0CLmc6k/Niña_modelando_ropa.jpg",
     images: [
-      "https://i.postimg.cc/DzTXQTDC/Niña_modelando_ropa.jpg"
+      "https://i.postimg.cc/Y0CLmc6k/Niña_modelando_ropa.jpg",
+      "https://i.postimg.cc/MKS3kgPy/Musculosa_gris.jpg"
     ],
     category: "Casual",
     gender: "Niña",
@@ -110,9 +117,10 @@ export const products: Product[] = [
     name: "Vestido Minnie Mouse",
     description: "Vestido de algodón estampado con volados en la manga y falda con brillo.",
     price: 31200.00,
-    image: "https://i.postimg.cc/8CS6dS3b/Niña_modelando_ropa_(1).jpg",
+    image: "https://i.postimg.cc/76D2wJbt/Niña_modelando_ropa_(1).jpg",
     images: [
-      "https://i.postimg.cc/8CS6dS3b/Niña_modelando_ropa_(1).jpg"
+      "https://i.postimg.cc/76D2wJbt/Niña_modelando_ropa_(1).jpg",
+      "https://i.postimg.cc/bNhVX4Cn/Musculosa_gris_(1).jpg"
     ],
     category: "Casual",
     gender: "Niña",
@@ -122,7 +130,7 @@ export const products: Product[] = [
     inStock: true,
     reviews: [
       { rating: 5, comment: "Mi hija lo ama, muy lindo", user: "Ana", date: "2026-02-28" },
-      { rating: 5, comment: "Perfecto para el cumpleañeros", user: "Laura", date: "2026-02-10" }
+      { rating: 5, comment: "Perfecto para el cumple", user: "Laura", date: "2026-02-10" }
     ]
   },
   {
@@ -130,9 +138,10 @@ export const products: Product[] = [
     name: "Pupera Negra Minnie",
     description: "Remera de algodón corta tipo pupera, ancha con estampa en su frente.",
     price: 13800.00,
-    image: "https://i.postimg.cc/JzJXBnTQ/Niña_modelando_ropa_(10).jpg",
+    image: "https://i.postimg.cc/pTZnTVFt/Niña_modelando_ropa_(10).jpg",
     images: [
-      "https://i.postimg.cc/JzJXBnTQ/Niña_modelando_ropa_(10).jpg"
+      "https://i.postimg.cc/pTZnTVFt/Niña_modelando_ropa_(10).jpg",
+      "https://i.postimg.cc/0QYbK6pY/686D4E4C_78F2_49A6_817B_4EAF148FDA29.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -146,9 +155,12 @@ export const products: Product[] = [
     name: "Campera Spider-Man",
     description: "Campera con diseño original y muy abrigada.",
     price: 100000.00,
-    image: "https://i.postimg.cc/5NDv0vm2/Niña_modela_ropa_(10).jpg",
+    image: "https://i.postimg.cc/Cx38rQg6/Niña_modela_ropa_(10).jpg",
     images: [
-      "https://i.postimg.cc/5NDv0vm2/Niña_modela_ropa_(10).jpg"
+      "https://i.postimg.cc/Cx38rQg6/Niña_modela_ropa_(10).jpg",
+      "https://i.postimg.cc/593Dgz1t/PHOTO_2026_02_25_19_12_32.jpg",
+      "https://i.postimg.cc/jd80x7kZ/PHOTO_2026_03_03_16_12_25_1.jpg",
+      "https://i.postimg.cc/kXMPPcwG/PHOTO_2026_03_03_16_12_29_2.jpg"
     ],
     category: "Casual",
     gender: "Niño",
@@ -162,9 +174,13 @@ export const products: Product[] = [
     name: "Campera Minnie Mouse",
     description: "Campera con diseño original y muy abrigada.",
     price: 100000.00,
-    image: "https://i.postimg.cc/J4SJnJQ1/Niña_modela_ropa_(11).jpg",
+    image: "https://i.postimg.cc/vZJn2NsK/Niña_modela_ropa_(11).jpg",
     images: [
-      "https://i.postimg.cc/J4SJnJQ1/Niña_modela_ropa_(11).jpg"
+      "https://i.postimg.cc/vZJn2NsK/Niña_modela_ropa_(11).jpg",
+      "https://i.postimg.cc/9Xpsb9VW/PHOTO_2026_02_25_19_12_37.jpg",
+      "https://i.postimg.cc/ryJ7j4c6/PHOTO_2026_02_25_19_12_39.jpg",
+      "https://i.postimg.cc/pX0bWF1D/PHOTO_2026_03_03_16_12_26_1.jpg",
+      "https://i.postimg.cc/xTjVVRgG/PHOTO_2026_03_03_16_12_28.jpg"
     ],
     category: "Casual",
     gender: "Niña",
@@ -181,9 +197,12 @@ export const products: Product[] = [
     name: "Campera Frozzen",
     description: "Campera con diseño original y muy abrigada.",
     price: 100000.00,
-    image: "https://i.postimg.cc/c4PYHYcd/Niña_modela_ropa_(12).jpg",
+    image: "https://i.postimg.cc/HkqMvhgq/Niña_modela_ropa_(12).jpg",
     images: [
-      "https://i.postimg.cc/c4PYHYcd/Niña_modela_ropa_(12).jpg"
+      "https://i.postimg.cc/HkqMvhgq/Niña_modela_ropa_(12).jpg",
+      "https://i.postimg.cc/T29B0bGT/PHOTO_2026_02_25_19_12_36_1.jpg",
+      "https://i.postimg.cc/c41GGmTf/PHOTO_2026_03_03_16_12_28_2.jpg",
+      "https://i.postimg.cc/bNYffTLZ/PHOTO_2026_03_03_16_12_29_1.jpg"
     ],
     category: "Casual",
     gender: "Niña",
@@ -197,9 +216,12 @@ export const products: Product[] = [
     name: "Campera Mickey Mouse",
     description: "Campera con diseño original y muy abrigada.",
     price: 100000.00,
-    image: "https://i.postimg.cc/pX38T8BW/Niña_modela_ropa_(13).jpg",
+    image: "https://i.postimg.cc/W40kBwNC/Niña_modela_ropa_(13).jpg",
     images: [
-      "https://i.postimg.cc/pX38T8BW/Niña_modela_ropa_(13).jpg"
+      "https://i.postimg.cc/W40kBwNC/Niña_modela_ropa_(13).jpg",
+      "https://i.postimg.cc/Pf40yDhf/PHOTO_2026_02_25_19_12_33.jpg",
+      "https://i.postimg.cc/WbpccnS3/PHOTO_2026_03_03_16_12_30_1.jpg",
+      "https://i.postimg.cc/xTjVVRgq/PHOTO_2026_03_03_16_12_30.jpg"
     ],
     category: "Casual",
     gender: "Niño",
@@ -213,9 +235,11 @@ export const products: Product[] = [
     name: "Campera Avengers",
     description: "Campera con diseño original y muy abrigada.",
     price: 100000.00,
-    image: "https://i.postimg.cc/dtgd1d9F/Niña_modela_ropa_(14).jpg",
+    image: "https://i.postimg.cc/TPnDzJ2T/Niña_modela_ropa_(14).jpg",
     images: [
-      "https://i.postimg.cc/dtgd1d9F/Niña_modela_ropa_(14).jpg"
+      "https://i.postimg.cc/TPnDzJ2T/Niña_modela_ropa_(14).jpg",
+      "https://i.postimg.cc/zDj47h5X/PHOTO_2026_02_25_19_12_36.jpg",
+      "https://i.postimg.cc/CMN978Yp/PHOTO_2026_02_25_19_12_38_1.jpg"
     ],
     category: "Casual",
     gender: "Niño",
@@ -229,9 +253,11 @@ export const products: Product[] = [
     name: "Malla Premium Minnie Mouse",
     description: "Malla de alta calidad con diseño original.",
     price: 31200.00,
-    image: "https://i.postimg.cc/sgSWZXnj/Niña_modela_ropa_(2).jpg",
+    image: "https://i.postimg.cc/0yTSXBsS/Niña_modela_ropa_(2).jpg",
     images: [
-      "https://i.postimg.cc/sgSWZXnj/Niña_modela_ropa_(2).jpg"
+      "https://i.postimg.cc/0yTSXBsS/Niña_modela_ropa_(2).jpg",
+      "https://i.postimg.cc/T1Pf2hQp/A1CC5A34_E878_48F7_9D13_0A74694271C5.png",
+      "https://i.postimg.cc/VNjYDxdf/E7EF0D21_FAAC_4687_B495_FF6249DFBA93.png"
     ],
     category: "Baño",
     gender: "Niña",
@@ -245,9 +271,11 @@ export const products: Product[] = [
     name: "Bikini Premium Minnie Mouse",
     description: "Bikini de alta calidad con diseño original.",
     price: 31200.00,
-    image: "https://i.postimg.cc/fRXd0LHw/Niña_modela_ropa_(3).jpg",
+    image: "https://i.postimg.cc/Cx38rQgb/Niña_modela_ropa_(1).jpg",
     images: [
-      "https://i.postimg.cc/fRXd0LHw/Niña_modela_ropa_(3).jpg"
+      "https://i.postimg.cc/Cx38rQgb/Niña_modela_ropa_(1).jpg",
+      "https://i.postimg.cc/rsYcDcY0/53B1C1F1_6967_44AB_9631_1261BAB52492.png",
+      "https://i.postimg.cc/T1Pf2hQr/7488A037_EC0D_4170_AF98_A2D383CCA6E7.png"
     ],
     category: "Baño",
     gender: "Niña",
@@ -261,9 +289,10 @@ export const products: Product[] = [
     name: "Top y Calza Stone",
     description: "Top y calza de lycra para un look moderno.",
     price: 24000.00,
-    image: "https://i.postimg.cc/m2KMDMS1/Niña_modela_ropa_(4).jpg",
+    image: "https://i.postimg.cc/L8cPQbp1/Niña_modela_ropa_(4).jpg",
     images: [
-      "https://i.postimg.cc/m2KMDMS1/Niña_modela_ropa_(4).jpg"
+      "https://i.postimg.cc/L8cPQbp1/Niña_modela_ropa_(4).jpg",
+      "https://i.postimg.cc/NF0BGLbR/A8460BD2_DE2F_48F8_81A9_8D6F00580FE2.png"
     ],
     category: "Deportivo",
     gender: "Niña",
@@ -277,9 +306,12 @@ export const products: Product[] = [
     name: "Pollera Jean",
     description: "Pollera de jean para un look moderno.",
     price: 33000.00,
-    image: "https://i.postimg.cc/MKgRTRYn/Niña_modela_ropa_(5).jpg",
+    image: "https://i.postimg.cc/K8kLNydf/Niña_modela_ropa_(5).jpg",
     images: [
-      "https://i.postimg.cc/MKgRTRYn/Niña_modela_ropa_(5).jpg"
+      "https://i.postimg.cc/K8kLNydf/Niña_modela_ropa_(5).jpg",
+      "https://i.postimg.cc/FRmLNk10/Niña_modela_ropa_5.jpg",
+      "https://i.postimg.cc/85HBrdrG/pollera_jean.png",
+      "https://i.postimg.cc/Tw9qWjWM/pollera_jean_dorso.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -293,9 +325,11 @@ export const products: Product[] = [
     name: "Bermuda Korea",
     description: "Bermuda de gabardina para un look moderno.",
     price: 36750.00,
-    image: "https://i.postimg.cc/tC8PTPzY/Niña_modela_ropa_(6).jpg",
+    image: "https://i.postimg.cc/sgkWHNrm/Niña_modela_ropa_(6).jpg",
     images: [
-      "https://i.postimg.cc/tC8PTPzY/Niña_modela_ropa_(6).jpg"
+      "https://i.postimg.cc/sgkWHNrm/Niña_modela_ropa_(6).jpg",
+      "https://i.postimg.cc/GhYPF1Dk/Bermuda_korea.png",
+      "https://i.postimg.cc/c4Y7RN3B/Bermuda_korea_dorso.png"
     ],
     category: "Casual",
     gender: "Niño",
@@ -309,9 +343,11 @@ export const products: Product[] = [
     name: "Calza Biker Minnie Mouse",
     description: "Calza ciclista de algodón y lycra con estampado en una pierna.",
     price: 15000.00,
-    image: "https://i.postimg.cc/GmYDs2MY/Niña_modelando_ropa_(11).jpg",
+    image: "https://i.postimg.cc/cHm8H1nW/Niña_modelando_ropa_(11).jpg",
     images: [
-      "https://i.postimg.cc/GmYDs2MY/Niña_modelando_ropa_(11).jpg"
+      "https://i.postimg.cc/cHm8H1nW/Niña_modelando_ropa_(11).jpg",
+      "https://i.postimg.cc/vBrcx1Wv/7FCA0CE7_A5AB_48B8_A386_7C513400DC25.png",
+      "https://i.postimg.cc/C1GznZjc/B42B472E_FDF2_4070_A4E9_DD9A1C283E47.png"
     ],
     category: "Deportivo",
     gender: "Niña",
@@ -325,9 +361,11 @@ export const products: Product[] = [
     name: "Top y Calza Minnie Mouse",
     description: "Top y calza de lycra para un look moderno.",
     price: 27600.00,
-    image: "https://i.postimg.cc/htxm7jCd/Niña_modelando_ropa_(12).jpg",
+    image: "https://i.postimg.cc/NM4rMGHB/Niña_modelando_ropa_(12).jpg",
     images: [
-      "https://i.postimg.cc/htxm7jCd/Niña_modelando_ropa_(12).jpg"
+      "https://i.postimg.cc/NM4rMGHB/Niña_modelando_ropa_(12).jpg",
+      "https://i.postimg.cc/vTXTXp2Y/73151A6B_B9BC_42C1_8754_FDC21F6EE4A8.png",
+      "https://i.postimg.cc/vBrcx1Wj/119E2A40_F2C3_4E1B_90F4_DCFE520BD152.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -341,9 +379,11 @@ export const products: Product[] = [
     name: "Top y Calza Mickey Mouse",
     description: "Top y calza de lycra para un look moderno.",
     price: 27600.00,
-    image: "https://i.postimg.cc/DwsGbZCb/Niña_modelando_ropa_(13).jpg",
+    image: "https://i.postimg.cc/cHm8H1ns/Niña_modelando_ropa_(13).jpg",
     images: [
-      "https://i.postimg.cc/DwsGbZCb/Niña_modelando_ropa_(13).jpg"
+      "https://i.postimg.cc/cHm8H1ns/Niña_modelando_ropa_(13).jpg",
+      "https://i.postimg.cc/VsFJYCfT/A569141F_A267_4AFE_B9B2_687C5E882827.png",
+      "https://i.postimg.cc/DfcS2XvH/643B908C_B553_476D_84B4_BACB665AB7E7.png"
     ],
     category: "Casual",
     gender: "Niño",
@@ -357,9 +397,10 @@ export const products: Product[] = [
     name: "Top Minnie Mouse",
     description: "Top sublimado de microfibra a rayas.",
     price: 18000.00,
-    image: "https://i.postimg.cc/9QT9qMxw/Niña_modelando_ropa_(14).jpg",
+    image: "https://i.postimg.cc/sXcZXfhj/Niña_modelando_ropa_(14).jpg",
     images: [
-      "https://i.postimg.cc/9QT9qMxw/Niña_modelando_ropa_(14).jpg"
+      "https://i.postimg.cc/sXcZXfhj/Niña_modelando_ropa_(14).jpg",
+      "https://i.postimg.cc/C5J5JWrq/55D4F186_7FD1_4F7F_B869_1D109B07D86D.png"
     ],
     category: "Deportivo",
     gender: "Niña",
@@ -373,9 +414,11 @@ export const products: Product[] = [
     name: "Calza y top Minnie Mouse",
     description: "Top y calza sublimado de microfibra.",
     price: 27800.00,
-    image: "https://i.postimg.cc/VkMtb67S/Niña_modelando_ropa_(15).jpg",
+    image: "https://i.postimg.cc/7hZJTv3v/Niña_modelando_ropa_(15).jpg",
     images: [
-      "https://i.postimg.cc/VkMtb67S/Niña_modelando_ropa_(15).jpg"
+      "https://i.postimg.cc/7hZJTv3v/Niña_modelando_ropa_(15).jpg",
+      "https://i.postimg.cc/28c3WNBF/2C38BA9F_E1AE_4833_A38F_3A65785F2727.png",
+      "https://i.postimg.cc/qRT7rk9C/506BE7E8_B20F_4A2E_AD70_42212955BAA2.png"
     ],
     category: "Deportivo",
     gender: "Niña",
@@ -389,9 +432,10 @@ export const products: Product[] = [
     name: "Remera Mickey Mouse",
     description: "Remera manga corta superpuestas con aplique de strass.",
     price: 18000.00,
-    image: "https://i.postimg.cc/y89RSdfW/Niña_modelando_ropa_(16).jpg",
+    image: "https://i.postimg.cc/4yxHhC6R/Niña_modelando_ropa_(16).jpg",
     images: [
-      "https://i.postimg.cc/y89RSdfW/Niña_modelando_ropa_(16).jpg"
+      "https://i.postimg.cc/4yxHhC6R/Niña_modelando_ropa_(16).jpg",
+      "https://i.postimg.cc/pTJLXwHk/36E8DB94_BF0D_4B6F_B9C9_4A93D3BCA182.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -405,9 +449,10 @@ export const products: Product[] = [
     name: "Remera Minnie Mouse",
     description: "Remera manga corta con aplique en frente con brillos.",
     price: 18000.00,
-    image: "https://i.postimg.cc/Hk5M7xSn/Niña_modelando_ropa_(17).jpg",
+    image: "https://i.postimg.cc/j2SnJVHb/Niña_modelando_ropa_(17).jpg",
     images: [
-      "https://i.postimg.cc/Hk5M7xSn/Niña_modelando_ropa_(17).jpg"
+      "https://i.postimg.cc/j2SnJVHb/Niña_modelando_ropa_(17).jpg",
+      "https://i.postimg.cc/cHBL4pS2/615D36E2_F4B7_47C2_AF82_76A73F7D0759.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -421,9 +466,10 @@ export const products: Product[] = [
     name: "Remera Disney",
     description: "Remera estampada con glitter y manga superpuesta.",
     price: 18000.00,
-    image: "https://i.postimg.cc/52vzF0PN/Niña_modelando_ropa_(18).jpg",
+    image: "https://i.postimg.cc/Zn5vyk8m/Niña_modelando_ropa_(18).jpg",
     images: [
-      "https://i.postimg.cc/52vzF0PN/Niña_modelando_ropa_(18).jpg"
+      "https://i.postimg.cc/Zn5vyk8m/Niña_modelando_ropa_(18).jpg",
+      "https://i.postimg.cc/7hBPSSbM/CD1E403A_BDE0_4031_A370_FCB344300346.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -437,9 +483,10 @@ export const products: Product[] = [
     name: "Remera Stitch Oversize",
     description: "Remera mangas cortas oversize, cuello redondo y estampas del personaje en la parte de adelante.",
     price: 21000.00,
-    image: "https://i.postimg.cc/QM3Tg3PJ/Niña_modelando_ropa_(2).jpg",
+    image: "https://i.postimg.cc/85Hr5krd/Niña_modelando_ropa_(2).jpg",
     images: [
-      "https://i.postimg.cc/QM3Tg3PJ/Niña_modelando_ropa_(2).jpg"
+      "https://i.postimg.cc/85Hr5krd/Niña_modelando_ropa_(2).jpg",
+      "https://i.postimg.cc/QdzB2Z85/FAB34165_3706_448F_B3C9_837CFE3610EE.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -453,9 +500,10 @@ export const products: Product[] = [
     name: "Remera Pupera Minnie Mouse",
     description: "Remera de algodón, cuello redondo, mangas cortas anchas y estampa en la parte delantera.",
     price: 13800.00,
-    image: "https://i.postimg.cc/GpCyPCNJ/Niña_modelando_ropa_(3).jpg",
+    image: "https://i.postimg.cc/NM4rMGrk/Niña_modelando_ropa_(3).jpg",
     images: [
-      "https://i.postimg.cc/GpCyPCNJ/Niña_modelando_ropa_(3).jpg"
+      "https://i.postimg.cc/NM4rMGrk/Niña_modelando_ropa_(3).jpg",
+      "https://i.postimg.cc/MpLcCJ65/BD3E91EA_FD6D_4ECA_8CD1_B8103F473E5C.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -469,9 +517,10 @@ export const products: Product[] = [
     name: "Musculosa Minnie Mouse",
     description: "Musculosa de algodón ancha con flecos en su parte inferior y estampa con brillos en el frente.",
     price: 18000.00,
-    image: "https://i.postimg.cc/yNHZhH5h/Niña_modelando_ropa_(6).jpg",
+    image: "https://i.postimg.cc/tT5VTRVk/Niña_modelando_ropa_(6).jpg",
     images: [
-      "https://i.postimg.cc/yNHZhH5h/Niña_modelando_ropa_(6).jpg"
+      "https://i.postimg.cc/tT5VTRVk/Niña_modelando_ropa_(6).jpg",
+      "https://i.postimg.cc/JhBymY03/7B46489B_F76A_4734_80AC_8650FC598EC1.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -485,9 +534,10 @@ export const products: Product[] = [
     name: "Musculosa Mickey & Minnie",
     description: "Musculosa algodón, estampada, cuello redondo, volados a los laterales.",
     price: 18000.00,
-    image: "https://i.postimg.cc/qvnKCRmm/Niña_modelando_ropa_(7).jpg",
+    image: "https://i.postimg.cc/3RBDRrDq/Niña_modelando_ropa_(7).jpg",
     images: [
-      "https://i.postimg.cc/qvnKCRmm/Niña_modelando_ropa_(7).jpg"
+      "https://i.postimg.cc/3RBDRrDq/Niña_modelando_ropa_(7).jpg",
+      "https://i.postimg.cc/T3syzvd9/FC283A8C_F5ED_41FB_8D1A_C14486FE9786.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -501,9 +551,10 @@ export const products: Product[] = [
     name: "Remera Stitch MC",
     description: "Remera de algodón, manga corta, cuello redondo y estampa grande en su frente.",
     price: 21000.00,
-    image: "https://i.postimg.cc/4xtchd8B/Niña_modelando_ropa_(8).jpg",
+    image: "https://i.postimg.cc/zBjRBDRs/Niña_modelando_ropa_(8).jpg",
     images: [
-      "https://i.postimg.cc/4xtchd8B/Niña_modelando_ropa_(8).jpg"
+      "https://i.postimg.cc/zBjRBDRs/Niña_modelando_ropa_(8).jpg",
+      "https://i.postimg.cc/bv2G8VrW/26004F3A_2044_49B2_8337_5C77C17B4F58.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -517,9 +568,10 @@ export const products: Product[] = [
     name: "Remera Minnie Mouse MC",
     description: "Remera estampada con glitter y cuello redondo.",
     price: 18000.00,
-    image: "https://i.postimg.cc/pL8jnT0k/Niña_modelando_ropa_(9).jpg",
+    image: "https://i.postimg.cc/Px48xfws/Niña_modelando_ropa_(9).jpg",
     images: [
-      "https://i.postimg.cc/pL8jnT0k/Niña_modelando_ropa_(9).jpg"
+      "https://i.postimg.cc/Px48xfws/Niña_modelando_ropa_(9).jpg",
+      "https://i.postimg.cc/63J8QVGw/40E53328_51A2_4AD1_BF97_54A2B2D97374.png"
     ],
     category: "Casual",
     gender: "Niña",
@@ -533,9 +585,11 @@ export const products: Product[] = [
     name: "Chaleco Minnie Mouse",
     description: "Chaleco impermeable y abrigado.",
     price: 100000.00,
-    image: "https://i.postimg.cc/RhNTTVjm/Niña_modela_ropa_(15).jpg",
+    image: "https://i.postimg.cc/7LS2FnPT/Niña_modela_ropa_(15).jpg",
     images: [
-      "https://i.postimg.cc/RhNTTVjm/Niña_modela_ropa_(15).jpg"
+      "https://i.postimg.cc/7LS2FnPT/Niña_modela_ropa_(15).jpg",
+      "https://i.postimg.cc/jdqYYXvz/PHOTO_2026_03_03_16_12_28_1.jpg",
+      "https://i.postimg.cc/FsP5rLnn/PHOTO_2026_03_03_16_12_25.jpg"
     ],
     category: "Casual",
     gender: "Niña",
@@ -549,9 +603,11 @@ export const products: Product[] = [
     name: "Chaleco Avengers",
     description: "Chaleco impermeable y abrigado.",
     price: 100000.00,
-    image: "https://i.postimg.cc/Fz7xxs24/Niña_modela_ropa_(16).jpg",
+    image: "https://i.postimg.cc/bJ8tpSdG/Niña_modela_ropa_(16).jpg",
     images: [
-      "https://i.postimg.cc/Fz7xxs24/Niña_modela_ropa_(16).jpg"
+      "https://i.postimg.cc/bJ8tpSdG/Niña_modela_ropa_(16).jpg",
+      "https://i.postimg.cc/8PyQp6nB/PHOTO_2026_03_03_16_12_26.jpg",
+      "https://i.postimg.cc/7YPrrVXN/PHOTO_2026_03_03_16_12_27_1.jpg"
     ],
     category: "Casual",
     gender: "Niño",

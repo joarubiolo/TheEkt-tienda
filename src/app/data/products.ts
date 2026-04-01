@@ -6,7 +6,7 @@ export const products: Product[] = [
     name: "Remera Sta Monica",
     description: "Remera cuello redondo tipo pupera.",
     price: 19500.00,
-    purchasePrice: 23400.00,
+    purchasePrice: 32500.00,
     image: "https://i.postimg.cc/4N9srFSk/D_NQ_NP_2X_695467_MLA101110920480_122025_F.jpg",
     images: [
       "https://i.postimg.cc/4N9srFSk/D_NQ_NP_2X_695467_MLA101110920480_122025_F.jpg"
@@ -27,7 +27,7 @@ export const products: Product[] = [
     name: "Remera MC Driver Club",
     description: "Remera MC Driver Club, cuello redondo algodón",
     price: 28200.00,
-    purchasePrice: 33840.00,
+    purchasePrice: 47000.00,
     image: "https://i.postimg.cc/bNtpKFFV/D_NQ_NP_611828_MLA101103761668_122025_O_convertido_de_webp.jpg",
     images: [
       "https://i.postimg.cc/bNtpKFFV/D_NQ_NP_611828_MLA101103761668_122025_O_convertido_de_webp.jpg"
@@ -44,7 +44,7 @@ export const products: Product[] = [
     name: "Jean Fly Back",
     description: "Jean elastizado",
     price: 68400.00,
-    purchasePrice: 82080.00,
+    purchasePrice: 114000.00,
     image: "https://i.postimg.cc/Nj3XCzcJ/Niña_modela_ropa_(9).jpg",
     images: [
       "https://i.postimg.cc/Nj3XCzcJ/Niña_modela_ropa_(9).jpg",
@@ -63,7 +63,7 @@ export const products: Product[] = [
     name: "Jean Total Blue",
     description: "Jean elastizado en color azul.",
     price: 67800.00,
-    purchasePrice: 81360.00,
+    purchasePrice: 113000.00,
     image: "https://i.postimg.cc/x1wmp426/Niña_modela_ropa_(8).jpg",
     images: [
       "https://i.postimg.cc/x1wmp426/Niña_modela_ropa_(8).jpg",
@@ -85,7 +85,7 @@ export const products: Product[] = [
     name: "Jean Wide Leg Chill",
     description: "Jean de piernas anchas color claro.",
     price: 65400.00,
-    purchasePrice: 78480.00,
+    purchasePrice: 109000.00,
     image: "https://i.postimg.cc/HkqMvhg3/Niña_modela_ropa_(7).jpg",
     images: [
       "https://i.postimg.cc/HkqMvhg3/Niña_modela_ropa_(7).jpg",
@@ -104,7 +104,7 @@ export const products: Product[] = [
     name: "Mono Minnie Mouse",
     description: "Mono de algodón con bolsillos, cintura elástica y tiras ajustables.",
     price: 22800.00,
-    purchasePrice: 27360.00,
+    purchasePrice: 38000.00,
     image: "https://i.postimg.cc/Y0CLmc6k/Niña_modelando_ropa.jpg",
     images: [
       "https://i.postimg.cc/Y0CLmc6k/Niña_modelando_ropa.jpg",
@@ -122,7 +122,7 @@ export const products: Product[] = [
     name: "Vestido Minnie Mouse",
     description: "Vestido de algodón estampado con volados en la manga y falda con brillo.",
     price: 31200.00,
-    purchasePrice: 37440.00,
+    purchasePrice: 52000.00,
     image: "https://i.postimg.cc/76D2wJbt/Niña_modelando_ropa_(1).jpg",
     images: [
       "https://i.postimg.cc/76D2wJbt/Niña_modelando_ropa_(1).jpg",
@@ -144,7 +144,7 @@ export const products: Product[] = [
     name: "Pupera Negra Minnie",
     description: "Remera de algodón corta tipo pupera, ancha con estampa en su frente.",
     price: 13800.00,
-    purchasePrice: 16560.00,
+    purchasePrice: 23000.00,
     image: "https://i.postimg.cc/pTZnTVFt/Niña_modelando_ropa_(10).jpg",
     images: [
       "https://i.postimg.cc/pTZnTVFt/Niña_modelando_ropa_(10).jpg",
@@ -162,7 +162,7 @@ export const products: Product[] = [
     name: "Campera Spider-Man",
     description: "Campera con diseño original y muy abrigada.",
     price: 110800.00,
-    purchasePrice: 132960.00,
+    purchasePrice: 138500.00,
     image: "https://i.postimg.cc/Cx38rQg6/Niña_modela_ropa_(10).jpg",
     images: [
       "https://i.postimg.cc/Cx38rQg6/Niña_modela_ropa_(10).jpg",
@@ -182,7 +182,7 @@ export const products: Product[] = [
     name: "Campera Minnie Mouse",
     description: "Campera con diseño original y muy abrigada.",
     price: 110800.00,
-    purchasePrice: 132960.00,
+    purchasePrice: 138500.00,
     image: "https://i.postimg.cc/vZJn2NsK/Niña_modela_ropa_(11).jpg",
     images: [
       "https://i.postimg.cc/vZJn2NsK/Niña_modela_ropa_(11).jpg",
@@ -206,7 +206,7 @@ export const products: Product[] = [
     name: "Campera Frozzen",
     description: "Campera con diseño original y muy abrigada.",
     price: 110800.00,
-    purchasePrice: 132960.00,
+    purchasePrice: 138500.00,
     image: "https://i.postimg.cc/HkqMvhgq/Niña_modela_ropa_(12).jpg",
     images: [
       "https://i.postimg.cc/HkqMvhgq/Niña_modela_ropa_(12).jpg",
@@ -226,7 +226,7 @@ export const products: Product[] = [
     name: "Campera Mickey Mouse",
     description: "Campera con diseño original y muy abrigada.",
     price: 83200.00,
-    purchasePrice: 99840.00,
+    purchasePrice: 104000.00,
     image: "https://i.postimg.cc/W40kBwNC/Niña_modela_ropa_(13).jpg",
     images: [
       "https://i.postimg.cc/W40kBwNC/Niña_modela_ropa_(13).jpg",
@@ -246,7 +246,7 @@ export const products: Product[] = [
     name: "Campera Avengers",
     description: "Campera con diseño original y muy abrigada.",
     price: 83200.00,
-    purchasePrice: 99840.00,
+    purchasePrice: 104000.00,
     image: "https://i.postimg.cc/TPnDzJ2T/Niña_modela_ropa_(14).jpg",
     images: [
       "https://i.postimg.cc/TPnDzJ2T/Niña_modela_ropa_(14).jpg",
@@ -265,7 +265,7 @@ export const products: Product[] = [
     name: "Malla Premium Minnie Mouse",
     description: "Malla de alta calidad con diseño original.",
     price: 31200.00,
-    purchasePrice: 37440.00,
+    purchasePrice: 52000.00,
     image: "https://i.postimg.cc/0yTSXBsS/Niña_modela_ropa_(2).jpg",
     images: [
       "https://i.postimg.cc/0yTSXBsS/Niña_modela_ropa_(2).jpg",
@@ -284,7 +284,7 @@ export const products: Product[] = [
     name: "Bikini Premium Minnie Mouse",
     description: "Bikini de alta calidad con diseño original.",
     price: 31200.00,
-    purchasePrice: 37440.00,
+    purchasePrice: 52000.00,
     image: "https://i.postimg.cc/Cx38rQgb/Niña_modela_ropa_(1).jpg",
     images: [
       "https://i.postimg.cc/Cx38rQgb/Niña_modela_ropa_(1).jpg",
@@ -303,7 +303,7 @@ export const products: Product[] = [
     name: "Top y Calza Stone",
     description: "Top y calza de lycra para un look moderno.",
     price: 24000.00,
-    purchasePrice: 28800.00,
+    purchasePrice: 40000.00,
     image: "https://i.postimg.cc/L8cPQbp1/Niña_modela_ropa_(4).jpg",
     images: [
       "https://i.postimg.cc/L8cPQbp1/Niña_modela_ropa_(4).jpg",
@@ -321,7 +321,7 @@ export const products: Product[] = [
     name: "Pollera Jean",
     description: "Pollera de jean para un look moderno.",
     price: 33000.00,
-    purchasePrice: 39600.00,
+    purchasePrice: 55000.00,
     image: "https://i.postimg.cc/K8kLNydf/Niña_modela_ropa_(5).jpg",
     images: [
       "https://i.postimg.cc/K8kLNydf/Niña_modela_ropa_(5).jpg",
@@ -341,7 +341,7 @@ export const products: Product[] = [
     name: "Bermuda Korea",
     description: "Bermuda de gabardina para un look moderno.",
     price: 36750.00,
-    purchasePrice: 44100.00,
+    purchasePrice: 61250.00,
     image: "https://i.postimg.cc/sgkWHNrm/Niña_modela_ropa_(6).jpg",
     images: [
       "https://i.postimg.cc/sgkWHNrm/Niña_modela_ropa_(6).jpg",
@@ -360,7 +360,7 @@ export const products: Product[] = [
     name: "Calza Biker Minnie Mouse",
     description: "Calza ciclista de algodón y lycra con estampado en una pierna.",
     price: 15000.00,
-    purchasePrice: 18000.00,
+    purchasePrice: 25000.00,
     image: "https://i.postimg.cc/cHm8H1nW/Niña_modelando_ropa_(11).jpg",
     images: [
       "https://i.postimg.cc/cHm8H1nW/Niña_modelando_ropa_(11).jpg",
@@ -379,7 +379,7 @@ export const products: Product[] = [
     name: "Top y Calza Minnie Mouse",
     description: "Top y calza de lycra para un look moderno.",
     price: 27600.00,
-    purchasePrice: 33120.00,
+    purchasePrice: 46000.00,
     image: "https://i.postimg.cc/NM4rMGHB/Niña_modelando_ropa_(12).jpg",
     images: [
       "https://i.postimg.cc/NM4rMGHB/Niña_modelando_ropa_(12).jpg",
@@ -398,7 +398,7 @@ export const products: Product[] = [
     name: "Top y Calza Mickey Mouse",
     description: "Top y calza de lycra para un look moderno.",
     price: 27600.00,
-    purchasePrice: 33120.00,
+    purchasePrice: 46000.00,
     image: "https://i.postimg.cc/cHm8H1ns/Niña_modelando_ropa_(13).jpg",
     images: [
       "https://i.postimg.cc/cHm8H1ns/Niña_modelando_ropa_(13).jpg",
@@ -417,7 +417,7 @@ export const products: Product[] = [
     name: "Top Minnie Mouse",
     description: "Top sublimado de microfibra a rayas.",
     price: 18000.00,
-    purchasePrice: 21600.00,
+    purchasePrice: 30000.00,
     image: "https://i.postimg.cc/sXcZXfhj/Niña_modelando_ropa_(14).jpg",
     images: [
       "https://i.postimg.cc/sXcZXfhj/Niña_modelando_ropa_(14).jpg",
@@ -434,8 +434,8 @@ export const products: Product[] = [
     id: 23,
     name: "Calza y top Minnie Mouse",
     description: "Top y calza sublimado de microfibra.",
-    price: 27800.00,
-    purchasePrice: 33360.00,
+    price: 27600.00,
+    purchasePrice: 46000.00,
     image: "https://i.postimg.cc/7hZJTv3v/Niña_modelando_ropa_(15).jpg",
     images: [
       "https://i.postimg.cc/7hZJTv3v/Niña_modelando_ropa_(15).jpg",
@@ -454,7 +454,7 @@ export const products: Product[] = [
     name: "Remera Mickey Mouse",
     description: "Remera manga corta superpuestas con aplique de strass.",
     price: 18000.00,
-    purchasePrice: 21600.00,
+    purchasePrice: 30000.00,
     image: "https://i.postimg.cc/4yxHhC6R/Niña_modelando_ropa_(16).jpg",
     images: [
       "https://i.postimg.cc/4yxHhC6R/Niña_modelando_ropa_(16).jpg",
@@ -472,7 +472,7 @@ export const products: Product[] = [
     name: "Remera Minnie Mouse",
     description: "Remera manga corta con aplique en frente con brillos.",
     price: 18000.00,
-    purchasePrice: 21600.00,
+    purchasePrice: 30000.00,
     image: "https://i.postimg.cc/j2SnJVHb/Niña_modelando_ropa_(17).jpg",
     images: [
       "https://i.postimg.cc/j2SnJVHb/Niña_modelando_ropa_(17).jpg",
@@ -490,7 +490,7 @@ export const products: Product[] = [
     name: "Remera Disney",
     description: "Remera estampada con glitter y manga superpuesta.",
     price: 18000.00,
-    purchasePrice: 21600.00,
+    purchasePrice: 30000.00,
     image: "https://i.postimg.cc/Zn5vyk8m/Niña_modelando_ropa_(18).jpg",
     images: [
       "https://i.postimg.cc/Zn5vyk8m/Niña_modelando_ropa_(18).jpg",
@@ -508,7 +508,7 @@ export const products: Product[] = [
     name: "Remera Stitch Oversize",
     description: "Remera mangas cortas oversize, cuello redondo y estampas del personaje en la parte de adelante.",
     price: 21000.00,
-    purchasePrice: 25200.00,
+    purchasePrice: 35000.00,
     image: "https://i.postimg.cc/85Hr5krd/Niña_modelando_ropa_(2).jpg",
     images: [
       "https://i.postimg.cc/85Hr5krd/Niña_modelando_ropa_(2).jpg",
@@ -526,7 +526,7 @@ export const products: Product[] = [
     name: "Remera Pupera Minnie Mouse",
     description: "Remera de algodón, cuello redondo, mangas cortas anchas y estampa en la parte delantera.",
     price: 13800.00,
-    purchasePrice: 16560.00,
+    purchasePrice: 23000.00,
     image: "https://i.postimg.cc/NM4rMGrk/Niña_modelando_ropa_(3).jpg",
     images: [
       "https://i.postimg.cc/NM4rMGrk/Niña_modelando_ropa_(3).jpg",
@@ -544,7 +544,7 @@ export const products: Product[] = [
     name: "Musculosa Minnie Mouse",
     description: "Musculosa de algodón ancha con flecos en su parte inferior y estampa con brillos en el frente.",
     price: 18000.00,
-    purchasePrice: 21600.00,
+    purchasePrice: 30000.00,
     image: "https://i.postimg.cc/tT5VTRVk/Niña_modelando_ropa_(6).jpg",
     images: [
       "https://i.postimg.cc/tT5VTRVk/Niña_modelando_ropa_(6).jpg",
@@ -562,7 +562,7 @@ export const products: Product[] = [
     name: "Musculosa Mickey & Minnie",
     description: "Musculosa algodón, estampada, cuello redondo, volados a los laterales.",
     price: 18000.00,
-    purchasePrice: 21600.00,
+    purchasePrice: 30000.00,
     image: "https://i.postimg.cc/3RBDRrDq/Niña_modelando_ropa_(7).jpg",
     images: [
       "https://i.postimg.cc/3RBDRrDq/Niña_modelando_ropa_(7).jpg",
@@ -580,7 +580,7 @@ export const products: Product[] = [
     name: "Remera Stitch MC",
     description: "Remera de algodón, manga corta, cuello redondo y estampa grande en su frente.",
     price: 21000.00,
-    purchasePrice: 25200.00,
+    purchasePrice: 35000.00,
     image: "https://i.postimg.cc/zBjRBDRs/Niña_modelando_ropa_(8).jpg",
     images: [
       "https://i.postimg.cc/zBjRBDRs/Niña_modelando_ropa_(8).jpg",
@@ -598,7 +598,7 @@ export const products: Product[] = [
     name: "Remera Minnie Mouse MC",
     description: "Remera estampada con glitter y cuello redondo.",
     price: 18000.00,
-    purchasePrice: 21600.00,
+    purchasePrice: 30000.00,
     image: "https://i.postimg.cc/Px48xfws/Niña_modelando_ropa_(9).jpg",
     images: [
       "https://i.postimg.cc/Px48xfws/Niña_modelando_ropa_(9).jpg",
@@ -616,7 +616,7 @@ export const products: Product[] = [
     name: "Chaleco Minnie Mouse",
     description: "Chaleco impermeable y abrigado.",
     price: 82800.00,
-    purchasePrice: 99360.00,
+    purchasePrice: 103500.00,
     image: "https://i.postimg.cc/7LS2FnPT/Niña_modela_ropa_(15).jpg",
     images: [
       "https://i.postimg.cc/7LS2FnPT/Niña_modela_ropa_(15).jpg",
@@ -635,7 +635,7 @@ export const products: Product[] = [
     name: "Chaleco Avengers",
     description: "Chaleco impermeable y abrigado.",
     price: 83200.00,
-    purchasePrice: 99840.00,
+    purchasePrice: 104000.00,
     image: "https://i.postimg.cc/bJ8tpSdG/Niña_modela_ropa_(16).jpg",
     images: [
       "https://i.postimg.cc/bJ8tpSdG/Niña_modela_ropa_(16).jpg",

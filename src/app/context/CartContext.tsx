@@ -162,7 +162,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           id: Date.now(),
           productId: product.id,
           name: product.name,
-          price: product.price,
+          price: product.purchasePrice || product.price,
           image: product.image,
           size,
           color,

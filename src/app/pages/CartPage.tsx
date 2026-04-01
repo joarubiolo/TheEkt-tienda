@@ -15,18 +15,19 @@ import {
   Wallet as WalletIcon,
   ShieldCheck,
   Loader2,
+  Copy,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import {
   isVexorConfigured,
   createCheckout,
-  getAvailablePaymentMethods,
-  getProviderInfo,
-  getAvailableProviders,
   type CheckoutData,
-  type PaymentProvider,
 } from "../services/vexorService";
+
+type PaymentMethod = "mercadopago" | "transferencia";
+type DeliveryType = "envio" | "retiro";
 
 export function CartPage() {
   const navigate = useNavigate();
@@ -36,23 +37,24 @@ export function CartPage() {
   // Estados del formulario
   const [couponCode, setCouponCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(0);
-  const [paymentProvider, setPaymentProvider] = useState<PaymentProvider>("mercadopago");
-  const [shippingMethod, setShippingMethod] = useState("standard");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mercadopago");
+  const [deliveryType, setDeliveryType] = useState<DeliveryType>("retiro");
   const [customerEmail, setCustomerEmail] = useState("");
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
 
+  // Estados de dirección
+  const [street, setStreet] = useState("");
+  const [height, setHeight] = useState("");
+  const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
+
   // Cálculos
   const subtotal = getTotalPrice();
-  const shippingCost =
-    shippingMethod === "standard" ? 5.99 : shippingMethod === "express" ? 12.99 : 0;
   const discount = subtotal * appliedDiscount;
-  const total = subtotal + shippingCost - discount;
+  const total = subtotal - discount;
 
   // Verificar configuración
   const vexorConfigured = isVexorConfigured();
-  const availableProviders = getAvailableProviders();
-  const paymentMethods = getAvailablePaymentMethods(paymentProvider);
-  const providerInfo = getProviderInfo(paymentProvider);
 
   // Aplicar cupón
   const handleApplyCoupon = () => {
@@ -83,6 +85,45 @@ export function CartPage() {
       return;
     }
 
+    // Validar dirección si选择了 envío a domicilio
+    if (deliveryType === "envio") {
+      if (!street.trim()) {
+        toast.error("Por favor ingresa la calle");
+        return;
+      }
+      if (!height.trim()) {
+        toast.error("Por favor ingresa la altura");
+        return;
+      }
+      if (!city.trim()) {
+        toast.error("Por favor ingresa la ciudad");
+        return;
+      }
+      if (!province.trim()) {
+        toast.error("Por favor ingresa la provincia");
+        return;
+      }
+    }
+
+    // Si选择了 transferencia, redirigir directamente a página de éxito
+    if (paymentMethod === "transferencia") {
+      const orderData = {
+        items: items,
+        customerEmail,
+        paymentMethod: "transferencia",
+        deliveryType,
+        deliveryAddress: deliveryType === "envio" ? { street, height, city, province } : null,
+        subtotal,
+        discount,
+        total,
+      };
+      sessionStorage.setItem("orderData", JSON.stringify(orderData));
+      clearCart();
+      navigate("/success?payment=transferencia");
+      return;
+    }
+
+    // Si选择了 mercadopago, usar vexorService
     if (!vexorConfigured) {
       toast.error("El sistema de pagos no está configurado");
       return;
@@ -100,21 +141,31 @@ export function CartPage() {
             color: item.color,
             image: item.image,
           })),
-          shippingCost,
+          shippingCost: 0,
           discount,
           couponCode: appliedDiscount > 0 ? couponCode : undefined,
-          shippingMethod,
+          shippingMethod: deliveryType,
           customerEmail,
         };
 
         toast.info("Preparando tu pago...");
 
-        const response = await createCheckout(checkoutData, paymentProvider);
+        const response = await createCheckout(checkoutData, "mercadopago");
 
         if (response && response.payment_url) {
+          const orderData = {
+            items: items,
+            customerEmail,
+            paymentMethod: "mercadopago",
+            deliveryType,
+            deliveryAddress: deliveryType === "envio" ? { street, height, city, province } : null,
+            subtotal,
+            discount,
+            total,
+          };
+          sessionStorage.setItem("orderData", JSON.stringify(orderData));
           setCheckoutUrl(response.payment_url);
           toast.success("¡Listo! Redirigiendo al pago...");
-          // Redirigir después de un breve delay para mostrar el mensaje
           setTimeout(() => {
             window.location.href = response.payment_url;
           }, 1500);
@@ -129,28 +180,11 @@ export function CartPage() {
         if (error instanceof Error) {
           errorMessage = error.message;
           console.error("Error message:", error.message);
-          console.error("Error stack:", error.stack);
         }
         
         toast.error(`Error: ${errorMessage}`);
       }
     });
-  };
-
-  // Renderizar icono según tipo
-  const getPaymentIcon = (iconName: string) => {
-    switch (iconName) {
-      case "credit-card":
-        return <CreditCard className="size-5 text-blue-600" />;
-      case "wallet":
-        return <WalletIcon className="size-5 text-green-600" />;
-      case "banknote":
-        return <Tag className="size-5 text-orange-600" />;
-      case "landmark":
-        return <ShieldCheck className="size-5 text-purple-600" />;
-      default:
-        return <CreditCard className="size-5 text-gray-600" />;
-    }
   };
 
   return (
@@ -201,7 +235,9 @@ export function CartPage() {
                   <p className="text-sm text-gray-500 mt-1">
                     Talla: {item.size} | Color: {item.color}
                   </p>
-                  <p className="text-lg text-gray-900 mt-2">${item.price}</p>
+                  <p className="text-lg text-gray-900 mt-2">
+                    ${(item.purchasePrice || item.price).toLocaleString('es-AR')}
+                  </p>
 
                   {/* Cantidad */}
                   <div className="flex items-center gap-2 mt-3">
@@ -239,7 +275,7 @@ export function CartPage() {
                     <Trash2 className="size-4" />
                   </Button>
                   <p className="text-lg text-gray-900">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${((item.purchasePrice || item.price) * item.quantity).toLocaleString('es-AR')}
                   </p>
                 </div>
               </div>
@@ -297,101 +333,105 @@ export function CartPage() {
               </p>
             </div>
 
-            {/* Selección de proveedor de pago */}
+            {/* Método de Pago */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h2 className="text-lg text-gray-900 mb-4 flex items-center gap-2">
                 <WalletIcon className="size-5" />
-                Proveedor de Pago
+                Método de Pago
               </h2>
               <RadioGroup
-                value={paymentProvider}
-                onValueChange={(value) => setPaymentProvider(value as PaymentProvider)}
+                value={paymentMethod}
+                onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
                 disabled={!!checkoutUrl}
               >
-                {availableProviders.map((provider) => {
-                  const info = getProviderInfo(provider);
-                  return (
-                    <div
-                      key={provider}
-                      className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors mb-2"
-                      style={{
-                        borderColor:
-                          paymentProvider === provider ? info.color : "#e5e7eb",
-                        backgroundColor:
-                          paymentProvider === provider ? `${info.color}10` : "transparent",
-                      }}
-                    >
-                      <RadioGroupItem value={provider} id={provider} />
-                      <Label
-                        htmlFor={provider}
-                        className="cursor-pointer flex items-center gap-2 flex-1"
-                      >
-                        <div
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: info.color }}
-                        />
-                        <span className="font-medium">{info.name}</span>
-                      </Label>
-                    </div>
-                  );
-                })}
-              </RadioGroup>
-
-              {/* Métodos de pago disponibles */}
-              <div className="bg-gray-50 rounded-lg p-3 mt-3">
-                <p className="text-xs text-gray-600 mb-2">
-                  Métodos de pago disponibles con {providerInfo.name}:
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {paymentMethods.slice(0, 4).map((method) => (
-                    <div
-                      key={method.id}
-                      className="flex items-center gap-1 text-xs text-gray-500"
-                    >
-                      {getPaymentIcon(method.icon)}
-                      <span>{method.name}</span>
-                    </div>
-                  ))}
+                <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors mb-2">
+                  <RadioGroupItem value="mercadopago" id="mercadopago" />
+                  <Label htmlFor="mercadopago" className="cursor-pointer flex-1 font-medium">
+                    MercadoPago
+                  </Label>
                 </div>
-              </div>
+                <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors mb-2">
+                  <RadioGroupItem value="transferencia" id="transferencia" />
+                  <Label htmlFor="transferencia" className="cursor-pointer flex-1">
+                    <span className="font-medium">Transferencia Bancaria</span>
+                  </Label>
+                </div>
+              </RadioGroup>
+              {paymentMethod === "transferencia" && (
+                <p className="text-xs text-gray-500 mt-2">
+                  *al realizar la compra se pasarán los datos bancarios para realizar la transferencia
+                </p>
+              )}
             </div>
 
-            {/* Método de envío */}
+            {/* Forma de Entrega */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-lg text-gray-900 mb-4">Método de Envío</h2>
+              <h2 className="text-lg text-gray-900 mb-4">Forma de Entrega</h2>
               <RadioGroup
-                value={shippingMethod}
-                onValueChange={setShippingMethod}
+                value={deliveryType}
+                onValueChange={(value) => setDeliveryType(value as DeliveryType)}
                 disabled={!!checkoutUrl}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="standard" id="standard" />
-                    <Label htmlFor="standard" className="cursor-pointer">
-                      Envío Estándar (5-7 días)
-                    </Label>
-                  </div>
-                  <span className="text-sm text-gray-600">$5.99</span>
+                <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors mb-2">
+                  <RadioGroupItem value="retiro" id="retiro" />
+                  <Label htmlFor="retiro" className="cursor-pointer flex-1">
+                    <span className="font-medium">Retirar en el local</span>
+                  </Label>
+                  <span className="text-sm text-green-600 font-medium">Sin costo</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="express" id="express" />
-                    <Label htmlFor="express" className="cursor-pointer">
-                      Envío Express (2-3 días)
-                    </Label>
-                  </div>
-                  <span className="text-sm text-gray-600">$12.99</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="pickup" id="pickup" />
-                    <Label htmlFor="pickup" className="cursor-pointer">
-                      Recoger en tienda
-                    </Label>
-                  </div>
-                  <span className="text-sm text-gray-600">Gratis</span>
+                <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <RadioGroupItem value="envio" id="envio" />
+                  <Label htmlFor="envio" className="cursor-pointer flex-1 font-medium">
+                    Envío a domicilio
+                  </Label>
                 </div>
               </RadioGroup>
+
+              {/* Formulario de dirección si选择了 envío */}
+              {deliveryType === "envio" && (
+                <div className="mt-4 space-y-3 pl-3 border-l-2 border-gray-200">
+                  <div>
+                    <Label htmlFor="street" className="text-sm">Calle *</Label>
+                    <Input
+                      id="street"
+                      placeholder="Av. Rivadavia"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      disabled={!!checkoutUrl}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="height" className="text-sm">Altura *</Label>
+                    <Input
+                      id="height"
+                      placeholder="1234"
+                      value={height}
+                      onChange={(e) => setHeight(e.target.value)}
+                      disabled={!!checkoutUrl}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="city" className="text-sm">Ciudad *</Label>
+                    <Input
+                      id="city"
+                      placeholder="Buenos Aires"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      disabled={!!checkoutUrl}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="province" className="text-sm">Provincia *</Label>
+                    <Input
+                      id="province"
+                      placeholder="CABA"
+                      value={province}
+                      onChange={(e) => setProvince(e.target.value)}
+                      disabled={!!checkoutUrl}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Resumen del pedido */}
@@ -400,24 +440,18 @@ export function CartPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="text-gray-900">${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Envío</span>
-                  <span className="text-gray-900">
-                    {shippingCost === 0 ? "Gratis" : `$${shippingCost.toFixed(2)}`}
-                  </span>
+                  <span className="text-gray-900">${subtotal.toLocaleString('es-AR')}</span>
                 </div>
                 {appliedDiscount > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Descuento</span>
-                    <span className="text-green-600">-${discount.toFixed(2)}</span>
+                    <span className="text-green-600">-${discount.toLocaleString('es-AR')}</span>
                   </div>
                 )}
                 <div className="border-t border-gray-200 pt-2 mt-2">
                   <div className="flex justify-between">
                     <span className="text-lg text-gray-900">Total</span>
-                    <span className="text-lg text-gray-900">${total.toFixed(2)}</span>
+                    <span className="text-lg text-gray-900">${total.toLocaleString('es-AR')}</span>
                   </div>
                 </div>
               </div>
@@ -425,33 +459,33 @@ export function CartPage() {
               {/* Botón de pago */}
               <Button
                 onClick={handlePrepareCheckout}
-                disabled={isPending || items.length === 0 || !vexorConfigured}
+                disabled={isPending || items.length === 0}
                 className="w-full mt-6 text-white disabled:opacity-50"
-                style={{
-                  backgroundColor: vexorConfigured ? providerInfo.color : "#9ca3af",
-                }}
+                style={{ backgroundColor: "#9ca3af" }}
               >
                 {isPending ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Preparando pago...
+                    Procesando...
                   </>
                 ) : (
                   <>
                     <WalletIcon className="w-4 h-4 mr-2" />
-                    Pagar con {providerInfo.name}
+                    {paymentMethod === "transferencia" 
+                      ? "Confirmar Compra" 
+                      : `Pagar con MercadoPago`}
                   </>
                 )}
               </Button>
 
-              {vexorConfigured && (
-                <div className="flex items-center justify-center gap-2 mt-3">
-                  <ShieldCheck className="w-3 h-3 text-gray-400" />
-                  <span className="text-xs text-gray-500">
-                    Pago seguro procesado por {providerInfo.name}
-                  </span>
-                </div>
-              )}
+              <div className="flex items-center justify-center gap-2 mt-3">
+                <ShieldCheck className="w-3 h-3 text-gray-400" />
+                <span className="text-xs text-gray-500">
+                  {paymentMethod === "transferencia" 
+                    ? "Te enviaremos los datos para transferir" 
+                    : "Pago seguro con MercadoPago"}
+                </span>
+              </div>
             </div>
           </div>
         </div>

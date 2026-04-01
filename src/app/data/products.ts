@@ -845,9 +845,9 @@ export const products: Product[] = [
     description: "Zapatillas de estilo casual, con diseño de los personajes de Disney.",
     price: 100000.00,
     purchasePrice: 120000.00,
-    image: "https://i.postimg.cc/7hF414SQ/Musculosa_gris_(4).jpg",
+    image: "https://i.postimg.cc/X7qqz8w7/Arreglar_foto.jpg",
     images: [
-      "https://i.postimg.cc/7hF414SQ/Musculosa_gris_(4).jpg",
+      "https://i.postimg.cc/X7qqz8w7/Arreglar_foto.jpg",
       "https://i.postimg.cc/kMyBrZzb/PHOTO_2026_03_13_10_46_25_2.jpg",
       "https://i.postimg.cc/L66hmDFf/PHOTO_2026_03_13_10_46_22_2.jpg"
     ],

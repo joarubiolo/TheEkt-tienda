@@ -15,6 +15,16 @@
   ],
   "routes": [
     {
+      "src": "/api/create-order",
+      "methods": ["POST"],
+      "dest": "/api/create-order.ts"
+    },
+    {
+      "src": "/api/webhook",
+      "methods": ["POST"],
+      "dest": "/api/webhook.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },

@@ -159,7 +159,10 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
               {/* Título y precio */}
               <div>
                 <h2 className="text-2xl font-semibold text-gray-900">{product.name}</h2>
-                <p className="text-2xl font-bold text-gray-900 mt-2">${product.price.toLocaleString('es-AR')}</p>
+                <div className="mt-2">
+                  <span className="text-2xl font-bold text-gray-900">${(product.purchasePrice || product.price).toLocaleString('es-AR')}</span>
+                  <span className="text-lg text-gray-500 ml-2">${product.price.toLocaleString('es-AR')}*</span>
+                </div>
               </div>
 
               {/* Descripción */}

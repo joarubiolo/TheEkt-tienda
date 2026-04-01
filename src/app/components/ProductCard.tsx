@@ -80,7 +80,10 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
         {/* Nombre y Precio */}
         <div>
           <h3 className="text-lg text-gray-900">{product.name}</h3>
-          <p className="text-xl text-gray-900 mt-2">${product.price.toLocaleString('es-AR')}</p>
+          <div className="mt-2">
+            <span className="text-xl text-gray-900 font-semibold">${(product.purchasePrice || product.price).toLocaleString('es-AR')}</span>
+            <span className="text-sm text-gray-500 ml-2">${product.price.toLocaleString('es-AR')}*</span>
+          </div>
         </div>
 
         {/* Talles */}

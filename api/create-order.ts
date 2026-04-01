@@ -1,8 +1,9 @@
 // =============================================
-// EDGE FUNCTION: CREATE ORDER
+// API: CREATE ORDER
 // Endpoint: /api/create-order
 // =============================================
 
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
 // Configuración de Supabase desde variables de entorno
@@ -23,7 +24,7 @@ const BANK_DETAILS = {
 
 const OWNER_EMAIL = 'rubioloj.93@gmail.com';
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Configurar CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');

@@ -39,8 +39,11 @@ export function CartPage() {
   const [appliedDiscount, setAppliedDiscount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mercadopago");
   const [deliveryType, setDeliveryType] = useState<DeliveryType>("retiro");
+  const [customerFirstName, setCustomerFirstName] = useState("");
+  const [customerLastName, setCustomerLastName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Estados de dirección
   const [street, setStreet] = useState("");
@@ -74,14 +77,14 @@ export function CartPage() {
   };
 
   // Preparar checkout
-  const handlePrepareCheckout = () => {
+  const handlePrepareCheckout = async () => {
     if (items.length === 0) {
       toast.error("El carrito está vacío");
       return;
     }
 
-    if (!customerEmail) {
-      toast.error("Por favor ingresa tu correo electrónico");
+    if (!customerFirstName || !customerLastName || !customerEmail) {
+      toast.error("Por favor completa todos los datos de contacto");
       return;
     }
 
@@ -105,21 +108,57 @@ export function CartPage() {
       }
     }
 
-    // Si选择了 transferencia, redirigir directamente a página de éxito
+    // Preparar datos del pedido para enviar a la API
+    const orderData = {
+      customerName: customerFirstName,
+      customerLastname: customerLastName,
+      customerEmail,
+      deliveryType,
+      deliveryAddress: deliveryType === "envio" ? { street, height, city, province } : null,
+      paymentMethod,
+      items: items.map(item => ({
+        productId: item.productId,
+        name: item.name,
+        price: item.purchasePrice || item.price,
+        quantity: item.quantity,
+        size: item.size,
+        color: item.color,
+        image: item.image
+      })),
+      subtotal,
+      discount,
+      total
+    };
+
+    // Si选择了 transferencia, crear pedido y redirigir
     if (paymentMethod === "transferencia") {
-      const orderData = {
-        items: items,
-        customerEmail,
-        paymentMethod: "transferencia",
-        deliveryType,
-        deliveryAddress: deliveryType === "envio" ? { street, height, city, province } : null,
-        subtotal,
-        discount,
-        total,
-      };
-      sessionStorage.setItem("orderData", JSON.stringify(orderData));
-      clearCart();
-      navigate("/success?payment=transferencia");
+      try {
+        setIsSubmitting(true);
+        toast.info("Creando tu pedido...");
+
+        const response = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.error || 'Error al crear el pedido');
+        }
+
+        // Guardar order number en sessionStorage
+        sessionStorage.setItem('orderNumber', result.orderNumber);
+        
+        clearCart();
+        navigate(`/success?payment=transferencia&order=${result.orderNumber}`);
+      } catch (error: any) {
+        console.error('Error:', error);
+        toast.error(error.message || 'Error al crear el pedido');
+      } finally {
+        setIsSubmitting(false);
+      }
       return;
     }
 
@@ -131,11 +170,36 @@ export function CartPage() {
 
     startTransition(async () => {
       try {
+        // Primero crear el pedido
+        try {
+          setIsSubmitting(true);
+          toast.info("Preparando tu pedido...");
+
+          const orderResponse = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+          });
+
+          const orderResult = await orderResponse.json();
+
+          if (!orderResult.success) {
+            throw new Error(orderResult.error || 'Error al crear el pedido');
+          }
+
+          sessionStorage.setItem('orderNumber', orderResult.orderNumber);
+        } catch (orderError: any) {
+          console.error('Error creando pedido:', orderError);
+          toast.error(orderError.message || 'Error al crear el pedido');
+          setIsSubmitting(false);
+          return;
+        }
+
         const checkoutData: CheckoutData = {
           items: items.map((item) => ({
             id: item.id,
             name: item.name,
-            price: item.price,
+            price: item.purchasePrice || item.price,
             quantity: item.quantity,
             size: item.size,
             color: item.color,
@@ -148,22 +212,11 @@ export function CartPage() {
           customerEmail,
         };
 
-        toast.info("Preparando tu pago...");
+        toast.info("Iniciando pago...");
 
         const response = await createCheckout(checkoutData, "mercadopago");
 
         if (response && response.payment_url) {
-          const orderData = {
-            items: items,
-            customerEmail,
-            paymentMethod: "mercadopago",
-            deliveryType,
-            deliveryAddress: deliveryType === "envio" ? { street, height, city, province } : null,
-            subtotal,
-            discount,
-            total,
-          };
-          sessionStorage.setItem("orderData", JSON.stringify(orderData));
           setCheckoutUrl(response.payment_url);
           toast.success("¡Listo! Redirigiendo al pago...");
           setTimeout(() => {
@@ -179,10 +232,11 @@ export function CartPage() {
         
         if (error instanceof Error) {
           errorMessage = error.message;
-          console.error("Error message:", error.message);
         }
         
         toast.error(`Error: ${errorMessage}`);
+      } finally {
+        setIsSubmitting(false);
       }
     });
   };
@@ -284,6 +338,32 @@ export function CartPage() {
             {/* Email del cliente */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h2 className="text-lg text-gray-900 mb-4">Información de Contacto</h2>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">Nombre *</Label>
+                  <Input
+                    id="firstName"
+                    type="text"
+                    placeholder="Juan"
+                    value={customerFirstName}
+                    onChange={(e) => setCustomerFirstName(e.target.value)}
+                    required
+                    disabled={!!checkoutUrl}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Apellido *</Label>
+                  <Input
+                    id="lastName"
+                    type="text"
+                    placeholder="Pérez"
+                    value={customerLastName}
+                    onChange={(e) => setCustomerLastName(e.target.value)}
+                    required
+                    disabled={!!checkoutUrl}
+                  />
+                </div>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Correo Electrónico *</Label>
                 <Input
@@ -459,11 +539,11 @@ export function CartPage() {
               {/* Botón de pago */}
               <Button
                 onClick={handlePrepareCheckout}
-                disabled={isPending || items.length === 0}
+                disabled={isSubmitting || items.length === 0}
                 className="w-full mt-6 text-white disabled:opacity-50"
                 style={{ backgroundColor: "#9ca3af" }}
               >
-                {isPending ? (
+                {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Procesando...

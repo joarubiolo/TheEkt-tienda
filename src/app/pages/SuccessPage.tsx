@@ -19,6 +19,7 @@ export function SuccessPage() {
   const [searchParams] = useSearchParams();
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
   const paymentMethod = searchParams.get("payment");
   const isTransferencia = paymentMethod === "transferencia";
@@ -28,6 +29,12 @@ export function SuccessPage() {
     const storedData = sessionStorage.getItem("orderData");
     if (storedData) {
       setOrderData(JSON.parse(storedData));
+    }
+    
+    // Get order number
+    const storedOrderNumber = sessionStorage.getItem("orderNumber");
+    if (storedOrderNumber) {
+      setOrderNumber(storedOrderNumber);
     }
   }, []);
 

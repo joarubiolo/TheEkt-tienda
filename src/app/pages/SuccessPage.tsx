@@ -56,7 +56,7 @@ export function SuccessPage() {
     banco: "Ualá Bank S.A.U.",
   };
 
-  const orderNumber = Math.random().toString(36).substr(2, 9).toUpperCase();
+  const displayOrderNumber = orderNumber || Math.random().toString(36).substr(2, 9).toUpperCase();
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -82,7 +82,7 @@ export function SuccessPage() {
 
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
           <p className="text-sm text-green-800">
-            <strong>Número de pedido:</strong> #{orderNumber}
+            <strong>Número de pedido:</strong> #{displayOrderNumber}
           </p>
           <p className="text-sm text-green-800 mt-1">
             <strong>Estado:</strong> {isTransferencia ? "Esperando transferencia" : "Pagado y en preparación"}

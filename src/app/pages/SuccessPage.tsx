@@ -164,10 +164,7 @@ export function SuccessPage() {
         </div>
 
         <p className="text-xs text-gray-500 mt-6">
-          ¿Tienes alguna pregunta? Contactanos en{" "}
-          <a href="mailto:soporte@auroraclothes.com" className="text-blue-600 hover:underline">
-            soporte@auroraclothes.com
-          </a>
+          Si tienes dudas o consultas <Link to="/contact" className="text-blue-600 hover:underline">contactanos</Link>
         </p>
       </div>
     </div>

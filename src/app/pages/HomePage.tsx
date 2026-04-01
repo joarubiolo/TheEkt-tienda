@@ -2,10 +2,22 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useLocation } from "react-router";
 import { SearchFilters } from "../components/SearchFilters";
 import { ProductGrid } from "../components/ProductGrid";
-import { products } from "../data/products";
+import { products as allProducts } from "../data/products";
+import { Product } from "../types/product";
+
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 export function HomePage() {
   const location = useLocation();
+  
+  const [shuffledProducts] = useState<Product[]>(() => shuffleArray(allProducts));
   
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todas");
@@ -41,7 +53,7 @@ export function HomePage() {
   };
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    return shuffledProducts.filter((product) => {
       const matchesSearch = product.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||

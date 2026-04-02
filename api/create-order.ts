@@ -171,7 +171,24 @@ async function syncToGoogleSheets(order, orderItems, customerData) {
   const { JWT } = await import('google-auth-library');
   
   // Obtener credenciales de variable de entorno
-  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON || '{}');
+  const rawJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON || '{}';
+  console.log('Raw GOOGLE_SERVICE_ACCOUNT_JSON length:', rawJson.length);
+  console.log('Raw JSON starts with:', rawJson.substring(0, 50));
+  
+  let credentials;
+  try {
+    credentials = JSON.parse(rawJson);
+  } catch (parseError) {
+    console.error('Error parsing GOOGLE_SERVICE_ACCOUNT_JSON:', parseError.message);
+    console.error('Raw value:', rawJson);
+    throw new Error('Invalid JSON in GOOGLE_SERVICE_ACCOUNT_JSON');
+  }
+  
+  if (!credentials.client_email || !credentials.private_key) {
+    console.error('Missing required fields in credentials');
+    throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON missing client_email or private_key');
+  }
+  
   const spreadsheetId = process.env.GOOGLE_SHEET_ID || '1oaVh-zrBDzxaz82H8qkeQ5yGegQCbHcwY3XNZg24qR0';
 
   const auth = new JWT(

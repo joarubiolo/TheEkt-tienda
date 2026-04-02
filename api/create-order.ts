@@ -167,7 +167,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 // FUNCIÓN: SINCRONIZAR CON GOOGLE SHEETS
 // =============================================
 async function syncToGoogleSheets(order, orderItems, customerData) {
-  const { GoogleApis } = await import('@googleapis/sheets');
+  const { google } = await import('googleapis');
   const { JWT } = await import('google-auth-library');
   
   // Obtener credenciales de variable de entorno
@@ -198,7 +198,7 @@ async function syncToGoogleSheets(order, orderItems, customerData) {
     ['https://www.googleapis.com/auth/spreadsheets']
   );
 
-  const sheets = new GoogleApis({ auth }).sheets('v4');
+  const sheets = google.sheets({ version: 'v4', auth });
 
   // Preparar datos para la fila del pedido
   const productsList = orderItems.map(item => 

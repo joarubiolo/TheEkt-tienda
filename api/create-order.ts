@@ -410,22 +410,57 @@ Banco: ${BANK_DETAILS.banco}
 </html>
   `.trim();
 
-  // Enviar emails en paralelo usando Resend
-  const [clientResult, ownerResult] = await Promise.all([
-    resend.emails.send({
+  // Verificar que el email del cliente sea válido
+  if (!customerData.customerEmail || !customerData.customerEmail.includes('@')) {
+    console.error('Email del cliente inválido:', customerData.customerEmail);
+    // Solo enviar al owner si el email del cliente es inválido
+    const ownerResult = await resend.emails.send({
+      from: 'TheEkt <onboarding@resend.dev>',
+      to: OWNER_EMAIL,
+      subject: `Nuevo pedido: ${order.order_number} (email cliente inválido)`,
+      html: ownerHtml
+    });
+    console.log('✅ Email enviado solo al owner (email cliente inválido):', ownerResult.data?.id);
+    return;
+  }
+
+  // Enviar emails por separado para mejor manejo de errores
+  let clientResult = null;
+  let ownerResult = null;
+
+  // Email al cliente
+  try {
+    clientResult = await resend.emails.send({
       from: 'TheEkt <onboarding@resend.dev>',
       to: customerData.customerEmail,
       subject: clientSubject,
       html: clientHtml
-    }),
-    resend.emails.send({
+    });
+    
+    if (clientResult.error) {
+      console.error('Error enviando email al cliente:', clientResult.error);
+    } else {
+      console.log('✅ Email enviado al cliente:', clientResult.data?.id);
+    }
+  } catch (clientError: any) {
+    console.error('Excepción enviando email al cliente:', clientError.message);
+  }
+
+  // Email al owner
+  try {
+    ownerResult = await resend.emails.send({
       from: 'TheEkt <onboarding@resend.dev>',
       to: OWNER_EMAIL,
       subject: `Nuevo pedido: ${order.order_number}`,
       html: ownerHtml
-    })
-  ]);
-
-  console.log('✅ Email enviado al cliente:', clientResult.data?.id);
-  console.log('✅ Email enviado al owner:', ownerResult.data?.id);
+    });
+    
+    if (ownerResult.error) {
+      console.error('Error enviando email al owner:', ownerResult.error);
+    } else {
+      console.log('✅ Email enviado al owner:', ownerResult.data?.id);
+    }
+  } catch (ownerError: any) {
+    console.error('Excepción enviando email al owner:', ownerError.message);
+  }
 }

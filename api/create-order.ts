@@ -112,23 +112,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (itemsError) throw itemsError;
 
-    // 4. Sincronizar con Google Sheets (en segundo plano)
-    try {
-      await syncToGoogleSheets(order, orderItems, {
-        customerName,
-        customerLastname,
-        customerEmail,
-        deliveryType,
-        deliveryAddress,
-        paymentMethod,
-        subtotal,
-        discount,
-        total
-      });
-    } catch (sheetError) {
-      console.error('Error sincronizando con Google Sheets:', sheetError);
-      // No fallar la transacción por esto
-    }
+    // 4. Sincronizar con Google Sheets (DESHABILITADO - opcional)
+    // try {
+    //   await syncToGoogleSheets(order, orderItems, {...});
+    // } catch (sheetError) {
+    //   console.error('Error sincronizando con Google Sheets:', sheetError);
+    // }
 
     // 5. Enviar emails (en segundo plano)
     try {
@@ -254,10 +243,12 @@ async function syncToGoogleSheets(order, orderItems, customerData) {
 }
 
 // =============================================
-// FUNCIÓN: ENVIAR EMAILS
+// FUNCIÓN: ENVIAR EMAILS CON RESEND
 // =============================================
 async function sendEmails(order, orderItems, customerData) {
-  // Aquí usaríamos Resend, SendGrid o Supabase built-in para enviar emails
+  const { Resend } = await import('resend');
+  
+  const resend = new Resend(process.env.RESEND_API_KEY);
   
   const productsList = orderItems.map(item => 
     `- ${item.product_name} (Talle: ${item.size}, Color: ${item.color}) x${item.quantity} - $${item.subtotal.toLocaleString('es-AR')}`
@@ -265,92 +256,176 @@ async function sendEmails(order, orderItems, customerData) {
 
   // Email al cliente
   let clientSubject = '';
-  let clientBody = '';
+  let clientHtml = '';
 
   if (customerData.paymentMethod === 'transferencia') {
     clientSubject = `Pedido ${order.order_number} - Datos para Transferencia`;
-    clientBody = `
-¡Gracias por tu compra en TheEkt!
-
-Tu número de pedido es: ${order.order_number}
-
-DETALLE DEL PEDIDO:
-${productsList}
-
-Total: $${customerData.total.toLocaleString('es-AR')}
-
-DATOS PARA REALIZAR LA TRANSFERENCIA:
+    clientHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #1a1a1a; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+    .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
+    .order-number { background: #e8f5e9; border: 1px solid #4caf50; padding: 12px; border-radius: 6px; margin: 15px 0; }
+    .bank-details { background: #fff3e0; border: 1px solid #ff9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+    .bank-details pre { background: #fff; padding: 10px; border-radius: 4px; font-family: monospace; }
+    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎉 ¡Gracias por tu compra en TheEkt!</h1>
+  </div>
+  <div class="content">
+    <div class="order-number">
+      <strong>Número de pedido:</strong> ${order.order_number}
+    </div>
+    
+    <h3>Detalle del pedido:</h3>
+    <pre>${productsList}</pre>
+    
+    <p><strong>Total:</strong> $${customerData.total.toLocaleString('es-AR')}</p>
+    
+    <div class="bank-details">
+      <h3>💳 Datos para realizar la transferencia:</h3>
+      <pre>
 Titular: ${BANK_DETAILS.titular}
 CBU: ${BANK_DETAILS.cbu}
 Alias: ${BANK_DETAILS.alias}
 Banco: ${BANK_DETAILS.banco}
-
-Una vez realizada la transferencia, por favor contactanos para confirmar.
-
-Saludos,
-TheEkt
+      </pre>
+      <p>Una vez realizada la transferencia, por favor contactanos para confirmar.</p>
+    </div>
+    
+    <p>Saludos,<br>TheEkt</p>
+  </div>
+  <div class="footer">
+    <p>TheEkt - Tu tienda de confianza</p>
+  </div>
+</body>
+</html>
     `.trim();
   } else {
     clientSubject = `¡Gracias por tu compra en TheEkt! - Pedido ${order.order_number}`;
-    clientBody = `
-¡Gracias por tu compra en TheEkt!
-
-Tu número de pedido es: ${order.order_number}
-
-DETALLE DEL PEDIDO:
-${productsList}
-
-Total: $${customerData.total.toLocaleString('es-AR')}
-
-Tu pago ha sido procesado exitosamente. Te informaremos cuando tu pedido esté listo para retirar/enviar.
-
-Saludos,
-TheEkt
+    clientHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #1a1a1a; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+    .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
+    .order-number { background: #e8f5e9; border: 1px solid #4caf50; padding: 12px; border-radius: 6px; margin: 15px 0; }
+    .success { color: #4caf50; font-size: 18px; }
+    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎉 ¡Gracias por tu compra en TheEkt!</h1>
+  </div>
+  <div class="content">
+    <p class="success">✅ Tu pago ha sido procesado exitosamente.</p>
+    
+    <div class="order-number">
+      <strong>Número de pedido:</strong> ${order.order_number}
+    </div>
+    
+    <h3>Detalle del pedido:</h3>
+    <pre>${productsList}</pre>
+    
+    <p><strong>Total:</strong> $${customerData.total.toLocaleString('es-AR')}</p>
+    
+    <p>Te informaremos cuando tu pedido esté listo para retirar/enviar.</p>
+    
+    <p>Saludos,<br>TheEkt</p>
+  </div>
+  <div class="footer">
+    <p>TheEkt - Tu tienda de confianza</p>
+  </div>
+</body>
+</html>
     `.trim();
   }
 
   // Email a vos (el owner)
-  const ownerSubject = `Nuevo pedido: ${order.order_number}`;
-  const ownerBody = `
-NUEVO PEDIDO RECIBIDO
-
-Número de pedido: ${order.order_number}
-
-CLIENTE:
-Nombre: ${customerData.customerName} ${customerData.customerLastname}
-Email: ${customerData.customerEmail}
-Teléfono: No proporcionado
-
-ENTREGA:
-Tipo: ${customerData.deliveryType === 'envio' ? 'Envío a domicilio' : 'Retiro en local'}
-${customerData.deliveryType === 'envio' ? `Dirección: ${customerData.deliveryAddress.street} ${customerData.deliveryAddress.height}, ${customerData.customerCity}, ${customerData.deliveryAddress.province}` : ''}
-
-PAGO:
-Método: ${customerData.paymentMethod === 'mercadopago' ? 'MercadoPago' : 'Transferencia'}
-Estado: ${customerData.paymentMethod === 'mercadopago' ? 'Pagado' : 'Pendiente'}
-Subtotal: $${customerData.subtotal.toLocaleString('es-AR')}
-Descuento: $${customerData.discount.toLocaleString('es-AR')}
-Total: $${customerData.total.toLocaleString('es-AR')}
-
-PRODUCTOS:
-${productsList}
-
----
-TheEkt - Sistema de Pedidos Automático
+  const ownerHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #d32f2f; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+    .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
+    .order-number { background: #ffebee; border: 1px solid #f44336; padding: 12px; border-radius: 6px; margin: 15px 0; }
+    .details { background: white; padding: 15px; border-radius: 6px; margin: 15px 0; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔔 Nuevo pedido recibido</h1>
+  </div>
+  <div class="content">
+    <div class="order-number">
+      <strong>Número de pedido:</strong> ${order.order_number}
+    </div>
+    
+    <div class="details">
+      <h3>👤 Cliente:</h3>
+      <p><strong>Nombre:</strong> ${customerData.customerName} ${customerData.customerLastname}</p>
+      <p><strong>Email:</strong> ${customerData.customerEmail}</p>
+    </div>
+    
+    <div class="details">
+      <h3>🚚 Entrega:</h3>
+      <p><strong>Tipo:</strong> ${customerData.deliveryType === 'envio' ? 'Envío a domicilio' : 'Retiro en local'}</p>
+      ${customerData.deliveryType === 'envio' ? `<p><strong>Dirección:</strong> ${customerData.deliveryAddress.street} ${customerData.deliveryAddress.height}, ${customerData.deliveryAddress.city}, ${customerData.deliveryAddress.province}</p>` : ''}
+    </div>
+    
+    <div class="details">
+      <h3>💳 Pago:</h3>
+      <p><strong>Método:</strong> ${customerData.paymentMethod === 'mercadopago' ? 'MercadoPago' : 'Transferencia'}</p>
+      <p><strong>Estado:</strong> ${customerData.paymentMethod === 'mercadopago' ? 'Pagado' : 'Pendiente'}</p>
+      <p><strong>Subtotal:</strong> $${customerData.subtotal.toLocaleString('es-AR')}</p>
+      <p><strong>Descuento:</strong> $${customerData.discount.toLocaleString('es-AR')}</p>
+      <p><strong>Total:</strong> $${customerData.total.toLocaleString('es-AR')}</p>
+    </div>
+    
+    <div class="details">
+      <h3>📦 Productos:</h3>
+      <pre>${productsList}</pre>
+    </div>
+  </div>
+  <div class="footer">
+    <p>TheEkt - Sistema de Pedidos Automático</p>
+  </div>
+</body>
+</html>
   `.trim();
 
-  // Enviar emails usando Supabase (o servicio externo)
-  // Por ahora simulamos el envío (integrar con Resend/SendGrid después)
-  console.log('=== EMAIL AL CLIENTE ===');
-  console.log('Para:', customerData.customerEmail);
-  console.log('Asunto:', clientSubject);
-  console.log('---');
-  
-  console.log('=== EMAIL A VOS ===');
-  console.log('Para:', OWNER_EMAIL);
-  console.log('Asunto:', ownerSubject);
-  console.log('---');
+  // Enviar emails en paralelo usando Resend
+  const [clientResult, ownerResult] = await Promise.all([
+    resend.emails.send({
+      from: 'TheEkt <onboarding@resend.dev>',
+      to: customerData.customerEmail,
+      subject: clientSubject,
+      html: clientHtml
+    }),
+    resend.emails.send({
+      from: 'TheEkt <onboarding@resend.dev>',
+      to: OWNER_EMAIL,
+      subject: `Nuevo pedido: ${order.order_number}`,
+      html: ownerHtml
+    })
+  ]);
 
-  // En producción, usarías:
-  // const { error } = await supabase.functions.invoke('send-email', { ... })
+  console.log('✅ Email enviado al cliente:', clientResult.data?.id);
+  console.log('✅ Email enviado al owner:', ownerResult.data?.id);
 }

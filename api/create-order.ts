@@ -243,12 +243,20 @@ async function syncToGoogleSheets(order, orderItems, customerData) {
 }
 
 // =============================================
-// FUNCIÓN: ENVIAR EMAILS CON RESEND
+// FUNCIÓN: ENVIAR EMAILS CON NODEMAILER (BREVO)
 // =============================================
 async function sendEmails(order, orderItems, customerData) {
-  const { Resend } = await import('resend');
+  const nodemailer = await import('nodemailer');
   
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER || 'a7162d001@smtp-brevo.com',
+      pass: process.env.SMTP_PASS
+    }
+  });
   
   const productsList = orderItems.map(item => 
     `- ${item.product_name} (Talle: ${item.size}, Color: ${item.color}) x${item.quantity} - $${item.subtotal.toLocaleString('es-AR')}`
@@ -414,53 +422,40 @@ Banco: ${BANK_DETAILS.banco}
   if (!customerData.customerEmail || !customerData.customerEmail.includes('@')) {
     console.error('Email del cliente inválido:', customerData.customerEmail);
     // Solo enviar al owner si el email del cliente es inválido
-    const ownerResult = await resend.emails.send({
-      from: 'TheEkt <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: 'TheEkt <a7162d001@smtp-brevo.com>',
       to: OWNER_EMAIL,
       subject: `Nuevo pedido: ${order.order_number} (email cliente inválido)`,
       html: ownerHtml
     });
-    console.log('✅ Email enviado solo al owner (email cliente inválido):', ownerResult.data?.id);
+    console.log('✅ Email enviado solo al owner (email cliente inválido)');
     return;
   }
 
   // Enviar emails por separado para mejor manejo de errores
-  let clientResult = null;
-  let ownerResult = null;
-
   // Email al cliente
   try {
-    clientResult = await resend.emails.send({
-      from: 'TheEkt <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: 'TheEkt <a7162d001@smtp-brevo.com>',
       to: customerData.customerEmail,
       subject: clientSubject,
       html: clientHtml
     });
-    
-    if (clientResult.error) {
-      console.error('Error enviando email al cliente:', clientResult.error);
-    } else {
-      console.log('✅ Email enviado al cliente:', clientResult.data?.id);
-    }
+    console.log('✅ Email enviado al cliente:', customerData.customerEmail);
   } catch (clientError: any) {
-    console.error('Excepción enviando email al cliente:', clientError.message);
+    console.error('Error enviando email al cliente:', clientError.message);
   }
 
   // Email al owner
   try {
-    ownerResult = await resend.emails.send({
-      from: 'TheEkt <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: 'TheEkt <a7162d001@smtp-brevo.com>',
       to: OWNER_EMAIL,
       subject: `Nuevo pedido: ${order.order_number}`,
       html: ownerHtml
     });
-    
-    if (ownerResult.error) {
-      console.error('Error enviando email al owner:', ownerResult.error);
-    } else {
-      console.log('✅ Email enviado al owner:', ownerResult.data?.id);
-    }
+    console.log('✅ Email enviado al owner:', OWNER_EMAIL);
   } catch (ownerError: any) {
-    console.error('Excepción enviando email al owner:', ownerError.message);
+    console.error('Error enviando email al owner:', ownerError.message);
   }
 }

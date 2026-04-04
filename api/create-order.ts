@@ -243,6 +243,380 @@ async function syncToGoogleSheets(order, orderItems, customerData) {
 }
 
 // =============================================
+// PLANTILLAS HTML PARA EMAILS
+// =============================================
+
+// Template para cliente con pago por TRANSFERENCIA
+function getTransferEmailTemplate(order, orderItems, customerData) {
+  const productsHtml = orderItems.map(item => `
+    <tr>
+      <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.product_name}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">${item.size} / ${item.color}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">x${item.quantity}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right;">$${item.subtotal.toLocaleString('es-AR')}</td>
+    </tr>
+  `).join('');
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #1a1a1a 0%, #333 100%); padding: 40px 30px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600;">¡Gracias por tu compra!</h1>
+              <p style="margin: 10px 0 0 0; color: #ccc; font-size: 16px;">Tu pedido está casi listo</p>
+            </td>
+          </tr>
+          
+          <!-- Order Number -->
+          <tr>
+            <td style="padding: 30px 30px 20px 30px; text-align: center;">
+              <div style="display: inline-block; background-color: #e8f5e9; border: 2px solid #4caf50; border-radius: 8px; padding: 15px 30px;">
+                <span style="font-size: 14px; color: #666;">Número de pedido</span><br>
+                <strong style="font-size: 20px; color: #2e7d32;">${order.order_number}</strong>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Products -->
+          <tr>
+            <td style="padding: 0 30px;">
+              <h3 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">📦 Detalle de tu pedido</h3>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                <tr style="background-color: #f9f9f9;">
+                  <th style="padding: 12px; text-align: left; color: #666; font-size: 12px;">PRODUCTO</th>
+                  <th style="padding: 12px; text-align: center; color: #666; font-size: 12px;">TALLE/COLOR</th>
+                  <th style="padding: 12px; text-align: center; color: #666; font-size: 12px;">CANT.</th>
+                  <th style="padding: 12px; text-align: right; color: #666; font-size: 12px;">SUBTOTAL</th>
+                </tr>
+                ${productsHtml}
+                <tr>
+                  <td colspan="3" style="padding: 15px 12px; text-align: right; font-weight: bold; color: #333;">Total:</td>
+                  <td style="padding: 15px 12px; text-align: right; font-weight: bold; color: #2e7d32; font-size: 18px;">$${customerData.total.toLocaleString('es-AR')}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Bank Details -->
+          <tr>
+            <td style="padding: 30px;">
+              <div style="background: linear-gradient(135deg, #fff3e0 0%, #fff8e1 100%); border: 2px solid #ff9800; border-radius: 12px; padding: 25px;">
+                <h3 style="margin: 0 0 15px 0; color: #e65100; font-size: 18px;">💳 Datos para realizar la transferencia</h3>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding: 8px 0; color: #666; font-size: 14px;">Titular:</td>
+                    <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333;">${BANK_DETAILS.titular}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666; font-size: 14px;">CBU:</td>
+                    <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333; font-family: monospace;">${BANK_DETAILS.cbu}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666; font-size: 14px;">Alias:</td>
+                    <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333;">${BANK_DETAILS.alias}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666; font-size: 14px;">Banco:</td>
+                    <td style="padding: 8px 0; text-align: right; font-weight: bold; color: #333;">${BANK_DETAILS.banco}</td>
+                  </tr>
+                </table>
+                <p style="margin: 15px 0 0 0; padding: 12px; background-color: #fff; border-radius: 6px; color: #e65100; font-size: 14px;">
+                  ⚠️ <strong>Importante:</strong> Una vez realizada la transferencia, por favor contactanos para confirmar tu pedido.
+                </p>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Contact -->
+          <tr>
+            <td style="padding: 0 30px 30px 30px;">
+              <div style="background-color: #f5f5f5; border-radius: 8px; padding: 20px; text-align: center;">
+                <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">¿Tenés alguna duda?</p>
+                <p style="margin: 0; color: #333; font-size: 16px;">
+                  📱 WhatsApp: <strong>+54 9 XX XXX XXXX</strong><br>
+                  📧 Email: <strong>contacto@theekt.com</strong>
+                </p>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #1a1a1a; padding: 25px; text-align: center;">
+              <p style="margin: 0; color: #888; font-size: 14px;">TheEkt - Tu tienda de confianza</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
+// Template para cliente con pago por MERCADOPAGO
+function getMercadoPagoEmailTemplate(order, orderItems, customerData) {
+  const productsHtml = orderItems.map(item => `
+    <tr>
+      <td style="padding: 12px; border-bottom: 1px solid #eee;">${item.product_name}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">${item.size} / ${item.color}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">x${item.quantity}</td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right;">$${item.subtotal.toLocaleString('es-AR')}</td>
+    </tr>
+  `).join('');
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #00B1EA 0%, #0099D6 100%); padding: 40px 30px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600;">¡Pago confirmado!</h1>
+              <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">Tu pedido está siendo procesado</p>
+            </td>
+          </tr>
+          
+          <!-- Success Message -->
+          <tr>
+            <td style="padding: 30px; text-align: center;">
+              <div style="display: inline-block; background-color: #e8f5e9; border-radius: 50%; width: 80px; height: 80px; line-height: 80px; margin-bottom: 20px;">
+                <span style="font-size: 40px;">✓</span>
+              </div>
+              <h2 style="margin: 0 0 10px 0; color: #2e7d32; font-size: 24px;">¡Gracias por tu compra!</h2>
+              <p style="margin: 0; color: #666; font-size: 16px;">Tu pago fue procesado exitosamente. Te informaremos cuando tu pedido esté listo.</p>
+            </td>
+          </tr>
+          
+          <!-- Order Number -->
+          <tr>
+            <td style="padding: 0 30px 20px 30px; text-align: center;">
+              <div style="display: inline-block; background-color: #e3f2fd; border: 2px solid #2196f3; border-radius: 8px; padding: 15px 30px;">
+                <span style="font-size: 14px; color: #666;">Número de pedido</span><br>
+                <strong style="font-size: 20px; color: #1565c0;">${order.order_number}</strong>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Products -->
+          <tr>
+            <td style="padding: 0 30px;">
+              <h3 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">📦 Detalle de tu pedido</h3>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                <tr style="background-color: #f9f9f9;">
+                  <th style="padding: 12px; text-align: left; color: #666; font-size: 12px;">PRODUCTO</th>
+                  <th style="padding: 12px; text-align: center; color: #666; font-size: 12px;">TALLE/COLOR</th>
+                  <th style="padding: 12px; text-align: center; color: #666; font-size: 12px;">CANT.</th>
+                  <th style="padding: 12px; text-align: right; color: #666; font-size: 12px;">SUBTOTAL</th>
+                </tr>
+                ${productsHtml}
+                <tr>
+                  <td colspan="3" style="padding: 15px 12px; text-align: right; font-weight: bold; color: #333;">Total:</td>
+                  <td style="padding: 15px 12px; text-align: right; font-weight: bold; color: #1565c0; font-size: 18px;">$${customerData.total.toLocaleString('es-AR')}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Delivery Info -->
+          <tr>
+            <td style="padding: 30px;">
+              <div style="background-color: #f5f5f5; border-radius: 8px; padding: 20px;">
+                <h3 style="margin: 0 0 10px 0; color: #333; font-size: 16px;">🚚 Información de entrega</h3>
+                <p style="margin: 0; color: #666; font-size: 14px;">
+                  ${customerData.deliveryType === 'envio' 
+                    ? `Envío a domicilio: ${customerData.deliveryAddress.street} ${customerData.deliveryAddress.height}, ${customerData.deliveryAddress.city}, ${customerData.deliveryAddress.province}`
+                    : 'Retiro en local'}
+                </p>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Contact -->
+          <tr>
+            <td style="padding: 0 30px 30px 30px;">
+              <div style="background-color: #e3f2fd; border-radius: 8px; padding: 20px; text-align: center;">
+                <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">¿Tenés alguna duda?</p>
+                <p style="margin: 0; color: #333; font-size: 16px;">
+                  📱 WhatsApp: <strong>+54 9 XX XXX XXXX</strong><br>
+                  📧 Email: <strong>contacto@theekt.com</strong>
+                </p>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #00B1EA; padding: 25px; text-align: center;">
+              <p style="margin: 0; color: #ffffff; font-size: 14px;">TheEkt - Tu tienda de confianza</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
+// Template para el VENDEDOR
+function getOwnerEmailTemplate(order, orderItems, customerData) {
+  const productsHtml = orderItems.map(item => `
+    <tr>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; color: #333;">${item.product_name}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center; color: #666;">${item.size} / ${item.color}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center; color: #666;">x${item.quantity}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right; color: #333;">$${item.subtotal.toLocaleString('es-AR')}</td>
+    </tr>
+  `).join('');
+
+  const paymentStatus = customerData.paymentMethod === 'mercadopago' ? 
+    '<span style="background-color: #4caf50; color: white; padding: 4px 12px; border-radius: 4px; font-weight: bold;">PAGADO</span>' :
+    '<span style="background-color: #ff9800; color: white; padding: 4px 12px; border-radius: 4px; font-weight: bold;">PENDIENTE</span>';
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%); padding: 30px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">🔔 Nuevo pedido recibido</h1>
+            </td>
+          </tr>
+          
+          <!-- Order Info -->
+          <tr>
+            <td style="padding: 25px 30px; text-align: center; background-color: #fff3e0;">
+              <h2 style="margin: 0 0 5px 0; color: #333; font-size: 14px;">NÚMERO DE PEDIDO</h2>
+              <p style="margin: 0; font-size: 28px; font-weight: bold; color: #d32f2f;">${order.order_number}</p>
+              <p style="margin: 10px 0 0 0; font-size: 14px; color: #666;">
+                ${new Date(order.created_at).toLocaleString('es-AR', { dateStyle: 'full', timeStyle: 'short' })}
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Customer Info -->
+          <tr>
+            <td style="padding: 25px 30px;">
+              <h3 style="margin: 0 0 15px 0; color: #333; font-size: 16px; border-bottom: 2px solid #d32f2f; padding-bottom: 10px;">👤 Datos del cliente</h3>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding: 8px 0; color: #666; width: 100px;">Nombre:</td>
+                  <td style="padding: 8px 0; color: #333; font-weight: bold;">${customerData.customerName} ${customerData.customerLastname}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666;">Email:</td>
+                  <td style="padding: 8px 0; color: #1565c0;"><a href="mailto:${customerData.customerEmail}" style="color: #1565c0;">${customerData.customerEmail}</a></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Payment Info -->
+          <tr>
+            <td style="padding: 0 30px 25px 30px;">
+              <h3 style="margin: 0 0 15px 0; color: #333; font-size: 16px; border-bottom: 2px solid #d32f2f; padding-bottom: 10px;">💳 Información de pago</h3>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding: 8px 0; color: #666;">Método:</td>
+                  <td style="padding: 8px 0; color: #333; font-weight: bold;">
+                    ${customerData.paymentMethod === 'mercadopago' ? 'MercadoPago' : 'Transferencia bancaria'}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666;">Estado:</td>
+                  <td style="padding: 8px 0;">${paymentStatus}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666;">Subtotal:</td>
+                  <td style="padding: 8px 0; color: #333;">$${customerData.subtotal.toLocaleString('es-AR')}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666;">Descuento:</td>
+                  <td style="padding: 8px 0; color: #ff5722;">-$${customerData.discount.toLocaleString('es-AR')}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #666; font-weight: bold;">TOTAL:</td>
+                  <td style="padding: 8px 0; color: #2e7d32; font-weight: bold; font-size: 18px;">$${customerData.total.toLocaleString('es-AR')}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Delivery Info -->
+          <tr>
+            <td style="padding: 0 30px 25px 30px;">
+              <h3 style="margin: 0 0 15px 0; color: #333; font-size: 16px; border-bottom: 2px solid #d32f2f; padding-bottom: 10px;">🚚 Entrega</h3>
+              <p style="margin: 0; color: #333;">
+                <strong>${customerData.deliveryType === 'envio' ? 'Envío a domicilio' : 'Retiro en local'}</strong>
+                ${customerData.deliveryType === 'envio' ? 
+                  `<br>${customerData.deliveryAddress.street} ${customerData.deliveryAddress.height}, ${customerData.deliveryAddress.city}, ${customerData.deliveryAddress.province}` : 
+                  ''}
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Products -->
+          <tr>
+            <td style="padding: 0 30px 25px 30px;">
+              <h3 style="margin: 0 0 15px 0; color: #333; font-size: 16px; border-bottom: 2px solid #d32f2f; padding-bottom: 10px;">📦 Productos</h3>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                <tr style="background-color: #f5f5f5;">
+                  <th style="padding: 10px; text-align: left; color: #666; font-size: 12px;">PRODUCTO</th>
+                  <th style="padding: 10px; text-align: center; color: #666; font-size: 12px;">TALLE/COLOR</th>
+                  <th style="padding: 10px; text-align: center; color: #666; font-size: 12px;">CANT.</th>
+                  <th style="padding: 10px; text-align: right; color: #666; font-size: 12px;">SUBTOTAL</th>
+                </tr>
+                ${productsHtml}
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #333; padding: 20px; text-align: center;">
+              <p style="margin: 0; color: #888; font-size: 12px;">TheEkt - Sistema de Pedidos Automático</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+}
+
+// =============================================
 // FUNCIÓN: ENVIAR EMAILS CON NODEMAILER (BREVO)
 // =============================================
 async function sendEmails(order, orderItems, customerData) {
@@ -258,165 +632,21 @@ async function sendEmails(order, orderItems, customerData) {
     }
   });
   
-  const productsList = orderItems.map(item => 
-    `- ${item.product_name} (Talle: ${item.size}, Color: ${item.color}) x${item.quantity} - $${item.subtotal.toLocaleString('es-AR')}`
-  ).join('\n');
-
-  // Email al cliente
+  // Generar templates según el método de pago
   let clientSubject = '';
   let clientHtml = '';
-
+  
   if (customerData.paymentMethod === 'transferencia') {
     clientSubject = `Pedido ${order.order_number} - Datos para Transferencia`;
-    clientHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: #1a1a1a; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
-    .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
-    .order-number { background: #e8f5e9; border: 1px solid #4caf50; padding: 12px; border-radius: 6px; margin: 15px 0; }
-    .bank-details { background: #fff3e0; border: 1px solid #ff9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
-    .bank-details pre { background: #fff; padding: 10px; border-radius: 4px; font-family: monospace; }
-    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>🎉 ¡Gracias por tu compra en TheEkt!</h1>
-  </div>
-  <div class="content">
-    <div class="order-number">
-      <strong>Número de pedido:</strong> ${order.order_number}
-    </div>
-    
-    <h3>Detalle del pedido:</h3>
-    <pre>${productsList}</pre>
-    
-    <p><strong>Total:</strong> $${customerData.total.toLocaleString('es-AR')}</p>
-    
-    <div class="bank-details">
-      <h3>💳 Datos para realizar la transferencia:</h3>
-      <pre>
-Titular: ${BANK_DETAILS.titular}
-CBU: ${BANK_DETAILS.cbu}
-Alias: ${BANK_DETAILS.alias}
-Banco: ${BANK_DETAILS.banco}
-      </pre>
-      <p>Una vez realizada la transferencia, por favor contactanos para confirmar.</p>
-    </div>
-    
-    <p>Saludos,<br>TheEkt</p>
-  </div>
-  <div class="footer">
-    <p>TheEkt - Tu tienda de confianza</p>
-  </div>
-</body>
-</html>
-    `.trim();
+    clientHtml = getTransferEmailTemplate(order, orderItems, customerData);
   } else {
     clientSubject = `¡Gracias por tu compra en TheEkt! - Pedido ${order.order_number}`;
-    clientHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: #1a1a1a; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
-    .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
-    .order-number { background: #e8f5e9; border: 1px solid #4caf50; padding: 12px; border-radius: 6px; margin: 15px 0; }
-    .success { color: #4caf50; font-size: 18px; }
-    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>🎉 ¡Gracias por tu compra en TheEkt!</h1>
-  </div>
-  <div class="content">
-    <p class="success">✅ Tu pago ha sido procesado exitosamente.</p>
-    
-    <div class="order-number">
-      <strong>Número de pedido:</strong> ${order.order_number}
-    </div>
-    
-    <h3>Detalle del pedido:</h3>
-    <pre>${productsList}</pre>
-    
-    <p><strong>Total:</strong> $${customerData.total.toLocaleString('es-AR')}</p>
-    
-    <p>Te informaremos cuando tu pedido esté listo para retirar/enviar.</p>
-    
-    <p>Saludos,<br>TheEkt</p>
-  </div>
-  <div class="footer">
-    <p>TheEkt - Tu tienda de confianza</p>
-  </div>
-</body>
-</html>
-    `.trim();
+    clientHtml = getMercadoPagoEmailTemplate(order, orderItems, customerData);
   }
-
-  // Email a vos (el owner)
-  const ownerHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: #d32f2f; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
-    .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
-    .order-number { background: #ffebee; border: 1px solid #f44336; padding: 12px; border-radius: 6px; margin: 15px 0; }
-    .details { background: white; padding: 15px; border-radius: 6px; margin: 15px 0; }
-    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
-    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>🔔 Nuevo pedido recibido</h1>
-  </div>
-  <div class="content">
-    <div class="order-number">
-      <strong>Número de pedido:</strong> ${order.order_number}
-    </div>
-    
-    <div class="details">
-      <h3>👤 Cliente:</h3>
-      <p><strong>Nombre:</strong> ${customerData.customerName} ${customerData.customerLastname}</p>
-      <p><strong>Email:</strong> ${customerData.customerEmail}</p>
-    </div>
-    
-    <div class="details">
-      <h3>🚚 Entrega:</h3>
-      <p><strong>Tipo:</strong> ${customerData.deliveryType === 'envio' ? 'Envío a domicilio' : 'Retiro en local'}</p>
-      ${customerData.deliveryType === 'envio' ? `<p><strong>Dirección:</strong> ${customerData.deliveryAddress.street} ${customerData.deliveryAddress.height}, ${customerData.deliveryAddress.city}, ${customerData.deliveryAddress.province}</p>` : ''}
-    </div>
-    
-    <div class="details">
-      <h3>💳 Pago:</h3>
-      <p><strong>Método:</strong> ${customerData.paymentMethod === 'mercadopago' ? 'MercadoPago' : 'Transferencia'}</p>
-      <p><strong>Estado:</strong> ${customerData.paymentMethod === 'mercadopago' ? 'Pagado' : 'Pendiente'}</p>
-      <p><strong>Subtotal:</strong> $${customerData.subtotal.toLocaleString('es-AR')}</p>
-      <p><strong>Descuento:</strong> $${customerData.discount.toLocaleString('es-AR')}</p>
-      <p><strong>Total:</strong> $${customerData.total.toLocaleString('es-AR')}</p>
-    </div>
-    
-    <div class="details">
-      <h3>📦 Productos:</h3>
-      <pre>${productsList}</pre>
-    </div>
-  </div>
-  <div class="footer">
-    <p>TheEkt - Sistema de Pedidos Automático</p>
-  </div>
-</body>
-</html>
-  `.trim();
+  
+  // Template para el owner
+  const ownerSubject = `Nuevo pedido: ${order.order_number}`;
+  const ownerHtml = getOwnerEmailTemplate(order, orderItems, customerData);
 
   // Verificar que el email del cliente sea válido
   if (!customerData.customerEmail || !customerData.customerEmail.includes('@')) {
@@ -428,7 +658,7 @@ Banco: ${BANK_DETAILS.banco}
       subject: `Nuevo pedido: ${order.order_number} (email cliente inválido)`,
       html: ownerHtml
     });
-    console.log('✅ Email enviado solo al owner (email cliente inválido)');
+    console.log('Email enviado solo al owner (email cliente inválido)');
     return;
   }
 
@@ -441,7 +671,7 @@ Banco: ${BANK_DETAILS.banco}
       subject: clientSubject,
       html: clientHtml
     });
-    console.log('✅ Email enviado al cliente:', customerData.customerEmail);
+    console.log('Email enviado al cliente:', customerData.customerEmail);
   } catch (clientError: any) {
     console.error('Error enviando email al cliente:', clientError.message);
   }
@@ -451,10 +681,10 @@ Banco: ${BANK_DETAILS.banco}
     await transporter.sendMail({
       from: 'TheEkt <a7162d001@smtp-brevo.com>',
       to: OWNER_EMAIL,
-      subject: `Nuevo pedido: ${order.order_number}`,
+      subject: ownerSubject,
       html: ownerHtml
     });
-    console.log('✅ Email enviado al owner:', OWNER_EMAIL);
+    console.log('Email enviado al owner:', OWNER_EMAIL);
   } catch (ownerError: any) {
     console.error('Error enviando email al owner:', ownerError.message);
   }

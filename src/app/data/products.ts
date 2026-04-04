@@ -881,7 +881,7 @@ export const products: Product[] = [
     id: 47,
     name: "Zapatillas Intensamente",
     description: "Zapatillas de estilo casual, con diseño de los personajes de Intensamente.",
-    price: 100000.00,
+    price: 1.00,
     purchasePrice: 120000.00,
     image: "https://i.postimg.cc/MHCw0w19/Musculosa_gris_(6).jpg",
     images: [

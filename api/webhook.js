@@ -1,19 +1,25 @@
-// Webhook endpoint para Vexor
-// Recibe notificaciones de pagos exitosos y fallidos
+// =============================================
+// WEBHOOK: VEXOR MERCADOPAGO
 // Endpoint: /api/webhook
+// =============================================
+
+import { createClient } from '@supabase/supabase-js';
+import { sendOrderEmails, getMercadoPagoConfirmedEmailTemplate, getOwnerEmailTemplate } from './emailService.js';
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://qyvbfwllqsezteecvieb.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function handler(req, res) {
-  // Configurar CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Vexor-Signature');
 
-  // Manejar preflight requests
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // Solo aceptar POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -21,25 +27,15 @@ export default async function handler(req, res) {
   try {
     const { type, data, id } = req.body;
 
-    // Log para debugging
-    console.log('Webhook recibido:', {
-      timestamp: new Date().toISOString(),
-      type,
-      id,
-      data,
-    });
+    console.log('Webhook recibido:', JSON.stringify({ type, data, id }, null, 2));
 
-    // Verificar firma del webhook (si está configurada)
     const signature = req.headers['x-vexor-signature'];
     const webhookSecret = process.env.VEXOR_WEBHOOK_SECRET;
 
     if (webhookSecret && signature) {
-      // Aquí iría la validación de firma
-      // Por ahora solo logueamos que se recibió
       console.log('Firma del webhook recibida:', signature);
     }
 
-    // Manejar diferentes tipos de eventos
     switch (type) {
       case 'payment.success':
         await handlePaymentSuccess(data);
@@ -61,7 +57,6 @@ export default async function handler(req, res) {
         console.log(`Evento no manejado: ${type}`);
     }
 
-    // Siempre responder 200 para confirmar recepción
     return res.status(200).json({ 
       received: true,
       processed: true,
@@ -69,7 +64,6 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Error procesando webhook:', error);
-    // Aún así respondemos 200 para evitar reintentos innecesarios
     return res.status(200).json({ 
       received: true,
       processed: false,
@@ -78,72 +72,115 @@ export default async function handler(req, res) {
   }
 }
 
-// Manejar pago exitoso
 async function handlePaymentSuccess(data) {
-  console.log('Pago exitoso:', {
-    transactionId: data.transaction_id,
-    amount: data.amount,
-    currency: data.currency,
-    provider: data.provider,
-    customerEmail: data.customer_email,
-    metadata: data.metadata,
-  });
+  console.log('Procesando pago exitoso:', JSON.stringify(data, null, 2));
 
-  // TODO: Aquí puedes:
-  // 1. Actualizar el estado del pedido en tu base de datos
-  // 2. Enviar email de confirmación al cliente
-  // 3. Actualizar inventario
-  // 4. Crear registro de venta
+  const orderNumber = data.metadata?.order_number || data.order_number;
+  
+  if (!orderNumber) {
+    console.error('No se encontró order_number en los datos del webhook');
+    return;
+  }
 
-  // Ejemplo con Firebase/Firestore:
-  // await db.collection('orders').doc(data.metadata.order_id).update({
-  //   status: 'paid',
-  //   transactionId: data.transaction_id,
-  //   paidAt: new Date(),
-  //   paymentProvider: data.provider,
-  // });
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('order_number', orderNumber)
+    .single();
+
+  if (orderError) {
+    console.error('Error buscando pedido:', orderError);
+    return;
+  }
+
+  if (!order) {
+    console.error('Pedido no encontrado:', orderNumber);
+    return;
+  }
+
+  if (order.payment_status === 'pagado') {
+    console.log('El pedido ya estaba marcado como pagado:', orderNumber);
+    return;
+  }
+
+  const { error: updateError } = await supabase
+    .from('orders')
+    .update({ 
+      payment_status: 'pagado',
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', order.id);
+
+  if (updateError) {
+    console.error('Error actualizando estado del pedido:', updateError);
+    return;
+  }
+
+  console.log('Pedido actualizado a PAGADO:', orderNumber);
+
+  const { data: orderItems, error: itemsError } = await supabase
+    .from('order_items')
+    .select('*')
+    .eq('order_id', order.id);
+
+  if (itemsError) {
+    console.error('Error buscando items del pedido:', itemsError);
+    return;
+  }
+
+  let deliveryAddress = null;
+  if (order.delivery_address) {
+    try {
+      deliveryAddress = typeof order.delivery_address === 'string' 
+        ? JSON.parse(order.delivery_address) 
+        : order.delivery_address;
+    } catch (e) {
+      deliveryAddress = order.delivery_address;
+    }
+  }
+
+  const customerData = {
+    customerName: order.customer_name,
+    customerLastname: order.customer_lastname,
+    customerEmail: order.customer_email,
+    deliveryType: order.delivery_type,
+    deliveryAddress: deliveryAddress,
+    paymentMethod: 'mercadopago',
+    subtotal: order.subtotal,
+    discount: order.discount,
+    total: order.total
+  };
+
+  await sendOrderEmails(order, orderItems || [], customerData, 'mercadopago');
+  console.log('Emails de confirmacion enviados para:', orderNumber);
 }
 
-// Manejar pago fallido
 async function handlePaymentFailure(data) {
   console.log('Pago fallido:', {
     transactionId: data.transaction_id,
     errorCode: data.error_code,
     errorMessage: data.error_message,
     customerEmail: data.customer_email,
+    orderNumber: data.metadata?.order_number || data.order_number
   });
-
-  // TODO: Aquí puedes:
-  // 1. Actualizar el estado del pedido a 'failed'
-  // 2. Enviar email al cliente informando del fallo
-  // 3. Registrar el error para análisis
 }
 
-// Manejar pago pendiente
 async function handlePaymentPending(data) {
   console.log('Pago pendiente:', {
     transactionId: data.transaction_id,
     amount: data.amount,
     provider: data.provider,
     pendingReason: data.pending_reason,
+    orderNumber: data.metadata?.order_number || data.order_number
   });
-
-  // TODO: Aquí puedes:
-  // 1. Actualizar el estado del pedido a 'pending'
-  // 2. Programar verificación de estado después
 }
 
-// Manejar reembolso completado
 async function handleRefundCompleted(data) {
   console.log('Reembolso completado:', {
     transactionId: data.transaction_id,
     refundId: data.refund_id,
     amount: data.amount,
     reason: data.reason,
+    orderNumber: data.metadata?.order_number || data.order_number
   });
-
-  // TODO: Aquí puedes:
-  // 1. Actualizar el estado del pedido a 'refunded'
-  // 2. Enviar email de confirmación de reembolso
-  // 3. Actualizar inventario si aplica
 }

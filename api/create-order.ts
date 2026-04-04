@@ -653,7 +653,7 @@ async function sendEmails(order, orderItems, customerData) {
     console.error('Email del cliente inválido:', customerData.customerEmail);
     // Solo enviar al owner si el email del cliente es inválido
     await transporter.sendMail({
-      from: 'TheEkt <a7162d001@smtp-brevo.com>',
+      from: 'TheEkt <rubioloj.93@gmail.com>',
       to: OWNER_EMAIL,
       subject: `Nuevo pedido: ${order.order_number} (email cliente inválido)`,
       html: ownerHtml
@@ -666,7 +666,7 @@ async function sendEmails(order, orderItems, customerData) {
   // Email al cliente
   try {
     await transporter.sendMail({
-      from: 'TheEkt <a7162d001@smtp-brevo.com>',
+      from: 'TheEkt <rubioloj.93@gmail.com>',
       to: customerData.customerEmail,
       subject: clientSubject,
       html: clientHtml
@@ -679,7 +679,7 @@ async function sendEmails(order, orderItems, customerData) {
   // Email al owner
   try {
     await transporter.sendMail({
-      from: 'TheEkt <a7162d001@smtp-brevo.com>',
+      from: 'TheEkt <rubioloj.93@gmail.com>',
       to: OWNER_EMAIL,
       subject: ownerSubject,
       html: ownerHtml

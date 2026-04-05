@@ -27,6 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { 
+      userId,
       customerName, 
       customerLastname, 
       customerEmail,
@@ -59,6 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .from('orders')
       .insert({
         order_number: orderNumber,
+        user_id: userId || null,
         customer_name: customerName,
         customer_lastname: customerLastname,
         customer_email: customerEmail,
@@ -78,6 +80,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const orderItems = items.map(item => ({
       order_id: order.id,
+      user_id: userId || null,
       product_id: item.productId,
       product_code: `P${String(item.productId).padStart(3, '0')}`,
       product_name: item.name,
@@ -95,6 +98,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (itemsError) throw itemsError;
 
     if (paymentMethod === 'transferencia') {
+      // Update payment status to 'pagado' for transferencia (they're already paying)
+      await supabase
+        .from('orders')
+        .update({ payment_status: 'pagado' })
+        .eq('id', order.id);
+
+      // Track product stats for transferencia purchases
+      for (const item of items) {
+        try {
+          await supabase.rpc('increment_product_purchase', {
+            p_product_id: item.productId,
+            p_quantity: item.quantity
+          });
+        } catch (statsError) {
+          console.error('Error updating product stats:', statsError);
+        }
+      }
+
       try {
         await sendOrderEmails(order, orderItems, {
           customerName,

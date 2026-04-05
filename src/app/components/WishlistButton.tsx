@@ -3,6 +3,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import { Heart } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { trackProductFavorite } from "../services/statsService";
 
 interface WishlistButtonProps {
   productId: number;
@@ -28,9 +29,11 @@ export function WishlistButton({ productId, className }: WishlistButtonProps) {
       const wishlistId = getWishlistId(productId);
       if (wishlistId) {
         await removeItem(wishlistId);
+        trackProductFavorite(productId, false);
       }
     } else {
       await addItem(productId);
+      trackProductFavorite(productId, true);
     }
   };
 

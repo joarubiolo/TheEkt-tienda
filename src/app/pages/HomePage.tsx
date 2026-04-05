@@ -4,6 +4,7 @@ import { SearchFilters } from "../components/SearchFilters";
 import { ProductGrid } from "../components/ProductGrid";
 import { products as allProducts } from "../data/products";
 import { Product } from "../types/product";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
@@ -23,6 +24,7 @@ export function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<string>("relevancia");
   
   const productsRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +55,7 @@ export function HomePage() {
   };
 
   const filteredProducts = useMemo(() => {
-    return shuffledProducts.filter((product) => {
+    let filtered = shuffledProducts.filter((product) => {
       const matchesSearch = product.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
@@ -70,7 +72,26 @@ export function HomePage() {
 
       return matchesSearch && matchesCategory && matchesGender && matchesType;
     });
-  }, [searchQuery, selectedCategory, selectedGenders, selectedTypes]);
+
+    // Apply sorting
+    switch (sortBy) {
+      case "precio-asc":
+        filtered = filtered.sort((a, b) => a.purchasePrice - b.purchasePrice);
+        break;
+      case "precio-desc":
+        filtered = filtered.sort((a, b) => b.purchasePrice - a.purchasePrice);
+        break;
+      case "nombre":
+        filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "relevancia":
+      default:
+        // Keep original shuffle order
+        break;
+    }
+
+    return filtered;
+  }, [searchQuery, selectedCategory, selectedGenders, selectedTypes, sortBy]);
 
   return (
     <div>
@@ -88,10 +109,24 @@ export function HomePage() {
         />
 
         <main className="flex-1 p-8">
-          <div className="mb-6">
+          <div className="flex items-center justify-between mb-6">
             <p className="text-sm text-gray-600">
               {filteredProducts.length} producto{filteredProducts.length !== 1 ? "s" : ""} encontrado{filteredProducts.length !== 1 ? "s" : ""}
             </p>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Ordenar:</span>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Ordenar por" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="relevancia">Relevancia</SelectItem>
+                  <SelectItem value="precio-asc">Menor precio</SelectItem>
+                  <SelectItem value="precio-desc">Mayor precio</SelectItem>
+                  <SelectItem value="nombre">Nombre A-Z</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <ProductGrid products={filteredProducts} />
         </main>

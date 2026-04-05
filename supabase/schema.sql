@@ -7,6 +7,7 @@
 CREATE TABLE IF NOT EXISTS orders (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     order_number TEXT UNIQUE NOT NULL,
+    user_id TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     customer_name TEXT NOT NULL,
     customer_lastname TEXT NOT NULL,
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE TABLE IF NOT EXISTS order_items (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    user_id TEXT,
     product_id INTEGER,
     product_code TEXT NOT NULL,
     product_name TEXT NOT NULL,
@@ -33,6 +35,17 @@ CREATE TABLE IF NOT EXISTS order_items (
     quantity INTEGER NOT NULL CHECK (quantity > 0),
     unit_price NUMERIC NOT NULL,
     subtotal NUMERIC NOT NULL
+);
+
+-- 4. Tabla de ESTADÍSTICAS DE PRODUCTOS
+CREATE TABLE IF NOT EXISTS product_stats (
+    product_id INTEGER PRIMARY KEY,
+    views INTEGER DEFAULT 0,
+    favorites INTEGER DEFAULT 0,
+    cart_adds INTEGER DEFAULT 0,
+    purchases INTEGER DEFAULT 0,
+    last_viewed_at TIMESTAMP WITH TIME ZONE,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 3. Tabla de CÓDIGOS DE PRODUCTOS
@@ -127,12 +140,70 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- =============================================
+-- FUNCIONES DE ESTADÍSTICAS
+-- =============================================
+
+-- Función para incrementar vistas de producto
+CREATE OR REPLACE FUNCTION increment_product_view(p_product_id INTEGER)
+RETURNS void AS $$
+BEGIN
+    INSERT INTO product_stats (product_id, views, last_viewed_at, updated_at)
+    VALUES (p_product_id, 1, NOW(), NOW())
+    ON CONFLICT (product_id) 
+    DO UPDATE SET 
+        views = product_stats.views + 1,
+        last_viewed_at = NOW(),
+        updated_at = NOW();
+END;
+$$ LANGUAGE plpgsql;
+
+-- Función para incrementar favoritos
+CREATE OR REPLACE FUNCTION increment_product_favorite(p_product_id INTEGER, p_increment INTEGER DEFAULT 1)
+RETURNS void AS $$
+BEGIN
+    INSERT INTO product_stats (product_id, favorites, updated_at)
+    VALUES (p_product_id, p_increment, NOW())
+    ON CONFLICT (product_id) 
+    DO UPDATE SET 
+        favorites = GREATEST(0, product_stats.favorites + p_increment),
+        updated_at = NOW();
+END;
+$$ LANGUAGE plpgsql;
+
+-- Función para incrementar agregados al carrito
+CREATE OR REPLACE FUNCTION increment_product_cart(p_product_id INTEGER, p_increment INTEGER DEFAULT 1)
+RETURNS void AS $$
+BEGIN
+    INSERT INTO product_stats (product_id, cart_adds, updated_at)
+    VALUES (p_product_id, p_increment, NOW())
+    ON CONFLICT (product_id) 
+    DO UPDATE SET 
+        cart_adds = GREATEST(0, product_stats.cart_adds + p_increment),
+        updated_at = NOW();
+END;
+$$ LANGUAGE plpgsql;
+
+-- Función para incrementar compras
+CREATE OR REPLACE FUNCTION increment_product_purchase(p_product_id INTEGER, p_quantity INTEGER DEFAULT 1)
+RETURNS void AS $$
+BEGIN
+    INSERT INTO product_stats (product_id, purchases, updated_at)
+    VALUES (p_product_id, p_quantity, NOW())
+    ON CONFLICT (product_id) 
+    DO UPDATE SET 
+        purchases = product_stats.purchases + p_quantity,
+        updated_at = NOW();
+END;
+$$ LANGUAGE plpgsql;
+
+-- =============================================
 -- HABILITAR RLS (Row Level Security)
 -- =============================================
 
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products_codes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE product_stats ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de acceso público para escritura (Edge Functions)
 CREATE POLICY "Allow public insert orders" ON orders FOR INSERT WITH CHECK (true);
@@ -142,3 +213,5 @@ CREATE POLICY "Allow public select products_codes" ON products_codes FOR SELECT 
 -- Habilitar RLS también en las políticas de lectura
 CREATE POLICY "Allow public read orders" ON orders FOR SELECT USING (true);
 CREATE POLICY "Allow public read order_items" ON order_items FOR SELECT USING (true);
+CREATE POLICY "Allow public read product_stats" ON product_stats FOR SELECT USING (true);
+CREATE POLICY "Allow public update product_stats" ON product_stats FOR UPDATE USING (true);

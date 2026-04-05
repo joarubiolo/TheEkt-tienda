@@ -153,6 +153,21 @@ async function handlePaymentSuccess(data) {
 
   await sendOrderEmails(order, orderItems || [], customerData, 'mercadopago');
   console.log('Emails de confirmacion enviados para:', orderNumber);
+
+  // Track product purchases
+  if (orderItems && orderItems.length > 0) {
+    for (const item of orderItems) {
+      try {
+        await supabase.rpc('increment_product_purchase', {
+          p_product_id: item.product_id,
+          p_quantity: item.quantity
+        });
+        console.log(`Stats actualizadas para producto ${item.product_id}: +${item.quantity} compras`);
+      } catch (statsError) {
+        console.error('Error actualizando stats del producto:', statsError);
+      }
+    }
+  }
 }
 
 async function handlePaymentFailure(data) {

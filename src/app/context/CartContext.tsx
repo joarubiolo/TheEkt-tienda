@@ -63,15 +63,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     try {
       setLoading(true);
+      
+      // Get local cart from localStorage (not state, to avoid stale data)
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const localItems: CartItem[] = stored ? JSON.parse(stored) : [];
+      
       const { data, error } = await getCartItems(user.uid);
 
       if (error) {
         console.error("Error loading cart from Supabase:", error);
+        setLoading(false);
         return;
       }
 
       if (data && data.length > 0) {
-        // Merge local cart with Supabase cart
+        // Map DB items to CartItem format
         const dbItems: CartItem[] = data.map((item: any) => ({
           id: item.id,
           productId: item.product_id,
@@ -83,34 +89,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
           quantity: item.quantity,
         }));
 
-        // Merge carts - if item exists in both, keep the one with higher quantity
-        const mergedItems = [...items];
-        dbItems.forEach((dbItem) => {
+        // For logged-in users, Supabase is the source of truth
+        // Merge local cart into DB cart (add local-only items)
+        const mergedItems = [...dbItems];
+        
+        localItems.forEach((localItem) => {
           const existingIndex = mergedItems.findIndex(
             (item) =>
-              item.productId === dbItem.productId &&
-              item.size === dbItem.size &&
-              item.color === dbItem.color
+              item.productId === localItem.productId &&
+              item.size === localItem.size &&
+              item.color === localItem.color
           );
 
-          if (existingIndex > -1) {
-            // Item exists in both, keep the higher quantity
-            if (dbItem.quantity > mergedItems[existingIndex].quantity) {
-              mergedItems[existingIndex] = dbItem;
-            }
+          if (existingIndex === -1) {
+            // Item only in local, add it to merged
+            mergedItems.push(localItem);
           } else {
-            // Item only in DB, add it
-            mergedItems.push(dbItem);
+            // Item exists in both, keep higher quantity
+            if (localItem.quantity > mergedItems[existingIndex].quantity) {
+              mergedItems[existingIndex] = localItem;
+            }
           }
         });
 
         setItems(mergedItems);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedItems));
 
         // Sync merged cart back to Supabase
         await syncCartToSupabase(mergedItems);
       } else {
-        // No items in DB, save local items to DB
-        await syncCartToSupabase(items);
+        // No items in DB, use local items
+        setItems(localItems);
+        if (localItems.length > 0) {
+          await syncCartToSupabase(localItems);
+        }
       }
     } catch (err) {
       console.error("Error in loadCartFromSupabase:", err);
@@ -183,6 +195,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const removeItem = async (id: number) => {
     setItems((prevItems) => {
       const newItems = prevItems.filter((item) => item.id !== id);
+      
+      // Update localStorage immediately
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
 
       if (user) {
         // Delete from Supabase
@@ -205,6 +220,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const newItems = prevItems.map((item) =>
         item.id === id ? { ...item, quantity } : item
       );
+      
+      // Update localStorage immediately
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
 
       if (user) {
         const item = newItems.find((i) => i.id === id);

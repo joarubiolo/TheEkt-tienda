@@ -8,11 +8,16 @@ import { Badge } from "../components/ui/badge";
 import { ArrowLeft, ShoppingBag, Package, Calendar, DollarSign } from "lucide-react";
 
 interface Order {
-  id: number;
-  total_amount: number;
+  id: string;
+  order_number: string;
+  total: number;
   status: string;
+  payment_status: string;
   created_at: string;
-  items: any[];
+  customer_name: string;
+  customer_lastname: string;
+  delivery_type: string;
+  payment_method: string;
 }
 
 export function OrdersPage() {
@@ -43,11 +48,11 @@ export function OrdersPage() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: { [key: string]: { label: string; variant: "default" | "secondary" | "outline" | "destructive" } } = {
-      pending: { label: "Pendiente", variant: "outline" },
-      paid: { label: "Pagado", variant: "default" },
-      shipped: { label: "Enviado", variant: "secondary" },
-      delivered: { label: "Entregado", variant: "default" },
-      cancelled: { label: "Cancelado", variant: "destructive" },
+      pendiente: { label: "Pendiente", variant: "outline" },
+      pagado: { label: "Pagado", variant: "default" },
+      procesando: { label: "Procesando", variant: "secondary" },
+      enviado: { label: "Enviado", variant: "secondary" },
+      entregado: { label: "Entregado", variant: "default" },
     };
 
     const config = statusConfig[status] || { label: status, variant: "outline" };
@@ -117,27 +122,33 @@ export function OrdersPage() {
             <Card key={order.id}>
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-lg">Pedido #{order.id}</CardTitle>
-                    <p className="text-sm text-gray-500 flex items-center mt-1">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(order.created_at)}
-                    </p>
-                  </div>
-                  {getStatusBadge(order.status)}
+                    <div>
+                      <CardTitle className="text-lg">Pedido {order.order_number}</CardTitle>
+                      <p className="text-sm text-gray-500 flex items-center mt-1">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {formatDate(order.created_at)}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {order.customer_name} {order.customer_lastname}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      {getStatusBadge(order.payment_status)}
+                      <span className="text-xs text-gray-500 uppercase">{order.payment_method}</span>
+                    </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between pt-4 border-t">
                   <div>
                     <p className="text-sm text-gray-600">
-                      {order.items?.length || 0} producto(s)
+                      {order.delivery_type === 'envio' ? 'Envío a domicilio' : 'Retiro en local'}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-gray-400" />
                     <span className="font-semibold text-lg">
-                      ${order.total_amount.toFixed(2)}
+                      ${Number(order.total).toLocaleString('es-AR')}
                     </span>
                   </div>
                 </div>

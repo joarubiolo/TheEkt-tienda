@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Product } from "../types/product";
 import { Button } from "./ui/button";
 import { ShoppingCart, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
 import { WishlistButton } from "./WishlistButton";
+import { trackProductView, trackProductCart } from "../services/statsService";
 
 interface ProductCardProps {
   product: Product;
@@ -16,12 +17,17 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const { addItem } = useCart();
 
+  useEffect(() => {
+    trackProductView(product.id);
+  }, [product.id]);
+
   const handlePurchase = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!selectedSize || !selectedColor) {
       toast.error("Por favor selecciona talla y color");
       return;
     }
+    trackProductCart(product.id, true);
     addItem(product, selectedSize, selectedColor);
     toast.success(`${product.name} agregado al carrito`);
     setSelectedSize("");

@@ -1,6 +1,7 @@
 import { useState, useTransition } from "react";
 import { Link, useNavigate } from "react-router";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -31,6 +32,7 @@ type DeliveryType = "envio" | "retiro";
 
 export function CartPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
   const [isPending, startTransition] = useTransition();
 
@@ -110,6 +112,7 @@ export function CartPage() {
 
     // Preparar datos del pedido para enviar a la API
     const orderData = {
+      userId: user?.uid || null,
       customerName: customerFirstName,
       customerLastname: customerLastName,
       customerEmail,
@@ -540,8 +543,9 @@ export function CartPage() {
               <Button
                 onClick={handlePrepareCheckout}
                 disabled={isSubmitting || items.length === 0}
-                className="w-full mt-6 text-white disabled:opacity-50"
-                style={{ backgroundColor: "#9ca3af" }}
+                className={`w-full mt-6 text-white disabled:opacity-50 ${
+                  !isSubmitting && items.length > 0 ? "bg-emerald-500 hover:bg-emerald-600" : ""
+                }`}
               >
                 {isSubmitting ? (
                   <>

@@ -40,6 +40,7 @@ export interface CheckoutData {
 // Interfaz para respuesta de checkout
 export interface CheckoutResponse {
   payment_url: string;
+  payment_id?: string;
   provider: PaymentProvider;
 }
 
@@ -103,8 +104,12 @@ export async function createCheckout(
 
     console.log('Respuesta de Vexor:', response);
 
+    // Intentar obtener payment_id de la respuesta
+    const paymentId = (response as any).payment_id || (response as any).id || null;
+    
     return {
       payment_url: response.payment_url,
+      payment_id: paymentId,
       provider,
     };
   } catch (error) {

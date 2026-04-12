@@ -219,6 +219,22 @@ export function CartPage() {
 
         const response = await createCheckout(checkoutData, "mercadopago");
 
+        // Actualizar el pedido con el payment_id
+        if (response?.payment_id) {
+          try {
+            await fetch('/api/update-payment-id', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderNumber: orderResult.orderNumber,
+                paymentId: response.payment_id
+              })
+            });
+          } catch (updateError) {
+            console.error('Error updating payment_id:', updateError);
+          }
+        }
+
         if (response && response.payment_url) {
           setCheckoutUrl(response.payment_url);
           toast.success("¡Listo! Redirigiendo al pago...");

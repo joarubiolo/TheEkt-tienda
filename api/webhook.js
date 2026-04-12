@@ -76,31 +76,52 @@ export default async function handler(req, res) {
 async function handlePaymentSuccess(data) {
   console.log('Procesando pago exitoso:', JSON.stringify(data, null, 2));
 
-  const orderNumber = data.metadata?.order_number || data.order_number;
+  // El payment_id viene en data.id
+  const paymentId = data.id;
   
-  if (!orderNumber) {
-    console.error('No se encontró order_number en los datos del webhook');
+  if (!paymentId) {
+    console.error('No se encontró payment_id en los datos del webhook');
     return;
   }
 
+  // Buscar por payment_id
   const { data: order, error: orderError } = await supabase
     .from('orders')
     .select('*')
-    .eq('order_number', orderNumber)
+    .eq('payment_id', paymentId.toString())
     .single();
 
-  if (orderError) {
+  if (orderError && orderError.code !== 'PGRST116') {
     console.error('Error buscando pedido:', orderError);
     return;
   }
 
+  // Si no se encuentra por payment_id, intentar por order_number en metadata
+  if (!order && data.metadata?.order_number) {
+    const { data: orderByNumber, error: orderByNumberError } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('order_number', data.metadata.order_number)
+      .single();
+
+    if (!orderByNumberError && orderByNumber) {
+      // Actualizar payment_id para futuras referencias
+      await supabase
+        .from('orders')
+        .update({ payment_id: paymentId.toString() })
+        .eq('id', orderByNumber.id);
+      
+      order = orderByNumber;
+    }
+  }
+
   if (!order) {
-    console.error('Pedido no encontrado:', orderNumber);
+    console.error('Pedido no encontrado para payment_id:', paymentId);
     return;
   }
 
   if (order.payment_status === 'pagado') {
-    console.log('El pedido ya estaba marcado como pagado:', orderNumber);
+    console.log('El pedido ya estaba marcado como pagado:', order.order_number);
     return;
   }
 

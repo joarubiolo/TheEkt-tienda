@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     order_number TEXT UNIQUE NOT NULL,
     user_id TEXT,
+    payment_id TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     customer_name TEXT NOT NULL,
     customer_lastname TEXT NOT NULL,

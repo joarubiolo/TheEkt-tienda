@@ -37,6 +37,7 @@ export default async function handler(req, res) {
     }
 
     switch (type) {
+      case 'payment':
       case 'payment.success':
         await handlePaymentSuccess(data);
         break;

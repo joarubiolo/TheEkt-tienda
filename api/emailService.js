@@ -15,7 +15,7 @@ export const BANK_DETAILS = {
   banco: 'Ualá Bank S.A.U.'
 };
 
-export const OWNER_EMAIL = 'rubioloj.93@gmail.com';
+export const OWNER_EMAIL = process.env.OWNER_EMAIL || 'theekt.tienda@gmail.com';
 
 // =============================================
 // CONFIGURACIÓN DE TRANSPORTE SMTP
@@ -430,7 +430,7 @@ export async function sendOrderEmails(order, orderItems, customerData, emailType
   if (!customerData.customerEmail || !customerData.customerEmail.includes('@')) {
     console.error('Email del cliente inválido:', customerData.customerEmail);
     await transporter.sendMail({
-      from: 'TheEkt <rubioloj.93@gmail.com>',
+      from: `TheEkt <${OWNER_EMAIL}>`,
       to: OWNER_EMAIL,
       subject: `Nuevo pedido: ${order.order_number} (email cliente inválido)`,
       html: ownerHtml
@@ -442,7 +442,7 @@ export async function sendOrderEmails(order, orderItems, customerData, emailType
   // Email al cliente
   try {
     await transporter.sendMail({
-      from: 'TheEkt <rubioloj.93@gmail.com>',
+      from: `TheEkt <${OWNER_EMAIL}>`,
       to: customerData.customerEmail,
       subject: clientSubject,
       html: clientHtml
@@ -455,7 +455,7 @@ export async function sendOrderEmails(order, orderItems, customerData, emailType
   // Email al owner
   try {
     await transporter.sendMail({
-      from: 'TheEkt <rubioloj.93@gmail.com>',
+      from: `TheEkt <${OWNER_EMAIL}>`,
       to: OWNER_EMAIL,
       subject: ownerSubject,
       html: ownerHtml

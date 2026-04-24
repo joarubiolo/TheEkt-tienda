@@ -56,7 +56,7 @@ export const products: Product[] = [
     type: "Pantalón",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Azul marino"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 4,
@@ -75,7 +75,7 @@ export const products: Product[] = [
     type: "Pantalón",
     sizes: ["XS", "S", "M", "L"],
     colors: ["Azul"],
-    inStock: true,
+    inStock: false,
     reviews: [
       { rating: 5, comment: "Excelente calidad, muy cómodo", user: "Carlos", date: "2026-03-01" }
     ]
@@ -97,7 +97,7 @@ export const products: Product[] = [
     type: "Pantalón",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Azul"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 6,
@@ -115,7 +115,7 @@ export const products: Product[] = [
     type: "Conjunto",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Gris"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 7,
@@ -133,7 +133,7 @@ export const products: Product[] = [
     type: "Conjunto",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Rosa"],
-    inStock: true,
+    inStock: false,
     reviews: [
       { rating: 5, comment: "Mi hija lo ama, muy lindo", user: "Ana", date: "2026-02-28" },
       { rating: 5, comment: "Perfecto para el cumple", user: "Laura", date: "2026-02-10" }
@@ -155,7 +155,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Negro"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 9,
@@ -217,9 +217,9 @@ export const products: Product[] = [
     category: "Casual",
     gender: "Niña",
     type: "Abrigo",
-    sizes: ["XS", "S", "M", "L", "XL"],
+    sizes: ["4", "6", "8", "10", "12"],
     colors: ["Fantasia"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 12,
@@ -277,7 +277,7 @@ export const products: Product[] = [
     type: "Mallas",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Rojo"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 15,
@@ -314,7 +314,7 @@ export const products: Product[] = [
     type: "Conjunto",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Azul"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 17,
@@ -353,7 +353,7 @@ export const products: Product[] = [
     type: "Pantalón",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Beige"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 19,
@@ -372,7 +372,7 @@ export const products: Product[] = [
     type: "Pantalón",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Gris"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 20,
@@ -391,7 +391,7 @@ export const products: Product[] = [
     type: "Conjunto",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Turquesa"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 21,
@@ -410,7 +410,7 @@ export const products: Product[] = [
     type: "Conjunto",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Multicolor"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 22,
@@ -428,7 +428,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Multicolor"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 23,
@@ -447,7 +447,7 @@ export const products: Product[] = [
     type: "Conjunto",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Violeta"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 24,
@@ -465,7 +465,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Negro"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 25,
@@ -501,7 +501,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Rosa"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 27,
@@ -537,7 +537,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Multicolor"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 29,
@@ -555,7 +555,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Rosa"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 30,
@@ -573,7 +573,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Rosa"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 31,
@@ -591,7 +591,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Blanco"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 32,
@@ -609,7 +609,7 @@ export const products: Product[] = [
     type: "Remera",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Verde"],
-    inStock: true,
+    inStock: false,
   },
   {
     id: 33,

@@ -11,7 +11,6 @@ import {
   Minus,
   Plus,
   Trash2,
-  Tag,
   CreditCard,
   Wallet as WalletIcon,
   ShieldCheck,
@@ -37,8 +36,6 @@ export function CartPage() {
   const [isPending, startTransition] = useTransition();
 
   // Estados del formulario
-  const [couponCode, setCouponCode] = useState("");
-  const [appliedDiscount, setAppliedDiscount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mercadopago");
   const [deliveryType, setDeliveryType] = useState<DeliveryType>("retiro");
   const [customerFirstName, setCustomerFirstName] = useState("");
@@ -55,28 +52,10 @@ export function CartPage() {
 
   // Cálculos
   const subtotal = getTotalPrice();
-  const discount = subtotal * appliedDiscount;
-  const total = subtotal - discount;
+  const total = subtotal;
 
   // Verificar configuración
   const vexorConfigured = isVexorConfigured();
-
-  // Aplicar cupón
-  const handleApplyCoupon = () => {
-    const validCoupons: { [key: string]: number } = {
-      DESCUENTO10: 0.1,
-      DESCUENTO20: 0.2,
-      VERANO15: 0.15,
-    };
-
-    const upperCoupon = couponCode.toUpperCase();
-    if (validCoupons[upperCoupon]) {
-      setAppliedDiscount(validCoupons[upperCoupon]);
-      toast.success(`Cupón aplicado: ${validCoupons[upperCoupon] * 100}% de descuento`);
-    } else {
-      toast.error("Cupón inválido");
-    }
-  };
 
   // Preparar checkout
   const handlePrepareCheckout = async () => {
@@ -129,7 +108,6 @@ export function CartPage() {
         image: item.image
       })),
       subtotal,
-      discount,
       total
     };
 
@@ -209,8 +187,6 @@ export function CartPage() {
             image: item.image,
           })),
           shippingCost: 0,
-          discount,
-          couponCode: appliedDiscount > 0 ? couponCode : undefined,
           shippingMethod: deliveryType,
           customerEmail,
         };
@@ -403,34 +379,6 @@ export function CartPage() {
 
           {/* Resumen y opciones de pago */}
           <div className="space-y-6">
-            {/* Cupón de descuento */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h2 className="text-lg text-gray-900 mb-4 flex items-center gap-2">
-                <Tag className="size-5" />
-                Cupón de Descuento
-              </h2>
-              <div className="flex gap-2">
-                <Input
-                  type="text"
-                  placeholder="Código de cupón"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value)}
-                  className="flex-1"
-                  disabled={!!checkoutUrl}
-                />
-                <Button onClick={handleApplyCoupon} variant="outline" disabled={!!checkoutUrl}>
-                  Aplicar
-                </Button>
-              </div>
-              {appliedDiscount > 0 && (
-                <p className="text-sm text-green-600 mt-2">
-                  Descuento del {appliedDiscount * 100}% aplicado
-                </p>
-              )}
-              <p className="text-xs text-gray-500 mt-2">
-                Cupones válidos: DESCUENTO10, DESCUENTO20, VERANO15
-              </p>
-            </div>
 
             {/* Método de Pago */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -541,12 +489,6 @@ export function CartPage() {
                   <span className="text-gray-600">Subtotal</span>
                   <span className="text-gray-900">${subtotal.toLocaleString('es-AR')}</span>
                 </div>
-                {appliedDiscount > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Descuento</span>
-                    <span className="text-green-600">-${discount.toLocaleString('es-AR')}</span>
-                  </div>
-                )}
                 <div className="border-t border-gray-200 pt-2 mt-2">
                   <div className="flex justify-between">
                     <span className="text-lg text-gray-900">Total</span>

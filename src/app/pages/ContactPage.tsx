@@ -11,10 +11,11 @@ export function ContactPage() {
   const [searchParams] = useSearchParams();
   const productName = searchParams.get("product");
 
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
+    subject: "",
     message: productName ? `Consulta sobre: ${productName}\n\n` : "",
   });
 
@@ -36,19 +37,37 @@ export function ContactPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
       toast.error("Por favor completa todos los campos obligatorios");
       return;
     }
-    toast.success("Mensaje enviado con éxito. Te contactaremos pronto.");
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Error al enviar');
+      }
+
+      toast.success("Mensaje enviado con éxito. Te contactaremos pronto.");
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (error: any) {
+      console.error('Error sending contact form:', error);
+      toast.error(error.message || 'Error al enviar el mensaje. Intenta de nuevo.');
+    }
   };
 
   return (
@@ -95,7 +114,7 @@ export function ContactPage() {
               />
             </div>
 
-            <div>
+<div>
               <Label htmlFor="phone">Teléfono</Label>
               <Input
                 id="phone"
@@ -104,6 +123,19 @@ export function ContactPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+1234567890"
+                className="mt-1"
+              />
+            </div>
+
+<div>
+              <Label htmlFor="subject">Asunto</Label>
+              <Input
+                id="subject"
+                name="subject"
+                type="text"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="¿Sobre qué quieres consultar?"
                 className="mt-1"
               />
             </div>

@@ -18,14 +18,21 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
   const { addItem } = useCart();
   const viewedRef = useRef(false);
 
+  // Debug: log cuando el componente se monta
+  useEffect(() => {
+    console.log("[ProductCard] Mounted for product:", product.id, product.name);
+  }, [product.id]);
+
   useEffect(() => {
     if (viewedRef.current) return;
     viewedRef.current = true;
     
+    console.log("[Stats] Attempting to track view for product:", product.id);
+    
     trackProductView(product.id).then(result => {
-      console.log(`[Stats] View tracked for product ${product.id}:`, result);
+      console.log("[Stats] trackProductView result:", result);
     }).catch(err => {
-      console.error(`[Stats] Error tracking view for product ${product.id}:`, err);
+      console.error("[Stats] trackProductView error:", err);
     });
   }, [product.id]);
 

@@ -16,24 +16,28 @@ export function WishlistButton({ productId, className }: WishlistButtonProps) {
 
   const inWishlist = isInWishlist(productId);
 
-  const handleClick = async (e: React.MouseEvent) => {
+const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (!user) {
-      // El contexto ya muestra el toast de error
+      console.log("[Wishlist] User not logged in");
       return;
     }
 
+    const wasInWishlist = inWishlist;
+    
     if (inWishlist) {
       const wishlistId = getWishlistId(productId);
       if (wishlistId) {
         await removeItem(wishlistId);
-        trackProductFavorite(productId, false);
+        console.log("[Wishlist] Removing, calling trackProductFavorite:", productId, false);
+        trackProductFavorite(productId, false).then(r => console.log("[Wishlist] trackProductFavorite result:", r));
       }
     } else {
+      console.log("[Wishlist] Adding, calling trackProductFavorite:", productId, true);
       await addItem(productId);
-      trackProductFavorite(productId, true);
+      trackProductFavorite(productId, true).then(r => console.log("[Wishlist] trackProductFavorite result:", r));
     }
   };
 

@@ -1,14 +1,17 @@
 import { supabase } from "./supabase";
 
-export const trackProductView = async (productId: number) => {
-  if (!productId) return;
+export const trackProductView = async (productId: number): Promise<boolean> => {
+  if (!productId) return false;
   try {
     const { data, error } = await supabase.rpc("increment_product_view", { p_product_id: productId });
     if (error) {
-      console.error("Error tracking product view:", error);
+      console.error("[Stats] trackProductView error:", error);
+      return false;
     }
+    return true;
   } catch (error) {
-    console.error("Error tracking product view:", error);
+    console.error("[Stats] trackProductView exception:", error);
+    return false;
   }
 };
 

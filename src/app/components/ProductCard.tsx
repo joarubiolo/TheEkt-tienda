@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Product } from "../types/product";
 import { Button } from "./ui/button";
 import { ShoppingCart, MessageCircle } from "lucide-react";
@@ -16,9 +16,17 @@ export function ProductCard({ product, onOpenModal }: ProductCardProps) {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const { addItem } = useCart();
+  const viewedRef = useRef(false);
 
   useEffect(() => {
-    trackProductView(product.id);
+    if (viewedRef.current) return;
+    viewedRef.current = true;
+    
+    trackProductView(product.id).then(result => {
+      console.log(`[Stats] View tracked for product ${product.id}:`, result);
+    }).catch(err => {
+      console.error(`[Stats] Error tracking view for product ${product.id}:`, err);
+    });
   }, [product.id]);
 
   const handlePurchase = (e: React.MouseEvent) => {

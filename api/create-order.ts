@@ -132,7 +132,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error('Error enviando emails:', emailError);
       }
     } else {
-      console.log('Email de MercadoPago se enviará via webhook cuando se confirme el pago');
+      // Email de MercadoPago se enviará via webhook cuando se confirme el pago
     }
 
     return res.status(200).json({

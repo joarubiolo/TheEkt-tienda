@@ -139,12 +139,12 @@ export function ContactPage() {
                 <div className="p-3 bg-gray-100 rounded-lg">
                   <MapPin className="size-5 text-gray-900" />
                 </div>
-                <div>
+<div>
                   <h3 className="text-sm text-gray-900 mb-1">Dirección</h3>
                   <p className="text-sm text-gray-600">
-                    Calle Principal 123, Local 4<br />
+                    Av Boedo 969, local 14<br />
                     Ciudad de Buenos Aires, Argentina<br />
-                    CP: 1001
+                    CP: 1218
                   </p>
                 </div>
               </div>
@@ -153,20 +153,13 @@ export function ContactPage() {
                 <div className="p-3 bg-gray-100 rounded-lg">
                   <Mail className="size-5 text-gray-900" />
                 </div>
-                <div>
+<div>
                   <h3 className="text-sm text-gray-900 mb-1">Email</h3>
                   <a
-                    href="mailto:contacto@tiendaropa.com"
+                    href="mailto:theekt.tienda@gmail.com"
                     className="text-sm text-gray-600 hover:text-gray-900"
                   >
-                    contacto@tiendaropa.com
-                  </a>
-                  <br />
-                  <a
-                    href="mailto:ventas@tiendaropa.com"
-                    className="text-sm text-gray-600 hover:text-gray-900"
-                  >
-                    ventas@tiendaropa.com
+                    theekt.tienda@gmail.com
                   </a>
                 </div>
               </div>
@@ -175,21 +168,16 @@ export function ContactPage() {
                 <div className="p-3 bg-gray-100 rounded-lg">
                   <Phone className="size-5 text-gray-900" />
                 </div>
-                <div>
+<div>
                   <h3 className="text-sm text-gray-900 mb-1">Teléfono</h3>
                   <a
-                    href="tel:+541143218765"
+                    href="tel:+5491131767366"
                     className="text-sm text-gray-600 hover:text-gray-900"
                   >
-                    +54 11 4321-8765
+                    +54 9 11 3176-7366
                   </a>
                   <br />
-                  <a
-                    href="tel:+5491155667788"
-                    className="text-sm text-gray-600 hover:text-gray-900"
-                  >
-                    +54 9 11 5566-7788 (WhatsApp)
-                  </a>
+                  <span className="text-sm text-gray-500">(WhatsApp)</span>
                 </div>
               </div>
             </div>
@@ -197,14 +185,10 @@ export function ContactPage() {
 
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h3 className="text-lg text-gray-900 mb-4">Horarios de atención</h3>
-            <div className="space-y-2 text-sm">
+<div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Lunes a Viernes:</span>
-                <span className="text-gray-900">9:00 - 20:00</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Sábados:</span>
-                <span className="text-gray-900">10:00 - 18:00</span>
+                <span className="text-gray-600">Lunes a Sábados:</span>
+                <span className="text-gray-900">10:00 - 20:00</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Domingos:</span>

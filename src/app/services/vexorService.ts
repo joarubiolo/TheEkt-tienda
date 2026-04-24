@@ -49,13 +49,6 @@ export function isVexorConfigured(): boolean {
   const hasProjectId = !!projectId;
   const hasPublishableKey = !!publishableKey;
   
-  console.log('Vexor Config Check:', {
-    hasProjectId,
-    hasPublishableKey,
-    projectId: projectId ? '***' + projectId.slice(-8) : 'missing',
-    publishableKey: publishableKey ? '***' + publishableKey.slice(-8) : 'missing',
-  });
-  
   return hasProjectId && hasPublishableKey;
 }
 
@@ -65,13 +58,11 @@ export async function createCheckout(
   provider: PaymentProvider = "mercadopago"
 ): Promise<CheckoutResponse | null> {
   try {
-    console.log('Iniciando checkout con Vexor:', { provider, itemsCount: checkoutData.items.length });
-    
     if (!isVexorConfigured()) {
       throw new Error("Vexor no está configurado. Verifica las variables de entorno VITE_VEXOR_PROJECT_ID y VITE_VEXOR_PUBLISHABLE_KEY.");
     }
 
-    // Mapear items del carrito al formato de Vexor
+// Mapear items del carrito al formato de Vexor
     const items = checkoutData.items.map((item) => ({
       id: item.id.toString(),
       title: item.name,
@@ -80,29 +71,10 @@ export async function createCheckout(
       quantity: item.quantity,
     }));
 
-    // Agregar envío como item si aplica
-    if (checkoutData.shippingCost > 0) {
-      items.push({
-        id: "shipping",
-        title:
-          checkoutData.shippingMethod === "express"
-            ? "Envío Express (2-3 días)"
-            : "Envío Estándar (5-7 días)",
-        description: "Costo de envío",
-        unit_price: checkoutData.shippingCost,
-        quantity: 1,
-      });
-    }
-
-    console.log('Items preparados para Vexor:', items);
-
     // Crear el pago con Vexor
-    console.log('Llamando a vexor.pay.mercadopago...');
     const response: VexorPaymentResponse = await vexor.pay.mercadopago({
       items,
     });
-
-    console.log('Respuesta de Vexor:', response);
 
     // Intentar obtener payment_id de la respuesta
     const paymentId = (response as any).payment_id || (response as any).id || null;
@@ -112,14 +84,8 @@ export async function createCheckout(
       payment_id: paymentId,
       provider,
     };
-  } catch (error) {
-    console.error("Error detallado creando checkout con Vexor:", error);
-    
-    // Loguear más detalles del error
-    if (error instanceof Error) {
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
-    }
+} catch (error) {
+    console.error("Error al crear checkout:", error.message);
     
     // Re-lanzar el error para que lo maneje el componente
     throw error;

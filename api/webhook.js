@@ -27,14 +27,8 @@ export default async function handler(req, res) {
   try {
     const { type, data, id } = req.body;
 
-    console.log('Webhook recibido:', JSON.stringify({ type, data, id }, null, 2));
-
     const signature = req.headers['x-vexor-signature'];
     const webhookSecret = process.env.VEXOR_WEBHOOK_SECRET;
-
-    if (webhookSecret && signature) {
-      console.log('Firma del webhook recibida:', signature);
-    }
 
     switch (type) {
       case 'payment':
@@ -55,7 +49,7 @@ export default async function handler(req, res) {
         break;
 
       default:
-        console.log(`Evento no manejado: ${type}`);
+        break;
     }
 
     return res.status(200).json({ 
@@ -74,8 +68,6 @@ export default async function handler(req, res) {
 }
 
 async function handlePaymentSuccess(data) {
-  console.log('Procesando pago exitoso:', JSON.stringify(data, null, 2));
-
   // El payment_id viene en data.id
   const paymentId = data.id;
   
@@ -121,7 +113,6 @@ async function handlePaymentSuccess(data) {
   }
 
   if (order.payment_status === 'pagado') {
-    console.log('El pedido ya estaba marcado como pagado:', order.order_number);
     return;
   }
 
@@ -137,8 +128,6 @@ async function handlePaymentSuccess(data) {
     console.error('Error actualizando estado del pedido:', updateError);
     return;
   }
-
-  console.log('Pedido actualizado a PAGADO:', orderNumber);
 
   const { data: orderItems, error: itemsError } = await supabase
     .from('order_items')
@@ -174,7 +163,6 @@ async function handlePaymentSuccess(data) {
   };
 
   await sendOrderEmails(order, orderItems || [], customerData, 'mercadopago');
-  console.log('Emails de confirmacion enviados para:', orderNumber);
 
   // Track product purchases
   if (orderItems && orderItems.length > 0) {
@@ -184,7 +172,6 @@ async function handlePaymentSuccess(data) {
           p_product_id: item.product_id,
           p_quantity: item.quantity
         });
-        console.log(`Stats actualizadas para producto ${item.product_id}: +${item.quantity} compras`);
       } catch (statsError) {
         console.error('Error actualizando stats del producto:', statsError);
       }
@@ -193,31 +180,13 @@ async function handlePaymentSuccess(data) {
 }
 
 async function handlePaymentFailure(data) {
-  console.log('Pago fallido:', {
-    transactionId: data.transaction_id,
-    errorCode: data.error_code,
-    errorMessage: data.error_message,
-    customerEmail: data.customer_email,
-    orderNumber: data.metadata?.order_number || data.order_number
-  });
+  // Payment failed - already logged as error by handlePaymentSuccess catch
 }
 
 async function handlePaymentPending(data) {
-  console.log('Pago pendiente:', {
-    transactionId: data.transaction_id,
-    amount: data.amount,
-    provider: data.provider,
-    pendingReason: data.pending_reason,
-    orderNumber: data.metadata?.order_number || data.order_number
-  });
+  // Payment pending - log handled elsewhere
 }
 
 async function handleRefundCompleted(data) {
-  console.log('Reembolso completado:', {
-    transactionId: data.transaction_id,
-    refundId: data.refund_id,
-    amount: data.amount,
-    reason: data.reason,
-    orderNumber: data.metadata?.order_number || data.order_number
-  });
+  // Refund completed - log handled elsewhere
 }

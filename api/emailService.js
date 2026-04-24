@@ -133,8 +133,8 @@ export function getTransferEmailTemplate(order, orderItems, customerData) {
               <div style="background-color: #f5f5f5; border-radius: 8px; padding: 20px; text-align: center;">
                 <p style="margin: 0 0 10px 0; color: #333; font-size: 14px;">¿Tenés alguna duda?</p>
                 <p style="margin: 0; color: #333; font-size: 16px;">
-                  📱 WhatsApp: <strong>+54 9 XX XXX XXXX</strong><br>
-                  📧 Email: <strong>contacto@theekt.com</strong>
+                  📱 WhatsApp: <strong>+54 9 11 3176-7366</strong><br>
+                  📧 Email: <strong>theekt.tienda@gmail.com</strong>
                 </p>
               </div>
             </td>
@@ -247,8 +247,8 @@ export function getMercadoPagoConfirmedEmailTemplate(order, orderItems, customer
               <div style="background-color: #e3f2fd; border-radius: 8px; padding: 20px; text-align: center;">
                 <p style="margin: 0 0 10px 0; color: #333; font-size: 14px;">¿Tenés alguna duda?</p>
                 <p style="margin: 0; color: #333; font-size: 16px;">
-                  📱 WhatsApp: <strong>+54 9 XX XXX XXXX</strong><br>
-                  📧 Email: <strong>contacto@theekt.com</strong>
+                  📱 WhatsApp: <strong>+54 9 11 3176-7366</strong><br>
+                  📧 Email: <strong>theekt.tienda@gmail.com</strong>
                 </p>
               </div>
             </td>

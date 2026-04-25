@@ -168,6 +168,47 @@ export const updateWishlistNotification = async (wishlistId: number, notify: boo
   return { data, error };
 };
 
+export interface StockNotification {
+  id: number;
+  user_id: string;
+  product_id: number;
+  notify_email: string;
+  status: 'pending' | 'sent' | 'cancelled';
+  created_at: string;
+}
+
+// Stock notification functions
+export const getStockNotifications = async (productId: number) => {
+  const { data, error } = await supabase
+    .from('stock_notifications')
+    .select('*')
+    .eq('product_id', productId)
+    .eq('status', 'pending');
+  
+  return { data, error };
+};
+
+export const createStockNotification = async (notification: Partial<StockNotification>) => {
+  const { data, error } = await supabase
+    .from('stock_notifications')
+    .insert(notification)
+    .select()
+    .single();
+   
+  return { data, error };
+};
+
+export const markStockNotificationSent = async (notificationId: number) => {
+  const { data, error } = await supabase
+    .from('stock_notifications')
+    .update({ status: 'sent' })
+    .eq('id', notificationId)
+    .select()
+    .single();
+   
+  return { data, error };
+};
+
 // Orders functions
 export const getOrders = async (userId: string) => {
   const { data, error } = await supabase

@@ -11,6 +11,7 @@ import {
   addToWishlist,
   removeFromWishlist,
   updateWishlistNotification,
+  createStockNotification,
 } from "../services/supabase";
 import { toast } from "sonner";
 
@@ -33,9 +34,11 @@ interface WishlistContextType {
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const userEmail = profile?.email || user?.email;
 
   useEffect(() => {
     if (user) {
@@ -73,7 +76,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addItem = async (productId: number, notifyOnRestock = true) => {
+const addItem = async (productId: number, notifyOnRestock = true) => {
     if (!user) {
       toast.error("Debes iniciar sesión para agregar favoritos");
       return;
@@ -97,6 +100,16 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
           product_id: data.product_id,
           notify_on_restock: data.notify_on_restock,
         }]);
+
+        if (notifyOnRestock && userEmail) {
+          await createStockNotification({
+            user_id: user.uid,
+            product_id: productId,
+            notify_email: userEmail,
+            status: 'pending',
+          });
+        }
+
         toast.success("Agregado a favoritos");
       }
     } catch (err) {
@@ -122,7 +135,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const toggleNotification = async (wishlistId: number, notify: boolean) => {
+const toggleNotification = async (wishlistId: number, notify: boolean) => {
     try {
       const { data, error } = await updateWishlistNotification(wishlistId, notify);
 
@@ -132,6 +145,18 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
       }
 
       if (data) {
+        const wishlistItem = wishlist.find((item) => item.id === wishlistId);
+        const productId = wishlistItem?.product_id;
+
+        if (notify && productId && user && userEmail) {
+          await createStockNotification({
+            user_id: user.uid,
+            product_id: productId,
+            notify_email: userEmail,
+            status: 'pending',
+          });
+        }
+
         setWishlist(
           wishlist.map((item) =>
             item.id === wishlistId

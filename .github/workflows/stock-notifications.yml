@@ -1,0 +1,73 @@
+name: Stock Notifications
+
+on:
+  push:
+    paths:
+      - 'src/app/data/products.ts'
+
+jobs:
+  notify-restock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get restocked products
+        id: detect-changes
+        run: |
+          # Get the diff between old and new products.ts
+          OLD_FILE=$(git show HEAD~1:src/app/data/products.ts 2>/dev/null || echo "")
+          NEW_FILE=$(cat src/app/data/products.ts)
+          
+          # Extract products that changed to inStock: true
+          # We'll use a Node.js script to parse and compare
+          node << 'EOF'
+          const oldContent = process.env.OLD_CONTENT || "";
+          const newContent = process.env.NEW_CONTENT || "";
+          
+          // Simple regex to extract id and inStock
+          const productRegex = /id:\s*(\d+)[^}]*inStock:\s*(true|false)/g;
+          
+          const oldProducts = {};
+          let match;
+          while ((match = productRegex.exec(oldContent)) !== null) {
+            oldProducts[match[1]] = match[2] === 'true';
+          }
+          
+          const newProducts = {};
+          const productRegex2 = /id:\s*(\d+)[^}]*inStock:\s*(true|false)/g;
+          while ((match = productRegex2.exec(newContent)) !== null) {
+            newProducts[match[1]] = match[2] === 'true';
+          }
+          
+          // Find products that changed from false to true
+          const restocked = [];
+          for (const id in newProducts) {
+            if (newProducts[id] && !oldProducts[id]) {
+              restocked.push(id);
+            }
+          }
+          
+          console.log("RESTOCKED_PRODUCTS=" + restocked.join(","));
+          console.log("::set-output name=products::" + restocked.join(","));
+          EOF
+        env:
+          OLD_CONTENT: ${{ steps.get-old-file.outputs.content }}
+        shell: bash
+
+      - name: Call notification API
+        if: steps.detect-changes.outputs.RESTOCKED_PRODUCTS != ''
+        run: |
+          PRODUCTS="${{ steps.detect-changes.outputs.RESTOCKED_PRODUCTS }}"
+          IFS=',' read -ra PRODUCT_ARRAY <<< "$PRODUCTS"
+          
+          for product_id in "${PRODUCT_ARRAY[@]}"; do
+            echo "Notifying restock for product $product_id"
+            curl -X POST "${{ secrets.NOTIFICATION_API_URL }}" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer ${{ secrets.NOTIFICATION_API_KEY }}" \
+              -d "{\"product_id\": $product_id}"
+          done
+        shell: bash

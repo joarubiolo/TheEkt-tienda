@@ -25,6 +25,26 @@
       "dest": "/api/webhook.js"
     },
     {
+      "src": "/api/create-stock-notification",
+      "methods": ["POST"],
+      "dest": "/api/create-stock-notification.ts"
+    },
+    {
+      "src": "/api/update-payment-id",
+      "methods": ["POST"],
+      "dest": "/api/update-payment-id.ts"
+    },
+    {
+      "src": "/api/stock-notification",
+      "methods": ["POST"],
+      "dest": "/api/stock-notification.ts"
+    },
+    {
+      "src": "/api/contact",
+      "methods": ["POST"],
+      "dest": "/api/contact.ts"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },

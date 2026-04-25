@@ -40,6 +40,8 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
   const userEmail = profile?.email || user?.email;
 
+  console.log('[WishlistProvider] user:', user?.uid, 'profile:', profile?.email, 'derived email:', userEmail);
+
   useEffect(() => {
     if (user) {
       loadWishlist();
@@ -102,12 +104,18 @@ const addItem = async (productId: number, notifyOnRestock = true) => {
         }]);
 
         if (notifyOnRestock && userEmail) {
-          await createStockNotification({
+          console.log('[addItem] Creating stock notification for product:', productId, 'email:', userEmail);
+          const { error: notifError } = await createStockNotification({
             user_id: user.uid,
             product_id: productId,
             notify_email: userEmail,
             status: 'pending',
           });
+          if (notifError) {
+            console.error('[addItem] Failed to create stock notification:', notifError);
+          } else {
+            console.log('[addItem] Stock notification created successfully');
+          }
         }
 
         toast.success("Agregado a favoritos");
@@ -149,12 +157,18 @@ const toggleNotification = async (wishlistId: number, notify: boolean) => {
         const productId = wishlistItem?.product_id;
 
         if (notify && productId && user && userEmail) {
-          await createStockNotification({
+          console.log('[toggleNotification] Creating stock notification for product:', productId, 'email:', userEmail);
+          const { error: notifError } = await createStockNotification({
             user_id: user.uid,
             product_id: productId,
             notify_email: userEmail,
             status: 'pending',
           });
+          if (notifError) {
+            console.error('[toggleNotification] Failed to create stock notification:', notifError);
+          } else {
+            console.log('[toggleNotification] Stock notification created successfully');
+          }
         }
 
         setWishlist(

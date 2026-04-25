@@ -189,12 +189,20 @@ export const getStockNotifications = async (productId: number) => {
 };
 
 export const createStockNotification = async (notification: Partial<StockNotification>) => {
+  console.log('[createStockNotification] Creating notification:', notification);
+  
   const { data, error } = await supabase
     .from('stock_notifications')
     .insert(notification)
     .select()
     .single();
    
+  if (error) {
+    console.error('[createStockNotification] Error:', error);
+    return { data, error };
+  }
+   
+  console.log('[createStockNotification] Success:', data);
   return { data, error };
 };
 

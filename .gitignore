@@ -5,3 +5,4 @@ nul
 .env.local
 .env.*
 .vercel
+_docs

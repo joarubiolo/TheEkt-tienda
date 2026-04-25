@@ -11,7 +11,6 @@ import {
   addToWishlist,
   removeFromWishlist,
   updateWishlistNotification,
-  createStockNotification,
 } from "../services/supabase";
 import { toast } from "sonner";
 
@@ -94,7 +93,7 @@ const addItem = async (productId: number, notifyOnRestock = true) => {
       if (error) {
         toast.error("Error al agregar a favoritos");
         return;
-      }
+}
 
       if (data) {
         setWishlist([...wishlist, {
@@ -103,16 +102,23 @@ const addItem = async (productId: number, notifyOnRestock = true) => {
           notify_on_restock: data.notify_on_restock,
         }]);
 
-        if (notifyOnRestock && userEmail) {
+        if (notifyOnRestock && userEmail && user) {
           console.log('[addItem] Creating stock notification for product:', productId, 'email:', userEmail);
-          const { error: notifError } = await createStockNotification({
-            user_id: user.uid,
-            product_id: productId,
-            notify_email: userEmail,
-            status: 'pending',
+          
+          const response = await fetch('/api/create-stock-notification', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id: user.uid,
+              product_id: productId,
+              notify_email: userEmail
+            })
           });
-          if (notifError) {
-            console.error('[addItem] Failed to create stock notification:', notifError);
+          
+          const result = await response.json();
+          
+          if (!response.ok || result.error) {
+            console.error('[addItem] Failed to create stock notification:', result.error || result.details);
           } else {
             console.log('[addItem] Stock notification created successfully');
           }
@@ -152,20 +158,30 @@ const toggleNotification = async (wishlistId: number, notify: boolean) => {
         return;
       }
 
-      if (data) {
+if (data) {
         const wishlistItem = wishlist.find((item) => item.id === wishlistId);
         const productId = wishlistItem?.product_id;
 
         if (notify && productId && user && userEmail) {
           console.log('[toggleNotification] Creating stock notification for product:', productId, 'email:', userEmail);
-          const { error: notifError } = await createStockNotification({
-            user_id: user.uid,
-            product_id: productId,
-            notify_email: userEmail,
-            status: 'pending',
+          
+          // Usar la edge function para crear la notificación (bypassea auth de Supabase)
+          const response = await fetch('/api/create-stock-notification', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              user_id: user.uid,
+              product_id: productId,
+              notify_email: userEmail
+            })
           });
-          if (notifError) {
-            console.error('[toggleNotification] Failed to create stock notification:', notifError);
+          
+          const result = await response.json();
+          
+          if (!response.ok || result.error) {
+            console.error('[toggleNotification] Failed to create stock notification:', result.error || result.details);
+            toast.error("Error al crear notificación de stock");
+            return;
           } else {
             console.log('[toggleNotification] Stock notification created successfully');
           }

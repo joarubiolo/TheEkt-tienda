@@ -8,7 +8,7 @@ import { createClient } from '@supabase/supabase-js';
 import { sendOrderEmails } from './emailService.js';
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://qyvbfwllqsezteecvieb.supabase.co';
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -78,7 +78,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (orderError) throw orderError;
 
-    const orderItems = items.map(item => ({
+    interface OrderItem {
+      productId: number;
+      name: string;
+      size: string;
+      color: string;
+      quantity: number;
+      price: number;
+    }
+
+    const orderItems: OrderItem[] = items.map((item: OrderItem) => ({
       order_id: order.id,
       user_id: userId || null,
       product_id: item.productId,

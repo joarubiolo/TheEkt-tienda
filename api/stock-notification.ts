@@ -12,10 +12,9 @@ const SMTP_HOST = process.env.SMTP_HOST || 'smtp-relay.brevo.com';
 const SMTP_PORT = parseInt(process.env.SMTP_PORT || '587');
 const SMTP_USER = process.env.SMTP_USER || 'a7162d001@smtp-brevo.com';
 const SMTP_PASS = process.env.SMTP_PASS;
-const OWNER_EMAIL = process.env.OWNER_EMAIL || 'theekt.tienda@gmail.com';
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://qyvbfwllqsezteecvieb.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY || '');
 
@@ -82,7 +81,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Send emails and update status
     for (const notification of notifications) {
       const email = notification.notify_email;
-      const userId = notification.user_id;
+      // userId disponible si se necesita: const userId = notification.user_id;
 
       const htmlContent = `
         <!DOCTYPE html>

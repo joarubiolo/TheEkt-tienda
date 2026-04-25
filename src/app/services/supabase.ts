@@ -169,7 +169,7 @@ export const updateWishlistNotification = async (wishlistId: number, notify: boo
 };
 
 export interface StockNotification {
-  id: number;
+  id: string;
   user_id: string;
   product_id: number;
   notify_email: string;
@@ -206,7 +206,7 @@ export const createStockNotification = async (notification: Partial<StockNotific
   return { data, error };
 };
 
-export const markStockNotificationSent = async (notificationId: number) => {
+export const markStockNotificationSent = async (notificationId: string) => {
   const { data, error } = await supabase
     .from('stock_notifications')
     .update({ status: 'sent' })

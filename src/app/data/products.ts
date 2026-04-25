@@ -391,7 +391,7 @@ export const products: Product[] = [
     type: "Conjunto",
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Turquesa"],
-    inStock: false,
+    inStock: true,
   },
   {
     id: 21,

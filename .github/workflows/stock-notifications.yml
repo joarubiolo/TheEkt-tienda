@@ -5,69 +5,109 @@ on:
     paths:
       - 'src/app/data/products.ts'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   notify-restock:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2
 
-      - name: Get restocked products
-        id: detect-changes
+      - name: Detect restocked products
+        id: detect
         run: |
-          # Get the diff between old and new products.ts
-          OLD_FILE=$(git show HEAD~1:src/app/data/products.ts 2>/dev/null || echo "")
-          NEW_FILE=$(cat src/app/data/products.ts)
+          echo "=== Analyzing products.ts changes ==="
           
-          # Extract products that changed to inStock: true
-          # We'll use a Node.js script to parse and compare
-          node << 'EOF'
-          const oldContent = process.env.OLD_CONTENT || "";
-          const newContent = process.env.NEW_CONTENT || "";
+          # Get old and new content
+          OLD_CONTENT=$(git show HEAD~1:src/app/data/products.ts 2>/dev/null || echo "")
+          NEW_CONTENT=$(cat src/app/data/products.ts)
           
-          // Simple regex to extract id and inStock
-          const productRegex = /id:\s*(\d+)[^}]*inStock:\s*(true|false)/g;
+          # Save to temp files for Node.js
+          echo "$OLD_CONTENT" > /tmp/old_products.ts
+          echo "$NEW_CONTENT" > /tmp/new_products.ts
           
-          const oldProducts = {};
-          let match;
-          while ((match = productRegex.exec(oldContent)) !== null) {
-            oldProducts[match[1]] = match[2] === 'true';
+          echo "=== Old products detected ==="
+          if [ -s /tmp/old_products.ts ]; then
+            echo "Old file exists"
+          else
+            echo "No previous version (first push)"
+          fi
+          
+          echo "=== Running detection script ==="
+          
+          # Run Node.js to detect restocked products
+          node --input-type=module << 'SCRIPT'
+          import { readFileSync } from 'fs';
+          
+          const oldContent = readFileSync('/tmp/old_products.ts', 'utf-8');
+          const newContent = readFileSync('/tmp/new_products.ts', 'utf-8');
+          
+          // Better regex that works across multiple lines
+          // Matches: id: 123, ... inStock: true
+          function extractProducts(content) {
+            const products = {};
+            const regex = /id:\s*(\d+)[\s\S]*?inStock:\s*(true|false)/g;
+            let match;
+            while ((match = regex.exec(content)) !== null) {
+              products[match[1]] = match[2] === 'true';
+            }
+            return products;
           }
           
-          const newProducts = {};
-          const productRegex2 = /id:\s*(\d+)[^}]*inStock:\s*(true|false)/g;
-          while ((match = productRegex2.exec(newContent)) !== null) {
-            newProducts[match[1]] = match[2] === 'true';
-          }
+          const oldProducts = extractProducts(oldContent);
+          const newProducts = extractProducts(newContent);
           
-          // Find products that changed from false to true
+          console.log('Old products count:', Object.keys(oldProducts).length);
+          console.log('New products count:', Object.keys(newProducts).length);
+          
+          // Find products that changed from false/undefined to true
           const restocked = [];
-          for (const id in newProducts) {
-            if (newProducts[id] && !oldProducts[id]) {
+          for (const [id, inStock] of Object.entries(newProducts)) {
+            const wasOOS = !oldProducts[id] || oldProducts[id] === false;
+            const isAvailable = inStock === true;
+            if (wasOOS && isAvailable) {
               restocked.push(id);
             }
           }
           
-          console.log("RESTOCKED_PRODUCTS=" + restocked.join(","));
-          console.log("::set-output name=products::" + restocked.join(","));
-          EOF
-        env:
-          OLD_CONTENT: ${{ steps.get-old-file.outputs.content }}
-        shell: bash
+          console.log('Restocked products:', restocked.join(',') || 'none');
+          
+          // Set output using modern syntax
+          if (restocked.length > 0) {
+            console.log('::set-output name=products::' + restocked.join(','));
+          } else {
+            console.log('::set-output name=products::');
+          }
+          
+          // Also save to file for next step
+          console.log('RESTOCKED=' + restocked.join(','));
+          SCRIPT
+          
+          echo "=== Detection complete ==="
 
-      - name: Call notification API
-        if: steps.detect-changes.outputs.RESTOCKED_PRODUCTS != ''
+      - name: Show detected products
         run: |
-          PRODUCTS="${{ steps.detect-changes.outputs.RESTOCKED_PRODUCTS }}"
+          echo "Products to notify: ${{ steps.detect.outputs.products }}"
+
+      - name: Send notifications
+        if: ${{ steps.detect.outputs.products != '' }}
+        run: |
+          echo "=== Sending notifications for restocked products ==="
+          PRODUCTS="${{ steps.detect.outputs.products }}"
           IFS=',' read -ra PRODUCT_ARRAY <<< "$PRODUCTS"
           
           for product_id in "${PRODUCT_ARRAY[@]}"; do
-            echo "Notifying restock for product $product_id"
-            curl -X POST "${{ secrets.NOTIFICATION_API_URL }}" \
+            echo "Notifying restock for product ID: $product_id"
+            curl -X POST "${{ vars.NOTIFICATION_API_URL }}" \
               -H "Content-Type: application/json" \
               -H "Authorization: Bearer ${{ secrets.NOTIFICATION_API_KEY }}" \
-              -d "{\"product_id\": $product_id}"
+              -d "{\"product_id\": $product_id}" \
+              || echo "Failed to notify product $product_id"
           done
+          
+          echo "=== Notifications sent ==="
         shell: bash

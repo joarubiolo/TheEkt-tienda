@@ -60,9 +60,9 @@ export const products: Product[] = [
     "description": "Jean elastizado",
     "price": 68400,
     "purchasePrice": 114000,
-    "image": "https://i.postimg.cc/Nj3XCzcJ/Ni?a_modela_ropa_(9).jpg",
+    "image": "https://i.postimg.cc/Nj3XCzcJ/Nina_modela_ropa_(9).jpg",
     "images": [
-      "https://i.postimg.cc/Nj3XCzcJ/Ni?a_modela_ropa_(9).jpg",
+      "https://i.postimg.cc/Nj3XCzcJ/Nina_modela_ropa_(9).jpg",
       "https://i.postimg.cc/bYT4gnP4/Jean_fly_back.png",
       "https://i.postimg.cc/8kHx4vG0/Jean_fly_back_dorso.png"
     ],
@@ -86,9 +86,9 @@ export const products: Product[] = [
     "description": "Jean elastizado en color azul.",
     "price": 67800,
     "purchasePrice": 113000,
-    "image": "https://i.postimg.cc/x1wmp426/Ni?a_modela_ropa_(8).jpg",
+    "image": "https://i.postimg.cc/x1wmp426/Nina_modela_ropa_(8).jpg",
     "images": [
-      "https://i.postimg.cc/x1wmp426/Ni?a_modela_ropa_(8).jpg",
+      "https://i.postimg.cc/x1wmp426/Nina_modela_ropa_(8).jpg",
       "https://i.postimg.cc/Pf40yDHV/Jean_total_blue.png",
       "https://i.postimg.cc/SN3kqSMP/Jean_total_blue_dorso.png"
     ],
@@ -112,9 +112,9 @@ export const products: Product[] = [
     "description": "Jean de piernas anchas color claro.",
     "price": 65400,
     "purchasePrice": 109000,
-    "image": "https://i.postimg.cc/HkqMvhg3/Ni?a_modela_ropa_(7).jpg",
+    "image": "https://i.postimg.cc/HkqMvhg3/Nina_modela_ropa_(7).jpg",
     "images": [
-      "https://i.postimg.cc/HkqMvhg3/Ni?a_modela_ropa_(7).jpg",
+      "https://i.postimg.cc/HkqMvhg3/Nina_modela_ropa_(7).jpg",
       "https://i.postimg.cc/9FrCvRrS/Jean_wide_leg_chill.png",
       "https://i.postimg.cc/XqD3r3DP/Jean_wide_leg_chill_dorso.png"
     ],
@@ -138,9 +138,9 @@ export const products: Product[] = [
     "description": "Mono de algod?n con bolsillos, cintura el?stica y tiras ajustables.",
     "price": 22800,
     "purchasePrice": 38000,
-    "image": "https://i.postimg.cc/Y0CLmc6k/Ni?a_modelando_ropa.jpg",
+    "image": "https://i.postimg.cc/Y0CLmc6k/Nina_modelando_ropa.jpg",
     "images": [
-      "https://i.postimg.cc/Y0CLmc6k/Ni?a_modelando_ropa.jpg",
+      "https://i.postimg.cc/Y0CLmc6k/Nina_modelando_ropa.jpg",
       "https://i.postimg.cc/MKS3kgPy/Musculosa_gris.jpg"
     ],
     "category": "Casual",
@@ -163,9 +163,9 @@ export const products: Product[] = [
     "description": "Vestido de algod?n estampado con volados en la manga y falda con brillo.",
     "price": 31200,
     "purchasePrice": 52000,
-    "image": "https://i.postimg.cc/76D2wJbt/Ni?a_modelando_ropa_(1).jpg",
+    "image": "https://i.postimg.cc/76D2wJbt/Nina_modelando_ropa_(1).jpg",
     "images": [
-      "https://i.postimg.cc/76D2wJbt/Ni?a_modelando_ropa_(1).jpg",
+      "https://i.postimg.cc/76D2wJbt/Nina_modelando_ropa_(1).jpg",
       "https://i.postimg.cc/bNhVX4Cn/Musculosa_gris_(1).jpg"
     ],
     "category": "Casual",
@@ -188,9 +188,9 @@ export const products: Product[] = [
     "description": "Remera de algod?n corta tipo pupera, ancha con estampa en su frente.",
     "price": 13800,
     "purchasePrice": 23000,
-    "image": "https://i.postimg.cc/pTZnTVFt/Ni?a_modelando_ropa_(10).jpg",
+    "image": "https://i.postimg.cc/pTZnTVFt/Nina_modelando_ropa_(10).jpg",
     "images": [
-      "https://i.postimg.cc/pTZnTVFt/Ni?a_modelando_ropa_(10).jpg",
+      "https://i.postimg.cc/pTZnTVFt/Nina_modelando_ropa_(10).jpg",
       "https://i.postimg.cc/0QYbK6pY/686D4E4C_78F2_49A6_817B_4EAF148FDA29.png"
     ],
     "category": "Casual",
@@ -214,9 +214,9 @@ export const products: Product[] = [
     "description": "Campera con dise?o original y muy abrigada.",
     "price": 117600,
     "purchasePrice": 147000,
-    "image": "https://i.postimg.cc/Cx38rQg6/Ni?a_modela_ropa_(10).jpg",
+    "image": "https://i.postimg.cc/Cx38rQg6/Nina_modela_ropa_(10).jpg",
     "images": [
-      "https://i.postimg.cc/Cx38rQg6/Ni?a_modela_ropa_(10).jpg",
+      "https://i.postimg.cc/Cx38rQg6/Nina_modela_ropa_(10).jpg",
       "https://i.postimg.cc/593Dgz1t/PHOTO_2026_02_25_19_12_32.jpg",
       "https://i.postimg.cc/jd80x7kZ/PHOTO_2026_03_03_16_12_25_1.jpg",
       "https://i.postimg.cc/kXMPPcwG/PHOTO_2026_03_03_16_12_29_2.jpg"
@@ -242,9 +242,9 @@ export const products: Product[] = [
     "description": "Campera con dise?o original y muy abrigada.",
     "price": 117600,
     "purchasePrice": 147000,
-    "image": "https://i.postimg.cc/vZJn2NsK/Ni?a_modela_ropa_(11).jpg",
+    "image": "https://i.postimg.cc/vZJn2NsK/Nina_modela_ropa_(11).jpg",
     "images": [
-      "https://i.postimg.cc/vZJn2NsK/Ni?a_modela_ropa_(11).jpg",
+      "https://i.postimg.cc/vZJn2NsK/Nina_modela_ropa_(11).jpg",
       "https://i.postimg.cc/9Xpsb9VW/PHOTO_2026_02_25_19_12_37.jpg",
       "https://i.postimg.cc/ryJ7j4c6/PHOTO_2026_02_25_19_12_39.jpg",
       "https://i.postimg.cc/pX0bWF1D/PHOTO_2026_03_03_16_12_26_1.jpg",
@@ -270,9 +270,9 @@ export const products: Product[] = [
     "description": "Campera con dise?o original y muy abrigada.",
     "price": 110800,
     "purchasePrice": 138500,
-    "image": "https://i.postimg.cc/HkqMvhgq/Ni?a_modela_ropa_(12).jpg",
+    "image": "https://i.postimg.cc/HkqMvhgq/Nina_modela_ropa_(12).jpg",
     "images": [
-      "https://i.postimg.cc/HkqMvhgq/Ni?a_modela_ropa_(12).jpg",
+      "https://i.postimg.cc/HkqMvhgq/Nina_modela_ropa_(12).jpg",
       "https://i.postimg.cc/T29B0bGT/PHOTO_2026_02_25_19_12_36_1.jpg",
       "https://i.postimg.cc/c41GGmTf/PHOTO_2026_03_03_16_12_28_2.jpg",
       "https://i.postimg.cc/bNYffTLZ/PHOTO_2026_03_03_16_12_29_1.jpg"
@@ -298,9 +298,9 @@ export const products: Product[] = [
     "description": "Campera con dise?o original y muy abrigada.",
     "price": 80500,
     "purchasePrice": 115000,
-    "image": "https://i.postimg.cc/W40kBwNC/Ni?a_modela_ropa_(13).jpg",
+    "image": "https://i.postimg.cc/W40kBwNC/Nina_modela_ropa_(13).jpg",
     "images": [
-      "https://i.postimg.cc/W40kBwNC/Ni?a_modela_ropa_(13).jpg",
+      "https://i.postimg.cc/W40kBwNC/Nina_modela_ropa_(13).jpg",
       "https://i.postimg.cc/Pf40yDhf/PHOTO_2026_02_25_19_12_33.jpg",
       "https://i.postimg.cc/WbpccnS3/PHOTO_2026_03_03_16_12_30_1.jpg",
       "https://i.postimg.cc/xTjVVRgq/PHOTO_2026_03_03_16_12_30.jpg"
@@ -326,9 +326,9 @@ export const products: Product[] = [
     "description": "Campera con dise?o original y muy abrigada.",
     "price": 80500,
     "purchasePrice": 115000,
-    "image": "https://i.postimg.cc/TPnDzJ2T/Ni?a_modela_ropa_(14).jpg",
+    "image": "https://i.postimg.cc/TPnDzJ2T/Nina_modela_ropa_(14).jpg",
     "images": [
-      "https://i.postimg.cc/TPnDzJ2T/Ni?a_modela_ropa_(14).jpg",
+      "https://i.postimg.cc/TPnDzJ2T/Nina_modela_ropa_(14).jpg",
       "https://i.postimg.cc/zDj47h5X/PHOTO_2026_02_25_19_12_36.jpg",
       "https://i.postimg.cc/CMN978Yp/PHOTO_2026_02_25_19_12_38_1.jpg"
     ],
@@ -352,9 +352,9 @@ export const products: Product[] = [
     "description": "Malla de alta calidad con dise?o original.",
     "price": 31200,
     "purchasePrice": 52000,
-    "image": "https://i.postimg.cc/0yTSXBsS/Ni?a_modela_ropa_(2).jpg",
+    "image": "https://i.postimg.cc/0yTSXBsS/Nina_modela_ropa_(2).jpg",
     "images": [
-      "https://i.postimg.cc/0yTSXBsS/Ni?a_modela_ropa_(2).jpg",
+      "https://i.postimg.cc/0yTSXBsS/Nina_modela_ropa_(2).jpg",
       "https://i.postimg.cc/T1Pf2hQp/A1CC5A34_E878_48F7_9D13_0A74694271C5.png",
       "https://i.postimg.cc/VNjYDxdf/E7EF0D21_FAAC_4687_B495_FF6249DFBA93.png"
     ],
@@ -379,9 +379,9 @@ export const products: Product[] = [
     "description": "Bikini de alta calidad con dise?o original.",
     "price": 36400,
     "purchasePrice": 52000,
-    "image": "https://i.postimg.cc/Cx38rQgb/Ni?a_modela_ropa_(1).jpg",
+    "image": "https://i.postimg.cc/Cx38rQgb/Nina_modela_ropa_(1).jpg",
     "images": [
-      "https://i.postimg.cc/Cx38rQgb/Ni?a_modela_ropa_(1).jpg",
+      "https://i.postimg.cc/Cx38rQgb/Nina_modela_ropa_(1).jpg",
       "https://i.postimg.cc/rsYcDcY0/53B1C1F1_6967_44AB_9631_1261BAB52492.png",
       "https://i.postimg.cc/T1Pf2hQr/7488A037_EC0D_4170_AF98_A2D383CCA6E7.png"
     ],
@@ -402,9 +402,9 @@ export const products: Product[] = [
     "description": "Top y calza de lycra para un look moderno.",
     "price": 24000,
     "purchasePrice": 40000,
-    "image": "https://i.postimg.cc/L8cPQbp1/Ni?a_modela_ropa_(4).jpg",
+    "image": "https://i.postimg.cc/L8cPQbp1/Nina_modela_ropa_(4).jpg",
     "images": [
-      "https://i.postimg.cc/L8cPQbp1/Ni?a_modela_ropa_(4).jpg",
+      "https://i.postimg.cc/L8cPQbp1/Nina_modela_ropa_(4).jpg",
       "https://i.postimg.cc/NF0BGLbR/A8460BD2_DE2F_48F8_81A9_8D6F00580FE2.png"
     ],
     "category": "Deportivo",
@@ -428,10 +428,10 @@ export const products: Product[] = [
     "description": "Pollera de jean para un look moderno.",
     "price": 44000,
     "purchasePrice": 55000,
-    "image": "https://i.postimg.cc/K8kLNydf/Ni?a_modela_ropa_(5).jpg",
+    "image": "https://i.postimg.cc/K8kLNydf/Nina_modela_ropa_(5).jpg",
     "images": [
-      "https://i.postimg.cc/K8kLNydf/Ni?a_modela_ropa_(5).jpg",
-      "https://i.postimg.cc/FRmLNk10/Ni?a_modela_ropa_5.jpg",
+      "https://i.postimg.cc/K8kLNydf/Nina_modela_ropa_(5).jpg",
+      "https://i.postimg.cc/FRmLNk10/Nina_modela_ropa_5.jpg",
       "https://i.postimg.cc/85HBrdrG/pollera_jean.png",
       "https://i.postimg.cc/Tw9qWjWM/pollera_jean_dorso.png"
     ],
@@ -456,9 +456,9 @@ export const products: Product[] = [
     "description": "Bermuda de gabardina para un look moderno.",
     "price": 36750,
     "purchasePrice": 61250,
-    "image": "https://i.postimg.cc/sgkWHNrm/Ni?a_modela_ropa_(6).jpg",
+    "image": "https://i.postimg.cc/sgkWHNrm/Nina_modela_ropa_(6).jpg",
     "images": [
-      "https://i.postimg.cc/sgkWHNrm/Ni?a_modela_ropa_(6).jpg",
+      "https://i.postimg.cc/sgkWHNrm/Nina_modela_ropa_(6).jpg",
       "https://i.postimg.cc/GhYPF1Dk/Bermuda_korea.png",
       "https://i.postimg.cc/c4Y7RN3B/Bermuda_korea_dorso.png"
     ],
@@ -483,9 +483,9 @@ export const products: Product[] = [
     "description": "Calza ciclista de algod?n y lycra con estampado en una pierna.",
     "price": 15000,
     "purchasePrice": 25000,
-    "image": "https://i.postimg.cc/cHm8H1nW/Ni?a_modelando_ropa_(11).jpg",
+    "image": "https://i.postimg.cc/cHm8H1nW/Nina_modelando_ropa_(11).jpg",
     "images": [
-      "https://i.postimg.cc/cHm8H1nW/Ni?a_modelando_ropa_(11).jpg",
+      "https://i.postimg.cc/cHm8H1nW/Nina_modelando_ropa_(11).jpg",
       "https://i.postimg.cc/vBrcx1Wv/7FCA0CE7_A5AB_48B8_A386_7C513400DC25.png",
       "https://i.postimg.cc/C1GznZjc/B42B472E_FDF2_4070_A4E9_DD9A1C283E47.png"
     ],
@@ -510,9 +510,9 @@ export const products: Product[] = [
     "description": "Top y calza de lycra para un look moderno.",
     "price": 27600,
     "purchasePrice": 46000,
-    "image": "https://i.postimg.cc/NM4rMGHB/Ni?a_modelando_ropa_(12).jpg",
+    "image": "https://i.postimg.cc/NM4rMGHB/Nina_modelando_ropa_(12).jpg",
     "images": [
-      "https://i.postimg.cc/NM4rMGHB/Ni?a_modelando_ropa_(12).jpg",
+      "https://i.postimg.cc/NM4rMGHB/Nina_modelando_ropa_(12).jpg",
       "https://i.postimg.cc/vTXTXp2Y/73151A6B_B9BC_42C1_8754_FDC21F6EE4A8.png",
       "https://i.postimg.cc/vBrcx1Wj/119E2A40_F2C3_4E1B_90F4_DCFE520BD152.png"
     ],
@@ -537,9 +537,9 @@ export const products: Product[] = [
     "description": "Top y calza de lycra para un look moderno.",
     "price": 27600,
     "purchasePrice": 46000,
-    "image": "https://i.postimg.cc/cHm8H1ns/Ni?a_modelando_ropa_(13).jpg",
+    "image": "https://i.postimg.cc/cHm8H1ns/Nina_modelando_ropa_(13).jpg",
     "images": [
-      "https://i.postimg.cc/cHm8H1ns/Ni?a_modelando_ropa_(13).jpg",
+      "https://i.postimg.cc/cHm8H1ns/Nina_modelando_ropa_(13).jpg",
       "https://i.postimg.cc/VsFJYCfT/A569141F_A267_4AFE_B9B2_687C5E882827.png",
       "https://i.postimg.cc/DfcS2XvH/643B908C_B553_476D_84B4_BACB665AB7E7.png"
     ],
@@ -564,9 +564,9 @@ export const products: Product[] = [
     "description": "Top sublimado de microfibra a rayas.",
     "price": 18000,
     "purchasePrice": 30000,
-    "image": "https://i.postimg.cc/sXcZXfhj/Ni?a_modelando_ropa_(14).jpg",
+    "image": "https://i.postimg.cc/sXcZXfhj/Nina_modelando_ropa_(14).jpg",
     "images": [
-      "https://i.postimg.cc/sXcZXfhj/Ni?a_modelando_ropa_(14).jpg",
+      "https://i.postimg.cc/sXcZXfhj/Nina_modelando_ropa_(14).jpg",
       "https://i.postimg.cc/C5J5JWrq/55D4F186_7FD1_4F7F_B869_1D109B07D86D.png"
     ],
     "category": "Deportivo",
@@ -590,9 +590,9 @@ export const products: Product[] = [
     "description": "Top y calza sublimado de microfibra.",
     "price": 27600,
     "purchasePrice": 46000,
-    "image": "https://i.postimg.cc/7hZJTv3v/Ni?a_modelando_ropa_(15).jpg",
+    "image": "https://i.postimg.cc/7hZJTv3v/Nina_modelando_ropa_(15).jpg",
     "images": [
-      "https://i.postimg.cc/7hZJTv3v/Ni?a_modelando_ropa_(15).jpg",
+      "https://i.postimg.cc/7hZJTv3v/Nina_modelando_ropa_(15).jpg",
       "https://i.postimg.cc/28c3WNBF/2C38BA9F_E1AE_4833_A38F_3A65785F2727.png",
       "https://i.postimg.cc/qRT7rk9C/506BE7E8_B20F_4A2E_AD70_42212955BAA2.png"
     ],
@@ -617,9 +617,9 @@ export const products: Product[] = [
     "description": "Remera manga corta superpuestas con aplique de strass.",
     "price": 18000,
     "purchasePrice": 30000,
-    "image": "https://i.postimg.cc/4yxHhC6R/Ni?a_modelando_ropa_(16).jpg",
+    "image": "https://i.postimg.cc/4yxHhC6R/Nina_modelando_ropa_(16).jpg",
     "images": [
-      "https://i.postimg.cc/4yxHhC6R/Ni?a_modelando_ropa_(16).jpg",
+      "https://i.postimg.cc/4yxHhC6R/Nina_modelando_ropa_(16).jpg",
       "https://i.postimg.cc/pTJLXwHk/36E8DB94_BF0D_4B6F_B9C9_4A93D3BCA182.png"
     ],
     "category": "Casual",
@@ -643,9 +643,9 @@ export const products: Product[] = [
     "description": "Remera manga corta con aplique en frente con brillos.",
     "price": 24000,
     "purchasePrice": 30000,
-    "image": "https://i.postimg.cc/j2SnJVHb/Ni?a_modelando_ropa_(17).jpg",
+    "image": "https://i.postimg.cc/j2SnJVHb/Nina_modelando_ropa_(17).jpg",
     "images": [
-      "https://i.postimg.cc/j2SnJVHb/Ni?a_modelando_ropa_(17).jpg",
+      "https://i.postimg.cc/j2SnJVHb/Nina_modelando_ropa_(17).jpg",
       "https://i.postimg.cc/cHBL4pS2/615D36E2_F4B7_47C2_AF82_76A73F7D0759.png"
     ],
     "category": "Casual",
@@ -669,9 +669,9 @@ export const products: Product[] = [
     "description": "Remera estampada con glitter y manga superpuesta.",
     "price": 18000,
     "purchasePrice": 30000,
-    "image": "https://i.postimg.cc/Zn5vyk8m/Ni?a_modelando_ropa_(18).jpg",
+    "image": "https://i.postimg.cc/Zn5vyk8m/Nina_modelando_ropa_(18).jpg",
     "images": [
-      "https://i.postimg.cc/Zn5vyk8m/Ni?a_modelando_ropa_(18).jpg",
+      "https://i.postimg.cc/Zn5vyk8m/Nina_modelando_ropa_(18).jpg",
       "https://i.postimg.cc/7hBPSSbM/CD1E403A_BDE0_4031_A370_FCB344300346.png"
     ],
     "category": "Casual",
@@ -695,9 +695,9 @@ export const products: Product[] = [
     "description": "Remera mangas cortas oversize, cuello redondo y estampas del personaje en la parte de adelante.",
     "price": 28000,
     "purchasePrice": 35000,
-    "image": "https://i.postimg.cc/85Hr5krd/Ni?a_modelando_ropa_(2).jpg",
+    "image": "https://i.postimg.cc/85Hr5krd/Nina_modelando_ropa_(2).jpg",
     "images": [
-      "https://i.postimg.cc/85Hr5krd/Ni?a_modelando_ropa_(2).jpg",
+      "https://i.postimg.cc/85Hr5krd/Nina_modelando_ropa_(2).jpg",
       "https://i.postimg.cc/QdzB2Z85/FAB34165_3706_448F_B3C9_837CFE3610EE.png"
     ],
     "category": "Casual",
@@ -722,9 +722,9 @@ export const products: Product[] = [
     "description": "Remera de algod?n, cuello redondo, mangas cortas anchas y estampa en la parte delantera.",
     "price": 13800,
     "purchasePrice": 23000,
-    "image": "https://i.postimg.cc/NM4rMGrk/Ni?a_modelando_ropa_(3).jpg",
+    "image": "https://i.postimg.cc/NM4rMGrk/Nina_modelando_ropa_(3).jpg",
     "images": [
-      "https://i.postimg.cc/NM4rMGrk/Ni?a_modelando_ropa_(3).jpg",
+      "https://i.postimg.cc/NM4rMGrk/Nina_modelando_ropa_(3).jpg",
       "https://i.postimg.cc/MpLcCJ65/BD3E91EA_FD6D_4ECA_8CD1_B8103F473E5C.png"
     ],
     "category": "Casual",
@@ -748,9 +748,9 @@ export const products: Product[] = [
     "description": "Musculosa de algod?n ancha con flecos en su parte inferior y estampa con brillos en el frente.",
     "price": 18000,
     "purchasePrice": 30000,
-    "image": "https://i.postimg.cc/tT5VTRVk/Ni?a_modelando_ropa_(6).jpg",
+    "image": "https://i.postimg.cc/tT5VTRVk/Nina_modelando_ropa_(6).jpg",
     "images": [
-      "https://i.postimg.cc/tT5VTRVk/Ni?a_modelando_ropa_(6).jpg",
+      "https://i.postimg.cc/tT5VTRVk/Nina_modelando_ropa_(6).jpg",
       "https://i.postimg.cc/JhBymY03/7B46489B_F76A_4734_80AC_8650FC598EC1.png"
     ],
     "category": "Casual",
@@ -774,9 +774,9 @@ export const products: Product[] = [
     "description": "Musculosa algod?n, estampada, cuello redondo, volados a los laterales.",
     "price": 18000,
     "purchasePrice": 30000,
-    "image": "https://i.postimg.cc/3RBDRrDq/Ni?a_modelando_ropa_(7).jpg",
+    "image": "https://i.postimg.cc/3RBDRrDq/Nina_modelando_ropa_(7).jpg",
     "images": [
-      "https://i.postimg.cc/3RBDRrDq/Ni?a_modelando_ropa_(7).jpg",
+      "https://i.postimg.cc/3RBDRrDq/Nina_modelando_ropa_(7).jpg",
       "https://i.postimg.cc/T3syzvd9/FC283A8C_F5ED_41FB_8D1A_C14486FE9786.png"
     ],
     "category": "Casual",
@@ -800,9 +800,9 @@ export const products: Product[] = [
     "description": "Remera de algod?n, manga corta, cuello redondo y estampa grande en su frente.",
     "price": 21000,
     "purchasePrice": 35000,
-    "image": "https://i.postimg.cc/zBjRBDRs/Ni?a_modelando_ropa_(8).jpg",
+    "image": "https://i.postimg.cc/zBjRBDRs/Nina_modelando_ropa_(8).jpg",
     "images": [
-      "https://i.postimg.cc/zBjRBDRs/Ni?a_modelando_ropa_(8).jpg",
+      "https://i.postimg.cc/zBjRBDRs/Nina_modelando_ropa_(8).jpg",
       "https://i.postimg.cc/bv2G8VrW/26004F3A_2044_49B2_8337_5C77C17B4F58.png"
     ],
     "category": "Casual",
@@ -826,9 +826,9 @@ export const products: Product[] = [
     "description": "Remera estampada con glitter y cuello redondo.",
     "price": 18000,
     "purchasePrice": 30000,
-    "image": "https://i.postimg.cc/Px48xfws/Ni?a_modelando_ropa_(9).jpg",
+    "image": "https://i.postimg.cc/Px48xfws/Nina_modelando_ropa_(9).jpg",
     "images": [
-      "https://i.postimg.cc/Px48xfws/Ni?a_modelando_ropa_(9).jpg",
+      "https://i.postimg.cc/Px48xfws/Nina_modelando_ropa_(9).jpg",
       "https://i.postimg.cc/63J8QVGw/40E53328_51A2_4AD1_BF97_54A2B2D97374.png"
     ],
     "category": "Casual",
@@ -852,9 +852,9 @@ export const products: Product[] = [
     "description": "Chaleco impermeable y abrigado.",
     "price": 80000,
     "purchasePrice": 100000,
-    "image": "https://i.postimg.cc/7LS2FnPT/Ni?a_modela_ropa_(15).jpg",
+    "image": "https://i.postimg.cc/7LS2FnPT/Nina_modela_ropa_(15).jpg",
     "images": [
-      "https://i.postimg.cc/7LS2FnPT/Ni?a_modela_ropa_(15).jpg",
+      "https://i.postimg.cc/7LS2FnPT/Nina_modela_ropa_(15).jpg",
       "https://i.postimg.cc/jdqYYXvz/PHOTO_2026_03_03_16_12_28_1.jpg",
       "https://i.postimg.cc/FsP5rLnn/PHOTO_2026_03_03_16_12_25.jpg"
     ],
@@ -880,9 +880,9 @@ export const products: Product[] = [
     "description": "Chaleco impermeable y abrigado.",
     "price": 80000,
     "purchasePrice": 100000,
-    "image": "https://i.postimg.cc/bJ8tpSdG/Ni?a_modela_ropa_(16).jpg",
+    "image": "https://i.postimg.cc/bJ8tpSdG/Nina_modela_ropa_(16).jpg",
     "images": [
-      "https://i.postimg.cc/bJ8tpSdG/Ni?a_modela_ropa_(16).jpg",
+      "https://i.postimg.cc/bJ8tpSdG/Nina_modela_ropa_(16).jpg",
       "https://i.postimg.cc/8PyQp6nB/PHOTO_2026_03_03_16_12_26.jpg",
       "https://i.postimg.cc/7YPrrVXN/PHOTO_2026_03_03_16_12_27_1.jpg"
     ],

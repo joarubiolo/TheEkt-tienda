@@ -11,6 +11,7 @@ const SMTP_HOST = process.env.SMTP_HOST || 'smtp-relay.brevo.com';
 const SMTP_PORT = parseInt(process.env.SMTP_PORT || '587');
 const SMTP_USER = process.env.SMTP_USER || 'a7162d001@smtp-brevo.com';
 const SMTP_PASS = process.env.SMTP_PASS;
+const SMTP_FROM = process.env.SMTP_FROM || 'theekt.tienda@gmail.com';
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'theekt.tienda@gmail.com';
 
 const transporter = nodemailer.createTransport({
@@ -119,8 +120,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     `;
 
     // Send email to owner
-    await transporter.sendMail({
-      from: `TheEkt <${SMTP_USER}>`,
+await transporter.sendMail({
+      from: SMTP_FROM,
       to: OWNER_EMAIL,
       subject: `Nuevo mensaje de contacto: ${subject || 'Sin asunto'} - ${name}`,
       html: htmlContent,
@@ -174,8 +175,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       </html>
     `;
 
-    await transporter.sendMail({
-      from: `TheEkt <${SMTP_USER}>`,
+await transporter.sendMail({
+      from: SMTP_FROM,
       to: email,
       subject: 'Recibimos tu mensaje - TheEkt',
       html: confirmationHtml,

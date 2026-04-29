@@ -98,17 +98,21 @@ export function WishlistPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {wishlistProducts.map((product) => (
+{wishlistProducts.map((product) => (
             <Card key={product.wishlistId} className="group overflow-hidden">
-              <div className="relative aspect-[3/4] overflow-hidden">
+              <div className="relative aspect-[3/4] overflow-hidden bg-white relative flex items-center justify-center">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                  className={`max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 ${
+                    !product.inStock ? "opacity-40" : ""
+                  }`}
                 />
-                {product.stock === 0 && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <span className="text-white font-semibold">Agotado</span>
+                {!product.inStock && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="bg-gray-900 text-white px-6 py-3 text-lg uppercase tracking-wider">
+                      Agotado
+                    </span>
                   </div>
                 )}
               </div>
@@ -133,15 +137,25 @@ export function WishlistPage() {
                   />
                 </div>
 
-                <div className="flex gap-2">
-                  <Button
-                    className="flex-1"
-                    disabled={product.stock === 0}
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Agregar al carrito
-                  </Button>
+<div className="flex gap-2">
+                  {product.inStock ? (
+                    <Button
+                      className="flex-1"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Agregar al carrito
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Consultar por esto
+                    </Button>
+                  )}
                   <Button
                     variant="outline"
                     size="icon"

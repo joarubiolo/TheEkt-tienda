@@ -1,12 +1,13 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useLocation } from "react-router";
 import { SearchFilters } from "../components/SearchFilters";
+import { SearchFiltersMobile } from "../components/SearchFiltersMobile";
 import { ProductGrid } from "../components/ProductGrid";
 import { products as allProducts } from "../data/products";
 import { Product } from "../types/product";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 
-function shuffleArray<T>(array: T[]): T[] {
+function shuffleArray< T >(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -17,16 +18,16 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export function HomePage() {
   const location = useLocation();
-  
-  const [shuffledProducts] = useState<Product[]>(() => shuffleArray(allProducts));
-  
+
+  const [shuffledProducts] = useState< Product[] >(() => shuffleArray(allProducts));
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todas");
-  const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>("relevancia");
-  
-  const productsRef = useRef<HTMLDivElement>(null);
+  const [selectedGenders, setSelectedGenders] = useState< string[] >([]);
+  const [selectedTypes, setSelectedTypes] = useState< string[] >([]);
+  const [sortBy, setSortBy] = useState< string >("relevancia");
+
+  const productsRef = useRef< HTMLDivElement >(null);
 
   useEffect(() => {
     const path = location.pathname;
@@ -95,8 +96,22 @@ export function HomePage() {
 
   return (
     <div>
-      {/* Filtros y Productos */}
-      <div className="flex" ref={productsRef}>
+      {/* Mobile Filters */}      <SearchFiltersMobile
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        selectedGenders={selectedGenders}
+        onGenderChange={setSelectedGenders}
+        selectedTypes={selectedTypes}
+        onTypeToggle={handleTypeToggle}
+        sortBy={sortBy}
+        onSortByChange={setSortBy}
+        totalResults={filteredProducts.length}
+      />
+
+      {/* Desktop Filters and Products */}
+      <div className="flex hidden md:flex" ref={productsRef}>
         <SearchFilters
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -112,25 +127,29 @@ export function HomePage() {
           <div className="flex items-center justify-between mb-6">
             <p className="text-sm text-gray-600">
               {filteredProducts.length} producto{filteredProducts.length !== 1 ? "s" : ""} encontrado{filteredProducts.length !== 1 ? "s" : ""}
-            </p>
-            <div className="flex items-center gap-2">
+            </p>            <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Ordenar:</span>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Ordenar por" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="relevancia">Relevancia</SelectItem>
-                  <SelectItem value="precio-asc">Menor precio</SelectItem>
-                  <SelectItem value="precio-desc">Mayor precio</SelectItem>
-                  <SelectItem value="nombre">Nombre A-Z</SelectItem>
+                <SelectContent>                  <SelectItem value="relevancia">Relevancia</SelectItem>
+                  <SelectItem value="precio-asc">Menor precio</SelectItem>                  <SelectItem value="precio-desc">Mayor precio</SelectItem>
+                  <SelectItem value="nombre">Nombre A- Z</SelectItem>
                 </SelectContent>
-              </Select>
-            </div>
+              </Select>            </div>
           </div>
           <ProductGrid products={filteredProducts} />
         </main>
       </div>
+
+      {/* Mobile Products Grid - full width without sidebar */}      <div className="md:hidden p-4" ref={productsRef}>
+        <p className="text-sm text-gray-600 mb-4">
+          {filteredProducts.length} producto{filteredProducts.length !== 1 ? "s" : ""} encontrado{filteredProducts.length !== 1 ? "s" : ""}
+        </p>
+        <ProductGrid products={filteredProducts} />
+      </div>
+
       <footer className="bg-gray-900 text-gray-400 py-4 px-6 text-center text-sm">
         *El precio indicado es el descuento que se hace al realizar la compra por transferencia, para más detalles póngase en contacto con nosotros
       </footer>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
-import { ShoppingCart, MessageCircle, LogIn, Menu, X, Heart, User, Package, Phone } from "lucide-react";
+import { ShoppingCart, MessageCircle, LogIn, Menu, User, Package, Phone } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/button";
@@ -106,39 +106,66 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile Header Content - Visible cuando scrollProgress > 0.3 */}
-        {scrollProgress > 0.3 && (
-          <div className="md:hidden absolute inset-0 flex items-center justify-between px-4 py-2">
-            {/* Hamburguesa */}
-            <button
-              onClick={() => setMobileNavOpen(true)}
-              className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
+        {/* Mobile Header Content - Always visible */}
+        <div className="md:hidden absolute inset-0 flex items-center justify-between px-3 py-2">
+          {/* Hamburguesa */}
+          <button
+            onClick={() => setMobileNavOpen(true)}
+            className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
 
-            {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <img
-                src="https://i.postimg.cc/7Yn9tWrD/Icon_transp.png"
-                alt="TheEkt"
-                className="h-10 w-auto"
-              />
-            </Link>
+          {/* Logo */}
+          <Link to="/" className="flex items-center justify-center flex-1">
+            <img
+              src="https://i.postimg.cc/7Yn9tWrD/Icon_transp.png"
+              alt="TheEkt"
+              className="h-10 w-auto"
+            />
+          </Link>
 
-            {/* Carrito */}
+          {/* Right side buttons */}
+          <div className="flex items-center gap-1">
+            {/* Contact button */}
+            {!isContactPage && (
+              <Link to="/contact" className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors">
+                <MessageCircle className="w-4 h-4" />
+              </Link>
+            )}
+
+            {/* Cart button */}
             {!isCartPage && (
               <Link to="/cart" className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors relative">
-                <ShoppingCart className="w-6 h-6" />
+                <ShoppingCart className="w-4 h-4" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gray-900 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-gray-900 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
                     {totalItems}
                   </span>
                 )}
               </Link>
             )}
+
+            {/* User/Login button */}
+            {loading ? (
+              <div className="w-8 h-8 rounded-full bg-white/90 animate-pulse" />
+            ) : user ? (
+              <Link to="/profile" className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors">
+                <User className="w-4 h-4" />
+              </Link>
+            ) : (
+              <AuthModal
+                open={authModalOpen}
+                onOpenChange={setAuthModalOpen}
+                trigger={
+                  <button className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors">
+                    <LogIn className="w-4 h-4" />
+                  </button>
+                }
+              />
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Mobile Navigation Drawer */}

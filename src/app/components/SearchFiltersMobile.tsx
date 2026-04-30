@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Search, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 import {
   Sheet,
@@ -46,7 +45,7 @@ export function SearchFiltersMobile({
   onSortByChange,
   totalResults,
 }: SearchFiltersMobileProps) {
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const activeFiltersCount =
     (selectedCategory !== "Todas" ? 1 : 0) +
@@ -61,10 +60,19 @@ export function SearchFiltersMobile({
     }
   };
 
+  const handleTypeToggle = (type: string) => {
+    if (selectedTypes.includes(type)) {
+      onTypeToggle(type);
+    } else {
+      onTypeToggle(type);
+    }
+  };
+
   const clearAllFilters = () => {
     onSearchChange("");
     onCategoryChange("Todas");
     onGenderChange([]);
+    onSortByChange("relevancia");
     onTypeToggle("");
   };
 
@@ -76,7 +84,7 @@ export function SearchFiltersMobile({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
           <Input
             type="text"
-            placeholder="Buscar productos..."
+            placeholder="Buscar..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9 bg-gray-100 border-transparent"
@@ -84,9 +92,10 @@ export function SearchFiltersMobile({
         </div>
 
         {/* Filters Button */}
-        <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" className="relative">
+            <Button variant="outline" className="relative shrink-0">
+              <SlidersHorizontal className="w-4 h-4 mr-1" />
               Filtros
               {activeFiltersCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-gray-900 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -98,29 +107,28 @@ export function SearchFiltersMobile({
           <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
             <SheetHeader className="pb-4 border-b">
               <div className="flex items-center justify-between">
-                <SheetTitle>Filtros</SheetTitle>
-                <button
-                  onClick={() => setFiltersOpen(false)}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <SheetTitle className="text-lg font-semibold">Filtros</SheetTitle>
+                <SheetClose asChild>
+                  <button className="p-2 hover:bg-gray-100 rounded-lg">
+                    <X className="w-5 h-5" />
+                  </button>
+                </SheetClose>
               </div>
             </SheetHeader>
 
             <div className="py-4 space-y-6">
               {/* Categoría */}
               <div className="space-y-3">
-                <Label className="text-sm font-medium">Categoría</Label>
+                <Label className="text-sm font-medium text-gray-700">Categoría</Label>
                 <div className="flex flex-wrap gap-2">
                   {categories.map((category) => (
                     <button
                       key={category}
                       onClick={() => onCategoryChange(category)}
-                      className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         selectedCategory === category
-                          ? "bg--gray-900 text-white"
-                          : "bg-gray-100 hover:bg-gray-200"
+                          ? "bg-gray-900 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                     >
                       {category}
@@ -131,16 +139,16 @@ export function SearchFiltersMobile({
 
               {/* Género */}
               <div className="space-y-3">
-                <Label className="text-sm font-medium">Género</Label>
+                <Label className="text-sm font-medium text-gray-700">Género</Label>
                 <div className="flex flex-wrap gap-2">
                   {genders.map((gender) => (
                     <button
                       key={gender}
                       onClick={() => handleGenderToggle(gender)}
-                      className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         selectedGenders.includes(gender)
-                          ? "bg--gray-900 text-white"
-                          : "bg-gray-100 hover:bg-gray-200"
+                          ? "bg-gray-900 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                     >
                       {gender}
@@ -151,16 +159,16 @@ export function SearchFiltersMobile({
 
               {/* Tipo */}
               <div className="space-y-3">
-                <Label className="text-sm font-medium">Tipo</Label>
+                <Label className="text-sm font-medium text-gray-700">Tipo</Label>
                 <div className="flex flex-wrap gap-2">
                   {types.map((type) => (
                     <button
                       key={type}
-                      onClick={() => onTypeToggle(type)}
-                      className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                      onClick={() => handleTypeToggle(type)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         selectedTypes.includes(type)
                           ? "bg-gray-900 text-white"
-                          : "bg-gray-100 hover:bg-gray-200"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                     >
                       {type}
@@ -171,10 +179,10 @@ export function SearchFiltersMobile({
 
               {/* Ordenar */}
               <div className="space-y-3">
-                <Label className="text-sm font-medium">Ordenar por</Label>
+                <Label className="text-sm font-medium text-gray-700">Ordenar</Label>
                 <Select value={sortBy} onValueChange={onSortByChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Ordenar por" />
+                  <SelectTrigger className="w-full bg-gray-100">
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="relevancia">Relevancia</SelectItem>
@@ -194,11 +202,12 @@ export function SearchFiltersMobile({
               >
                 Limpiar
               </Button>
-              <SheetClose asChild>
-                <Button className="flex-1 bg--gray-900 hover:bg-gray-800">
-                  Aplicar ({totalResults})
-                </Button>
-              </SheetClose>
+              <Button
+                className="flex-1 bg-gray-900 hover:bg-gray-800"
+                onClick={() => setIsOpen(false)}
+              >
+                Ver {totalResults}
+              </Button>
             </SheetFooter>
           </SheetContent>
         </Sheet>

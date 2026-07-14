@@ -19,16 +19,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { addItem } = useCart();
 
-  // 🔒 Evita errores si el producto es null o el modal está cerrado
-  if (!isOpen || !product) return null;
-
-  const images =
-    product.images && product.images.length > 0
-      ? product.images
-      : product.image
-      ? [product.image]
-      : [];
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -45,6 +35,15 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     setSelectedColor("");
     setCurrentImageIndex(0);
   }, [product]);
+
+  if (!isOpen || !product) return null;
+
+  const images =
+    product.images && product.images.length > 0
+      ? product.images
+      : product.image
+      ? [product.image]
+      : [];
 
   const handlePurchase = () => {
     if (!selectedSize || !selectedColor) {

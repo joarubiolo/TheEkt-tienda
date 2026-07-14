@@ -10,10 +10,8 @@ export function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  if (!user) return null;
-
-  // Cerrar menú al hacer clic fuera
   useEffect(() => {
+    if (!user) return;
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -22,7 +20,9 @@ export function UserMenu() {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [user]);
+
+  if (!user) return null;
 
   const getInitials = (name: string) => {
     return name

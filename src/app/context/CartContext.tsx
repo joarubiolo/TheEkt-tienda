@@ -156,85 +156,72 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addItem = async (product: Product, size: string, color: string) => {
-    setItems((prevItems) => {
-      const existingItemIndex = prevItems.findIndex(
-        (item) =>
-          item.productId === product.id &&
-          item.size === size &&
-          item.color === color
+  const addItem = (product: Product, size: string, color: string) => {
+    const existingItemIndex = items.findIndex(
+      (item) =>
+        item.productId === product.id &&
+        item.size === size &&
+        item.color === color
+    );
+
+    let newItems: CartItem[];
+    if (existingItemIndex > -1) {
+      newItems = items.map((item, index) =>
+        index === existingItemIndex ? { ...item, quantity: item.quantity + 1 } : item
       );
+    } else {
+      const newItem: CartItem = {
+        id: Date.now(),
+        productId: product.id,
+        name: product.name,
+        price: product.purchasePrice || product.price,
+        image: product.image,
+        size,
+        color,
+        quantity: 1,
+      };
+      newItems = [...items, newItem];
+    }
 
-      let newItems;
-      if (existingItemIndex > -1) {
-        newItems = [...prevItems];
-        newItems[existingItemIndex].quantity += 1;
-      } else {
-        const newItem: CartItem = {
-          id: Date.now(),
-          productId: product.id,
-          name: product.name,
-          price: product.purchasePrice || product.price,
-          image: product.image,
-          size,
-          color,
-          quantity: 1,
-        };
-        newItems = [...prevItems, newItem];
-      }
+    setItems(newItems);
 
-      // Sync to Supabase if user is logged in
-      if (user) {
-        syncCartToSupabase(newItems);
-      }
-
-      return newItems;
-    });
+    if (user) {
+      syncCartToSupabase(newItems);
+    }
   };
 
-  const removeItem = async (id: number) => {
-    setItems((prevItems) => {
-      const newItems = prevItems.filter((item) => item.id !== id);
-      
-      // Update localStorage immediately
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
+  const removeItem = (id: number) => {
+    const newItems = items.filter((item) => item.id !== id);
+    setItems(newItems);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
 
-      if (user) {
-        // Delete from Supabase
-        deleteCartItem(id).catch((err) => {
-          console.error("Error deleting cart item:", err);
-        });
-      }
-
-      return newItems;
-    });
+    if (user) {
+      deleteCartItem(id).catch((err) => {
+        console.error("Error deleting cart item:", err);
+      });
+    }
   };
 
-  const updateQuantity = async (id: number, quantity: number) => {
+  const updateQuantity = (id: number, quantity: number) => {
     if (quantity <= 0) {
       removeItem(id);
       return;
     }
 
-    setItems((prevItems) => {
-      const newItems = prevItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      );
-      
-      // Update localStorage immediately
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
+    const newItems = items.map((item) =>
+      item.id === id ? { ...item, quantity } : item
+    );
+    setItems(newItems);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
 
-      if (user) {
-        const item = newItems.find((i) => i.id === id);
-        if (item) {
-          updateCartItem(id, { quantity }).catch((err) => {
-            console.error("Error updating cart item:", err);
-          });
-        }
+    if (user) {
+      const item = newItems.find((i) => i.id === id);
+      if (item) {
+        updateCartItem(id, { quantity }).catch((err) => {
+          console.error("Error updating cart item:", err);
+        });
       }
-
-      return newItems;
-    });
+    }
   };
 
   const clearCart = async () => {

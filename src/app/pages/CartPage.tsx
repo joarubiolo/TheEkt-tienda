@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -33,7 +33,6 @@ export function CartPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
-  const [isPending, startTransition] = useTransition();
 
   // Estados del formulario
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mercadopago");
@@ -132,7 +131,7 @@ export function CartPage() {
         // Guardar order number en sessionStorage
         sessionStorage.setItem('orderNumber', result.orderNumber);
         
-        clearCart();
+        await clearCart();
         navigate(`/success?payment=transferencia&order=${result.orderNumber}`);
       } catch (error: any) {
         console.error('Error:', error);
@@ -149,91 +148,89 @@ export function CartPage() {
       return;
     }
 
-    startTransition(async () => {
+    try {
+      // Primero crear el pedido
       try {
-        // Primero crear el pedido
-        try {
-          setIsSubmitting(true);
-          toast.info("Preparando tu pedido...");
+        setIsSubmitting(true);
+        toast.info("Preparando tu pedido...");
 
-          const orderResponse = await fetch('/api/create-order', {
+        const orderResponse = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+
+        const orderResult = await orderResponse.json();
+
+        if (!orderResult.success) {
+          throw new Error(orderResult.error || 'Error al crear el pedido');
+        }
+
+        sessionStorage.setItem('orderNumber', orderResult.orderNumber);
+      } catch (orderError: any) {
+        console.error('Error creando pedido:', orderError);
+        toast.error(orderError.message || 'Error al crear el pedido');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const checkoutData: CheckoutData = {
+        items: items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: item.purchasePrice || item.price,
+          quantity: item.quantity,
+          size: item.size,
+          color: item.color,
+          image: item.image,
+        })),
+        shippingCost: 0,
+        shippingMethod: deliveryType,
+        customerEmail,
+      };
+
+      toast.info("Iniciando pago...");
+
+      const response = await createCheckout(checkoutData, "mercadopago");
+
+      // Actualizar el pedido con el payment_id
+      if (response?.payment_id) {
+        try {
+          await fetch('/api/update-payment-id', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
+            body: JSON.stringify({
+              orderNumber: orderResult.orderNumber,
+              paymentId: response.payment_id
+            })
           });
-
-          const orderResult = await orderResponse.json();
-
-          if (!orderResult.success) {
-            throw new Error(orderResult.error || 'Error al crear el pedido');
-          }
-
-          sessionStorage.setItem('orderNumber', orderResult.orderNumber);
-        } catch (orderError: any) {
-          console.error('Error creando pedido:', orderError);
-          toast.error(orderError.message || 'Error al crear el pedido');
-          setIsSubmitting(false);
-          return;
+        } catch (updateError) {
+          console.error('Error updating payment_id:', updateError);
         }
-
-        const checkoutData: CheckoutData = {
-          items: items.map((item) => ({
-            id: item.id,
-            name: item.name,
-            price: item.purchasePrice || item.price,
-            quantity: item.quantity,
-            size: item.size,
-            color: item.color,
-            image: item.image,
-          })),
-          shippingCost: 0,
-          shippingMethod: deliveryType,
-          customerEmail,
-        };
-
-        toast.info("Iniciando pago...");
-
-        const response = await createCheckout(checkoutData, "mercadopago");
-
-        // Actualizar el pedido con el payment_id
-        if (response?.payment_id) {
-          try {
-            await fetch('/api/update-payment-id', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                orderNumber: orderResult.orderNumber,
-                paymentId: response.payment_id
-              })
-            });
-          } catch (updateError) {
-            console.error('Error updating payment_id:', updateError);
-          }
-        }
-
-        if (response && response.payment_url) {
-          setCheckoutUrl(response.payment_url);
-          toast.success("¡Listo! Redirigiendo al pago...");
-          setTimeout(() => {
-            window.location.href = response.payment_url;
-          }, 1500);
-        } else {
-          toast.error("Error al preparar el pago. Intenta de nuevo.");
-        }
-      } catch (error) {
-        console.error("Error completo:", error);
-        
-        let errorMessage = "Hubo un error preparando el pago. Intenta de nuevo.";
-        
-        if (error instanceof Error) {
-          errorMessage = error.message;
-        }
-        
-        toast.error(`Error: ${errorMessage}`);
-      } finally {
-        setIsSubmitting(false);
       }
-    });
+
+      if (response && response.payment_url) {
+        setCheckoutUrl(response.payment_url);
+        toast.success("¡Listo! Redirigiendo al pago...");
+        setTimeout(() => {
+          window.location.href = response.payment_url;
+        }, 1500);
+      } else {
+        toast.error("Error al preparar el pago. Intenta de nuevo.");
+      }
+    } catch (error) {
+      console.error("Error completo:", error);
+      
+      let errorMessage = "Hubo un error preparando el pago. Intenta de nuevo.";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(`Error: ${errorMessage}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
